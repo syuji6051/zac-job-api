@@ -1,0 +1,9 @@
+[*]
+end_of_line = lf
+insert_final_newline =
+indent_style = space
+charset = utf-8
+
+# Web Files
+[*.{htm,html,js,ts,tsx,css,sass,scss,less,svg,vue}]
+indent_size = 2

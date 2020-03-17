@@ -1,0 +1,30 @@
+{
+  "name": "admin-cognito-user",
+  "version": "1.0.0",
+  "main": "app/http/app.ts",
+  "license": "MIT",
+  "scripts": {
+    "dev": "NODE_PATH=. nodemon -L",
+    "ts-node": "ts-node"
+  },
+  "dependencies": {
+    "express-validator": "^6.4.0",
+    "http-errors": "^1.7.3",
+    "inversify": "^5.0.1",
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.46",
+    "@types/express": "^4.17.3",
+    "@types/http-errors": "^1.6.3",
+    "aws-lambda": "^1.0.5",
+    "aws-sdk": "^2.636.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.2",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.3"
+  }
+}

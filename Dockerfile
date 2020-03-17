@@ -1,0 +1,7 @@
+FROM node:12-alpine
+
+ENV APP_ROOT /app/
+
+WORKDIR $APP_ROOT
+
+COPY . ${APP_ROOT}
