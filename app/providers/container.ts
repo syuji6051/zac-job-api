@@ -7,8 +7,8 @@ export const TYPES = {
   STORE_USERS: Symbol.for('STORE_USERS'),
 };
 
-import { Users as UseCaseUsers } from 'app/usecases/Users';
-import { Users as UseCaseUsersImpl } from 'app/usecases/implementations/Users';
+import { Users as UseCaseUsers } from '../usecases/Users';
+import { Users as UseCaseUsersImpl } from '../usecases/implementations/Users';
 container.bind<UseCaseUsers>(TYPES.USECASE_USERS).to(UseCaseUsersImpl);
 
 import { Users as StoreUsers } from '../usecases/stores/Users';

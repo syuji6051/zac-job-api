@@ -7,3 +7,7 @@ aws-exports.js
 aws-exports.ts
 
 .vscode
+cdk.out
+.cache
+.build
+template.yaml

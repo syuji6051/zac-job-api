@@ -9,8 +9,9 @@ export default function apiGatewayEventGenerator(req: Request) {
   
     }
   */
-  console.log(req.body);
   return {
-    body: req.body,
+    pathParameters: req.params,
+    queryStringParameters: req.query,
+    body: JSON.stringify(req.body),
   } as APIGatewayEvent;
 };

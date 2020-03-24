@@ -6,10 +6,10 @@ const lambdaDriver =
     async (req: Request, res: Response, next: NextFunction) => {
       const event = apiGatewayEventGenerator(req);
       const context = {} as Context;
-      return controller(event, context, result => res.status(200).send(result))
-        .catch((err) => {
-          next(err);
-        });
+      return controller(event, context, (_error, result) => {
+        if (result.statusCode >= 400) return next(result);
+        return res.status(200).send(JSON.parse(result.body));
+      })
     };
 
 export default lambdaDriver;

@@ -35,9 +35,10 @@ export class UserListInput extends UserInput implements IUserListInput {
 
   public constructor(
     _headers: { [name: string]: string },
-    eventBody: { [field: string]: any }) {
+    query: { [field: string]: string }) {
     super();
-    this.paginationToken = eventBody.paginationToken
+    console.log(query);
+    this.paginationToken = query.paginationToken;
   }
 
   public getPaginationToken(): string {
