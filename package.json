@@ -4,7 +4,7 @@
   "main": "app/http/app.ts",
   "license": "MIT",
   "scripts": {
-    "deploy": "NODE_PATH=. cdk deploy",
+    "deploy": "NODE_PATH=. cdk deploy -f",
     "dev": "NODE_PATH=. nodemon -L",
     "ts-node": "ts-node"
   },
