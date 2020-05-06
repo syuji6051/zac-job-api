@@ -7,6 +7,12 @@ export interface User {
   attributes?: AttributeListType;
 };
 
+export interface UserInfo {
+  userId: string;
+  obcUserId?: string;
+  obcPassword?: string;
+}
+
 export interface Users {
   paginationToken: string;
   users: User[];

@@ -6,5 +6,5 @@
     "ignore": [
         "tests/**/*.ts"
     ],
-    "exec": "npm run ts-node ./src/app/http/app.ts"
+    "exec": "npm run ts-node ./app/http/app.ts"
 }

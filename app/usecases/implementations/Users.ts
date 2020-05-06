@@ -3,7 +3,6 @@ import { UserCreateInput, UserListInput } from "app/usecases/inputs/Users";
 import { Users as IUsers } from 'app/usecases/Users';
 import { Users as UserStore } from 'app/usecases/stores/Users';
 import { container, TYPES } from "../../providers/container";
-import "reflect-metadata";
 import { UserCreateOutput, UserListOutput } from "app/usecases/outputs/Users";
 
 @injectable()

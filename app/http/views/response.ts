@@ -1,18 +1,18 @@
-import { Callback } from "aws-lambda";
+import { APIGatewayProxyResult } from "aws-lambda";
 
-export function success(cb: Callback, body: string): void {
-  cb(null, {
+export function success(body: any): APIGatewayProxyResult {
+  return {
     statusCode: 200,
-    body,
+    body: JSON.stringify(body),
     headers: {
       'Access-Control-Allow-Origin': '*'
-    }
-  });
+    },
+  }
 }
 
-export function invalidError(cb: Callback, error: any): void {
+export function invalidError(error: any): APIGatewayProxyResult {
   const { code, message } = error;
-  cb(null, {
+  return {
     statusCode: 400,
     body: JSON.stringify({
       code, message
@@ -20,5 +20,5 @@ export function invalidError(cb: Callback, error: any): void {
     headers: {
       'Access-Control-Allow-Origin': '*'
     }
-  })
+  };
 }

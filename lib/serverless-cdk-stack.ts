@@ -54,12 +54,22 @@ export class AdminCognitoUserCdkStack extends cdk.Stack {
       role: serviceRole
     });
 
+    const apiWorkList = new NodejsFunction(this, 'api-work-list', {
+      functionName: 'api-work-list',
+      entry: 'app/http/handler/works.ts',
+      handler: 'list',
+      runtime: lambda.Runtime.NODEJS_12_X,
+      timeout: Duration.seconds(30),
+      role: Role.fromRoleArn(this, id, 'arn:aws:iam::105785188161:role/lambda-basic-role')
+    })
+
     const api = new apigateway.RestApi(this, 'itemsApi', {
       restApiName: 'admin-cognito-user'
     });
 
     const userAddResource = api.root.addResource('user');
     const userListResource = api.root.addResource('users');
+    const workListResource = api.root.addResource('works');
 
     const postApiUserCreateIntegration = new apigateway.LambdaIntegration(
       apiUserCreate,
@@ -84,6 +94,17 @@ export class AdminCognitoUserCdkStack extends cdk.Stack {
       'GET',
       getApiUsersListIntegration,
       { methodResponses: [{ statusCode: '200', }] });
+
+    const getApiWorkListIntegration = new apigateway.LambdaIntegration(
+      apiWorkList,
+      { proxy: true }
+    );
+
+    workListResource.addMethod(
+      'GET',
+      getApiWorkListIntegration,
+      { methodResponses: [{ statusCode: '200' }] }
+    );
   }
 }
 

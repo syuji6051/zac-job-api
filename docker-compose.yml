@@ -4,8 +4,25 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+    env_file:
+      - ./config/.env.local
     command: npm run dev
     ports:
-      - "3001:3001"
+      - "3000:3000"
     volumes:
-      - ./app:/app
+      - .:/app
+    networks:
+      - dynamo-local
+  dynamodb-local:
+    container_name: dynamodb
+    image: amazon/dynamodb-local
+    ports:
+      - 8000:8000
+    command: -jar DynamoDBLocal.jar -dbPath /data -sharedDb
+    volumes:
+      - ./data:/data
+    networks:
+      - dynamo-local
+networks:
+  dynamo-local:
+    external: true
