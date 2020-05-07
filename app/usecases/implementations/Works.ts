@@ -5,7 +5,7 @@ import { Works as IWorks } from 'app/usecases/Works';
 import { WorkListOutput } from "app/adapters/http/response/Works";
 import { WorkListInput } from "app/usecases/inputs/Works";
 import { APIGatewayProxyResult } from "aws-lambda";
-import { container, TYPES } from "app/providers/container";
+import { container, TYPES } from "../../providers/container";
 
 @injectable()
 export class Works implements IWorks {

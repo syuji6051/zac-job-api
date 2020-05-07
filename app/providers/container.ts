@@ -15,7 +15,7 @@ import { Users as UseCaseUsersImpl } from '../usecases/implementations/Users';
 container.bind<UseCaseUsers>(TYPES.USECASE_USERS).to(UseCaseUsersImpl);
 
 import { Works as UseCaseWorks } from 'app/usecases/Works';
-import { Works as UseCaseWorksImpl } from 'app/usecases/implementations/Works';
+import { Works as UseCaseWorksImpl } from '../usecases/implementations/Works';
 container.bind<UseCaseWorks>(TYPES.USECASE_WORKS).to(UseCaseWorksImpl);
 
 import { Users as StoreUsers } from '../usecases/stores/Users';
@@ -23,5 +23,5 @@ import { Users as StoreUsersImpl } from '../adapters/cognito/Users';
 container.bind<StoreUsers>(TYPES.STORE_USERS).to(StoreUsersImpl);
 
 import { Works as StoreWorks } from 'app/usecases/stores/Works';
-import { Works as StoreWorksImpl } from 'app/adapters/puppeteer/Works';
+import { Works as StoreWorksImpl } from '../adapters/puppeteer/Works';
 container.bind<StoreWorks>(TYPES.STORE_WORKS).to(StoreWorksImpl);

@@ -1,9 +1,9 @@
 import express from 'express';
-import { list } from '../handlers/works';
+import { workList } from '../handlers/works';
 import lambdaDriver from '../middleware/lambda-driver';
 
 const router = express.Router()
 
-router.get('/works', lambdaDriver(list));
+router.get('/works', lambdaDriver(workList));
 
 export default router;

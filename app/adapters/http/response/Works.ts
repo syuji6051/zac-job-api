@@ -5,7 +5,7 @@ import {
 import {
   Work as WorkEntity,
 } from 'app/entities/Works';
-import { success } from "app/http/views/response";
+import { success } from "../../../http/views/response";
 
 export class WorkListOutput implements IWorkListOutput {
   public success(works: WorkEntity[]): APIGatewayProxyResult {

@@ -1,0 +1,569 @@
+Resources:
+  allowlambdacognitopolicyAB7C63FA:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+              - cognito-idp:*
+            Effect: Allow
+            Resource: "*"
+        Version: "2012-10-17"
+      PolicyName: allow-lambda-cognito-policy
+      Roles:
+        - Ref: lambdacognitoroleADDAE3C6
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/allow-lambda-cognito-policy/Resource
+  lambdacognitoroleADDAE3C6:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      RoleName: lambda-cognito-role
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/lambda-cognito-role/Resource
+  apiusercreateC0AFAC09:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParametersa4274787ce936d372ce985cd29c6f78b674f79ae9b59f22879a8b57870105549S3BucketF7FF6F87
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa4274787ce936d372ce985cd29c6f78b674f79ae9b59f22879a8b57870105549S3VersionKey1EE51A5B
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa4274787ce936d372ce985cd29c6f78b674f79ae9b59f22879a8b57870105549S3VersionKey1EE51A5B
+      Handler: index.create
+      Role:
+        Fn::GetAtt:
+          - lambdacognitoroleADDAE3C6
+          - Arn
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          REGION: ap-northeast-1
+      FunctionName: api-user-create
+      Timeout: 3
+    DependsOn:
+      - lambdacognitoroleADDAE3C6
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/api-user-create/Resource
+      aws:asset:path: asset.a4274787ce936d372ce985cd29c6f78b674f79ae9b59f22879a8b57870105549
+      aws:asset:property: Code
+  apiuserlistE8FD3E95:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParameters2a9fec89b1fa4da418d8ddcbee9c752a8299a56b5bb793f9fd3977b76c72f5f6S3Bucket473166E1
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters2a9fec89b1fa4da418d8ddcbee9c752a8299a56b5bb793f9fd3977b76c72f5f6S3VersionKey8F89DFCB
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters2a9fec89b1fa4da418d8ddcbee9c752a8299a56b5bb793f9fd3977b76c72f5f6S3VersionKey8F89DFCB
+      Handler: index.list
+      Role:
+        Fn::GetAtt:
+          - lambdacognitoroleADDAE3C6
+          - Arn
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          REGION: ap-northeast-1
+      FunctionName: api-user-list
+      Timeout: 3
+    DependsOn:
+      - lambdacognitoroleADDAE3C6
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/api-user-list/Resource
+      aws:asset:path: asset.2a9fec89b1fa4da418d8ddcbee9c752a8299a56b5bb793f9fd3977b76c72f5f6
+      aws:asset:property: Code
+  apiworklist6539B41E:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParameters074f268d31e29eac7a85b5dd3d9cdb1e6f95cbd2d2715bf9fa646829f646e874S3BucketB4FEAD97
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters074f268d31e29eac7a85b5dd3d9cdb1e6f95cbd2d2715bf9fa646829f646e874S3VersionKeyE28846BD
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters074f268d31e29eac7a85b5dd3d9cdb1e6f95cbd2d2715bf9fa646829f646e874S3VersionKeyE28846BD
+      Handler: index.workList
+      Role: arn:aws:iam::105785188161:role/lambda-basic-role
+      Runtime: nodejs12.x
+      FunctionName: api-work-list
+      Timeout: 30
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/api-work-list/Resource
+      aws:asset:path: asset.074f268d31e29eac7a85b5dd3d9cdb1e6f95cbd2d2715bf9fa646829f646e874
+      aws:asset:property: Code
+  itemsApi28111E1C:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: admin-cognito-user
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/itemsApi/Resource
+  itemsApiDeploymentFEC31BD0a1b2ca3743f74a90e942c61d960000eb:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId:
+        Ref: itemsApi28111E1C
+      Description: Automatically created by the RestApi construct
+    DependsOn:
+      - itemsApiuserPOSTE535AE4C
+      - itemsApiuser82DED758
+      - itemsApiusersGETDA7CA3BA
+      - itemsApiusersC3EFCD92
+      - itemsApiworksGET1A18671C
+      - itemsApiworksF89D6130
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/itemsApi/Deployment/Resource
+  itemsApiDeploymentStageprodE77B897D:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      RestApiId:
+        Ref: itemsApi28111E1C
+      DeploymentId:
+        Ref: itemsApiDeploymentFEC31BD0a1b2ca3743f74a90e942c61d960000eb
+      StageName: prod
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/itemsApi/DeploymentStage.prod/Resource
+  itemsApiCloudWatchRoleB5C7B431:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: apigateway.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/itemsApi/CloudWatchRole/Resource
+  itemsApiAccount591BF3E1:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn:
+        Fn::GetAtt:
+          - itemsApiCloudWatchRoleB5C7B431
+          - Arn
+    DependsOn:
+      - itemsApi28111E1C
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/itemsApi/Account
+  itemsApiuser82DED758:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Fn::GetAtt:
+          - itemsApi28111E1C
+          - RootResourceId
+      PathPart: user
+      RestApiId:
+        Ref: itemsApi28111E1C
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/itemsApi/Default/user/Resource
+  itemsApiuserPOSTApiPermissionAdminCognitoUserCdkStackitemsApi83571366POSTuserA8FCF68B:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - apiusercreateC0AFAC09
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: itemsApi28111E1C
+            - /
+            - Ref: itemsApiDeploymentStageprodE77B897D
+            - /POST/user
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/itemsApi/Default/user/POST/ApiPermission.AdminCognitoUserCdkStackitemsApi83571366.POST..user
+  itemsApiuserPOSTApiPermissionTestAdminCognitoUserCdkStackitemsApi83571366POSTuser84ACED57:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - apiusercreateC0AFAC09
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: itemsApi28111E1C
+            - /test-invoke-stage/POST/user
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/itemsApi/Default/user/POST/ApiPermission.Test.AdminCognitoUserCdkStackitemsApi83571366.POST..user
+  itemsApiuserPOSTE535AE4C:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: POST
+      ResourceId:
+        Ref: itemsApiuser82DED758
+      RestApiId:
+        Ref: itemsApi28111E1C
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - ":apigateway:"
+              - Ref: AWS::Region
+              - :lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - apiusercreateC0AFAC09
+                  - Arn
+              - /invocations
+      MethodResponses:
+        - StatusCode: "200"
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/itemsApi/Default/user/POST/Resource
+  itemsApiusersC3EFCD92:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Fn::GetAtt:
+          - itemsApi28111E1C
+          - RootResourceId
+      PathPart: users
+      RestApiId:
+        Ref: itemsApi28111E1C
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/itemsApi/Default/users/Resource
+  itemsApiusersGETApiPermissionAdminCognitoUserCdkStackitemsApi83571366GETusers80F17D06:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - apiuserlistE8FD3E95
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: itemsApi28111E1C
+            - /
+            - Ref: itemsApiDeploymentStageprodE77B897D
+            - /GET/users
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/itemsApi/Default/users/GET/ApiPermission.AdminCognitoUserCdkStackitemsApi83571366.GET..users
+  itemsApiusersGETApiPermissionTestAdminCognitoUserCdkStackitemsApi83571366GETusers8B5CDC89:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - apiuserlistE8FD3E95
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: itemsApi28111E1C
+            - /test-invoke-stage/GET/users
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/itemsApi/Default/users/GET/ApiPermission.Test.AdminCognitoUserCdkStackitemsApi83571366.GET..users
+  itemsApiusersGETDA7CA3BA:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      ResourceId:
+        Ref: itemsApiusersC3EFCD92
+      RestApiId:
+        Ref: itemsApi28111E1C
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - ":apigateway:"
+              - Ref: AWS::Region
+              - :lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - apiuserlistE8FD3E95
+                  - Arn
+              - /invocations
+      MethodResponses:
+        - StatusCode: "200"
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/itemsApi/Default/users/GET/Resource
+  itemsApiworksF89D6130:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Fn::GetAtt:
+          - itemsApi28111E1C
+          - RootResourceId
+      PathPart: works
+      RestApiId:
+        Ref: itemsApi28111E1C
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/itemsApi/Default/works/Resource
+  itemsApiworksGETApiPermissionAdminCognitoUserCdkStackitemsApi83571366GETworks54FDBE90:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - apiworklist6539B41E
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: itemsApi28111E1C
+            - /
+            - Ref: itemsApiDeploymentStageprodE77B897D
+            - /GET/works
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/itemsApi/Default/works/GET/ApiPermission.AdminCognitoUserCdkStackitemsApi83571366.GET..works
+  itemsApiworksGETApiPermissionTestAdminCognitoUserCdkStackitemsApi83571366GETworksE1F7CBAB:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - apiworklist6539B41E
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: itemsApi28111E1C
+            - /test-invoke-stage/GET/works
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/itemsApi/Default/works/GET/ApiPermission.Test.AdminCognitoUserCdkStackitemsApi83571366.GET..works
+  itemsApiworksGET1A18671C:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      ResourceId:
+        Ref: itemsApiworksF89D6130
+      RestApiId:
+        Ref: itemsApi28111E1C
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - ":apigateway:"
+              - Ref: AWS::Region
+              - :lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - apiworklist6539B41E
+                  - Arn
+              - /invocations
+      MethodResponses:
+        - StatusCode: "200"
+    Metadata:
+      aws:cdk:path: AdminCognitoUserCdkStack/itemsApi/Default/works/GET/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=1.37.0,jsii-runtime=node.js/v11.12.0
+    Condition: CDKMetadataAvailable
+Parameters:
+  AssetParametersa4274787ce936d372ce985cd29c6f78b674f79ae9b59f22879a8b57870105549S3BucketF7FF6F87:
+    Type: String
+    Description: S3 bucket for asset "a4274787ce936d372ce985cd29c6f78b674f79ae9b59f22879a8b57870105549"
+  AssetParametersa4274787ce936d372ce985cd29c6f78b674f79ae9b59f22879a8b57870105549S3VersionKey1EE51A5B:
+    Type: String
+    Description: S3 key for asset version "a4274787ce936d372ce985cd29c6f78b674f79ae9b59f22879a8b57870105549"
+  AssetParametersa4274787ce936d372ce985cd29c6f78b674f79ae9b59f22879a8b57870105549ArtifactHashCDDFE93C:
+    Type: String
+    Description: Artifact hash for asset "a4274787ce936d372ce985cd29c6f78b674f79ae9b59f22879a8b57870105549"
+  AssetParameters2a9fec89b1fa4da418d8ddcbee9c752a8299a56b5bb793f9fd3977b76c72f5f6S3Bucket473166E1:
+    Type: String
+    Description: S3 bucket for asset "2a9fec89b1fa4da418d8ddcbee9c752a8299a56b5bb793f9fd3977b76c72f5f6"
+  AssetParameters2a9fec89b1fa4da418d8ddcbee9c752a8299a56b5bb793f9fd3977b76c72f5f6S3VersionKey8F89DFCB:
+    Type: String
+    Description: S3 key for asset version "2a9fec89b1fa4da418d8ddcbee9c752a8299a56b5bb793f9fd3977b76c72f5f6"
+  AssetParameters2a9fec89b1fa4da418d8ddcbee9c752a8299a56b5bb793f9fd3977b76c72f5f6ArtifactHashC6025CF1:
+    Type: String
+    Description: Artifact hash for asset "2a9fec89b1fa4da418d8ddcbee9c752a8299a56b5bb793f9fd3977b76c72f5f6"
+  AssetParameters074f268d31e29eac7a85b5dd3d9cdb1e6f95cbd2d2715bf9fa646829f646e874S3BucketB4FEAD97:
+    Type: String
+    Description: S3 bucket for asset "074f268d31e29eac7a85b5dd3d9cdb1e6f95cbd2d2715bf9fa646829f646e874"
+  AssetParameters074f268d31e29eac7a85b5dd3d9cdb1e6f95cbd2d2715bf9fa646829f646e874S3VersionKeyE28846BD:
+    Type: String
+    Description: S3 key for asset version "074f268d31e29eac7a85b5dd3d9cdb1e6f95cbd2d2715bf9fa646829f646e874"
+  AssetParameters074f268d31e29eac7a85b5dd3d9cdb1e6f95cbd2d2715bf9fa646829f646e874ArtifactHash3295D554:
+    Type: String
+    Description: Artifact hash for asset "074f268d31e29eac7a85b5dd3d9cdb1e6f95cbd2d2715bf9fa646829f646e874"
+Outputs:
+  itemsApiEndpoint8392E274:
+    Value:
+      Fn::Join:
+        - ""
+        - - https://
+          - Ref: itemsApi28111E1C
+          - .execute-api.
+          - Ref: AWS::Region
+          - "."
+          - Ref: AWS::URLSuffix
+          - /
+          - Ref: itemsApiDeploymentStageprodE77B897D
+          - /
+Conditions:
+  CDKMetadataAvailable:
+    Fn::Or:
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ca-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-northwest-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-central-1
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-3
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - me-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - sa-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-west-2
+

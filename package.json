@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "deploy": "NODE_PATH=. cdk deploy -f",
+    "start": "NODE_PATH=. cdk synth AdminCognitoUserCdkStack > template.yml && sam local start-api -t template.yml",
     "dev": "NODE_PATH=. nodemon -L",
     "ts-node": "ts-node"
   },

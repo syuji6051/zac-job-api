@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { Works as IWorks } from 'app/usecases/stores/Works';
-import { Works as WorksAPI } from 'app/puppeteer/Works';
+import { Works as WorksAPI } from '../puppeteer/Works';
 import { Work as WEntitiesWork } from 'app/entities/Works';
 
 @injectable()

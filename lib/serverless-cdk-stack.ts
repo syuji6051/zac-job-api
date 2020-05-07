@@ -56,8 +56,8 @@ export class AdminCognitoUserCdkStack extends cdk.Stack {
 
     const apiWorkList = new NodejsFunction(this, 'api-work-list', {
       functionName: 'api-work-list',
-      entry: 'app/http/handler/works.ts',
-      handler: 'list',
+      entry: 'app/http/handlers/works.ts',
+      handler: 'workList',
       runtime: lambda.Runtime.NODEJS_12_X,
       timeout: Duration.seconds(30),
       role: Role.fromRoleArn(this, id, 'arn:aws:iam::105785188161:role/lambda-basic-role')
