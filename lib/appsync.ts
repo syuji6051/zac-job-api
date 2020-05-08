@@ -1,43 +1,32 @@
 import * as cdk from '@aws-cdk/core';
-import { UserPool } from '@aws-cdk/aws-cognito';
+import { IUserPool, UserPool } from '@aws-cdk/aws-cognito';
+import { Table } from '@aws-cdk/aws-dynamodb';
 import { GraphQLApi, MappingTemplate } from '@aws-cdk/aws-appsync';
-import { Table, AttributeType } from '@aws-cdk/aws-dynamodb'
 
-import { definition, tableName } from './schema';
-import { Role, ServicePrincipal, ManagedPolicy } from '@aws-cdk/aws-iam';
+import { definition } from './schema';
 
-export class AppSyncCdkStack extends cdk.Stack {
-  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
-
-    const dataSourceIamRole = new Role(this, 'dataSourceIamRole', {
-      assumedBy: new ServicePrincipal('appsync.amazonaws.com')
-    });
-    dataSourceIamRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonDynamoDBFullAccess'))
-
-    const userInfoTable = new Table(this, 'UserInfo', {
-      partitionKey: {
-        name: 'userId',
-        type: AttributeType.STRING
-      },
-      tableName,
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
-    });
-
-    const userPool = UserPool.fromUserPoolId(this, 'UserPool', 'ap-northeast-1_o2nkpklQf');
-
-    const graphQLApi = new GraphQLApi(this, 'ZacWorkManagement', {
+export default class AppSync {
+  private scope: cdk.Construct;
+  private userPool: IUserPool;
+  private table: Table;
+  constructor(scope: cdk.Construct, table: Table) {
+    this.scope = scope;
+    this.userPool = UserPool.fromUserPoolId(this.scope, 'UserPool', 'ap-northeast-1_o2nkpklQf');
+    this.table = table;
+  }
+  createAppSyncZacWorkManagement() {
+    const graphQLApi = new GraphQLApi(this.scope, 'ZacWorkManagement', {
       name: 'Zac-Work-Management',
       authorizationConfig: {
         defaultAuthorization: {
-          userPool,
+          userPool: this.userPool,
           appIdClientRegex: '2jgstgno1cjsaic2ftu6d2tu68',
           defaultAction: 'ALLOW'
         },
       },
       schemaDefinition: definition,
     });
-    const dataSource = graphQLApi.addDynamoDbDataSource('UserInfo', '', userInfoTable);
+    const dataSource = graphQLApi.addDynamoDbDataSource('UserInfo', '', this.table);
 
     dataSource.createResolver({
       typeName: 'Mutation',
@@ -74,7 +63,3 @@ export class AppSyncCdkStack extends cdk.Stack {
     });
   }
 }
-
-const app = new cdk.App();
-new AppSyncCdkStack(app, 'AppSyncCdkStack');
-app.synth()

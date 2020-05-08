@@ -10,10 +10,10 @@ export class WorkListInput extends WorkInput implements IWorkGetInput {
   private yearMonth: string;
   public constructor(
     identity: APIGatewayEventIdentity,
-    eventBody: { [field: string]: any }) {
+    query: { [name: string]: string }) {
     super();
     this.identity = identity;
-    this.yearMonth = eventBody.yearMonth;
+    this.yearMonth = query.yearMonth;
   }
 
   public getUserId(): string {

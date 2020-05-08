@@ -1,6 +1,5 @@
 import { CognitoIdentityServiceProvider } from 'aws-sdk';
 import { ListUsersResponse, UserType } from 'aws-sdk/clients/cognitoidentityserviceprovider';
-import config from '../../aws-exports';
 
 export class Users {
   cognito: CognitoIdentityServiceProvider;
@@ -9,7 +8,7 @@ export class Users {
     this.cognito = new CognitoIdentityServiceProvider({
       region: 'ap-northeast-1'
     });
-    this.userPoolId = config.cognito_user_pool;
+    this.userPoolId = process.env.COGNITO_USER_POOL!;
   }
 
   async create(email: string): Promise<UserType | undefined> {

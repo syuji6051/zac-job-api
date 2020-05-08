@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import { AdminCognitoUserCdkStack } from '../lib/serverless-cdk-stack';
-import { AppSyncCdkStack } from '../lib/appsync-ckd-stack';
+// import { AdminCognitoUserCdkStack } from '../lib/serverless-cdk-stack';
+import { ZacJobManagementCdkStack } from '../lib/cdk-stack';
 
 const app = new cdk.App();
-new AdminCognitoUserCdkStack(app, 'AdminCognitoUserCdkStack');
-new AppSyncCdkStack(app, 'AppSyncCdkStack');
+// new AdminCognitoUserCdkStack(app, 'AdminCognitoUserCdkStack');
+new ZacJobManagementCdkStack(app, 'ZacJobManagementCdkStack');

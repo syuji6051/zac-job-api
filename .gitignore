@@ -11,4 +11,4 @@ aws-exports.ts
 cdk.out
 .cache
 .build
-template.yaml
+template.yml
