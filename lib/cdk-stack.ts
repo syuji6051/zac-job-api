@@ -24,8 +24,8 @@ export class ZacJobManagementCdkStack extends cdk.Stack {
     const lambdaWorkList = lambda.createApiWorkList();
 
     const apiGateway = new APIGateway(this);
-    apiGateway.createGetApiUserList(lambdaUserCreate);
-    apiGateway.createPostApiUserCreate(lambdaUserList);
+    apiGateway.createGetApiUserList(lambdaUserList);
+    apiGateway.createPostApiUserCreate(lambdaUserCreate);
     apiGateway.createGetApiWorkList(lambdaWorkList);
   }
 }

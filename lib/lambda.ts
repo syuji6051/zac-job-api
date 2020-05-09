@@ -15,6 +15,9 @@ export default class Lambda {
       handler: 'create',
       runtime: lambda.Runtime.NODEJS_12_X,
       timeout: cdk.Duration.seconds(3),
+      environment: {
+        COGNITO_USER_POOL: 'ap-northeast-1_nsYbr83YQ'
+      },
       role: iamRole
     });
   }
@@ -25,6 +28,9 @@ export default class Lambda {
       handler: 'list',
       runtime: lambda.Runtime.NODEJS_12_X,
       timeout: cdk.Duration.seconds(3),
+      environment: {
+        COGNITO_USER_POOL: 'ap-northeast-1_nsYbr83YQ'
+      },
       role: iamRole
     });
   }
