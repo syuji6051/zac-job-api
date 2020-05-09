@@ -1,25 +1,25 @@
 import {
   WorkListInput as IWorkGetInput,
 } from 'app/usecases/inputs/Works';
-import { APIGatewayEventIdentity } from 'aws-lambda';
+import { APIGatewayEventDefaultAuthorizerContext } from 'aws-lambda';
 
 class WorkInput { }
 
 export class WorkListInput extends WorkInput implements IWorkGetInput {
-  private identity: APIGatewayEventIdentity;
+  private authorizer: APIGatewayEventDefaultAuthorizerContext;
   private yearMonth: string;
   public constructor(
-    identity: APIGatewayEventIdentity,
+    authorizer: APIGatewayEventDefaultAuthorizerContext,
     query: { [name: string]: string }) {
     super();
-    this.identity = identity;
+    this.authorizer = authorizer;
     this.yearMonth = query.yearMonth;
-    console.log(identity);
+    console.log(authorizer!.claims);
     console.log(query);
   }
 
   public getUserId(): string {
-    return this.identity.user!;
+    return this.authorizer!.claims['cognito:username'];
   }
 
   public getYearMonth(): string {
