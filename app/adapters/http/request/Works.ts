@@ -14,6 +14,8 @@ export class WorkListInput extends WorkInput implements IWorkGetInput {
     super();
     this.identity = identity;
     this.yearMonth = query.yearMonth;
+    console.log(identity);
+    console.log(query);
   }
 
   public getUserId(): string {

@@ -18,7 +18,8 @@ export default class Lambda {
       environment: {
         COGNITO_USER_POOL: 'ap-northeast-1_o2nkpklQf'
       },
-      role: iamRole
+      role: iamRole,
+      sourceMaps: true
     });
   }
   createApiUserList(iamRole: Role) {
@@ -31,7 +32,8 @@ export default class Lambda {
       environment: {
         COGNITO_USER_POOL: 'ap-northeast-1_o2nkpklQf'
       },
-      role: iamRole
+      role: iamRole,
+      sourceMaps: true
     });
   }
   createApiWorkList() {
@@ -44,7 +46,8 @@ export default class Lambda {
       environment: {
         COGNITO_USER_POOL: 'ap-northeast-1_o2nkpklQf'
       },
-      role: Role.fromRoleArn(this.scope, 'createApiWorkList', 'arn:aws:iam::105785188161:role/lambda-basic-role')
+      role: Role.fromRoleArn(this.scope, 'createApiWorkList', 'arn:aws:iam::105785188161:role/lambda-basic-role'),
+      sourceMaps: true
     });
   }
 }
