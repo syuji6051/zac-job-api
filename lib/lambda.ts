@@ -16,7 +16,7 @@ export default class Lambda {
       runtime: lambda.Runtime.NODEJS_12_X,
       timeout: cdk.Duration.seconds(3),
       environment: {
-        COGNITO_USER_POOL: 'ap-northeast-1_nsYbr83YQ'
+        COGNITO_USER_POOL: 'ap-northeast-1_o2nkpklQf'
       },
       role: iamRole
     });
@@ -29,7 +29,7 @@ export default class Lambda {
       runtime: lambda.Runtime.NODEJS_12_X,
       timeout: cdk.Duration.seconds(3),
       environment: {
-        COGNITO_USER_POOL: 'ap-northeast-1_nsYbr83YQ'
+        COGNITO_USER_POOL: 'ap-northeast-1_o2nkpklQf'
       },
       role: iamRole
     });
@@ -42,7 +42,7 @@ export default class Lambda {
       runtime: lambda.Runtime.NODEJS_12_X,
       timeout: cdk.Duration.seconds(30),
       environment: {
-        COGNITO_USER_POOL: 'ap-northeast-1_nsYbr83YQ'
+        COGNITO_USER_POOL: 'ap-northeast-1_o2nkpklQf'
       },
       role: Role.fromRoleArn(this.scope, 'createApiWorkList', 'arn:aws:iam::105785188161:role/lambda-basic-role')
     });

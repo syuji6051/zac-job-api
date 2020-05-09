@@ -4,6 +4,7 @@ import { Users as IUsers } from 'app/usecases/Users';
 import { Users as UserStore } from 'app/usecases/stores/Users';
 import { container, TYPES } from "../../providers/container";
 import { UserCreateOutput, UserListOutput } from "app/usecases/outputs/Users";
+import { APIGatewayProxyResult } from "aws-lambda";
 
 @injectable()
 export class Users implements IUsers {
@@ -16,22 +17,22 @@ export class Users implements IUsers {
   public async create(
     input: UserCreateInput,
     output: UserCreateOutput
-  ): Promise<void> {
+  ): Promise<APIGatewayProxyResult> {
     try {
       const user = await this.store.create(
         input.getUserName(), input.getPassword());
-      output.success(user);
+      return output.success(user);
     } catch (e) {
-      output.error400(e);
+      return output.error400(e);
     }
   }
 
   public async list(
     input: UserListInput,
     output: UserListOutput,
-  ): Promise<void> {
+  ): Promise<APIGatewayProxyResult> {
     const users = await this.store.list(
       input.getPaginationToken());
-    output.success(users);
+    return output.success(users);
   }
 }
