@@ -9,7 +9,8 @@ export default class APIGateway {
   private restApi: apigateway.RestApi;
   private userAddResource: apigateway.Resource;
   private userListResource: apigateway.Resource;
-  private workListResource: apigateway.Resource;
+  private worksResource: apigateway.Resource;
+  private worksSyncResource: apigateway.Resource;
   private authorizer: apigateway.CfnAuthorizer;
   constructor(scope: cdk.Construct) {
     this.scope = scope;
@@ -25,7 +26,8 @@ export default class APIGateway {
     })
     this.userAddResource = this.restApi.root.addResource('user');
     this.userListResource = this.restApi.root.addResource('users');
-    this.workListResource = this.restApi.root.addResource('works');
+    this.worksResource = this.restApi.root.addResource('works');
+    this.worksSyncResource = this.worksResource.addResource('sync');
   }
 
   createPostApiUserCreate(lambda: IFunction) {
@@ -54,15 +56,15 @@ export default class APIGateway {
       { methodResponses: [{ statusCode: '200', }] });
   }
 
-  createGetApiWorkList(lambda: IFunction) {
-    const getApiWorkListIntegration = new apigateway.LambdaIntegration(
+  createPostApiWorkSync(lambda: IFunction) {
+    const getApiWorkSyncIntegration = new apigateway.LambdaIntegration(
       lambda,
       { proxy: true }
     );
 
-    this.workListResource.addMethod(
-      'GET',
-      getApiWorkListIntegration,
+    this.worksSyncResource.addMethod(
+      'POST',
+      getApiWorkSyncIntegration,
       {
         authorizationType: apigateway.AuthorizationType.COGNITO,
         authorizer: { authorizerId: this.authorizer.ref },

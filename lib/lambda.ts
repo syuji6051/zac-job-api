@@ -36,17 +36,17 @@ export default class Lambda {
       sourceMaps: true
     });
   }
-  createApiWorkList() {
-    return new NodejsFunction(this.scope, 'api-work-list', {
-      functionName: 'api-work-list',
+  createApiWorkSync() {
+    return new NodejsFunction(this.scope, 'api-work-sync', {
+      functionName: 'api-work-sync',
       entry: 'app/http/handlers/works.ts',
-      handler: 'workList',
+      handler: 'workSync',
       runtime: lambda.Runtime.NODEJS_12_X,
       timeout: cdk.Duration.seconds(30),
       environment: {
         COGNITO_USER_POOL: 'ap-northeast-1_o2nkpklQf'
       },
-      role: Role.fromRoleArn(this.scope, 'createApiWorkList', 'arn:aws:iam::105785188161:role/lambda-basic-role'),
+      role: Role.fromRoleArn(this.scope, 'createApiWorkSync', 'arn:aws:iam::105785188161:role/lambda-basic-role'),
       sourceMaps: true
     });
   }

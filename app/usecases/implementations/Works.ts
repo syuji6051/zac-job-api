@@ -17,26 +17,24 @@ export class Works implements IWorks {
     this.workStore = container.get<WorkStore>(TYPES.STORE_WORKS)
   }
 
-  public async list(
+  public async workSync(
     input: WorkListInput,
     output: WorkListOutput,
   ): Promise<APIGatewayProxyResult> {
-    const { obcUserId, obcPassword } = await this.userStore.get(
-      input.getUserId()
-    );
+    const { obcUserId, obcPassword } = await this.userStore.get(input.getUserId());
 
     const works = await (async () => {
       try {
-        return (await this.workStore.list(
-          obcUserId!, obcPassword!, input.getYearMonth()
-        ));
+        const works = await this.workStore.list(obcUserId!, obcPassword!, input.getYearMonth());
+        return works;
       } catch (e) {
         console.log(e);
-        throw e;
+        return Promise.reject(e);
       }
     })();
     console.log(works);
 
-    return output.success(works);
+    await this.workStore.put(obcUserId!, works);
+    return output.success();
   }
 }

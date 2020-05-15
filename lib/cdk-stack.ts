@@ -1,7 +1,7 @@
 import * as cdk from '@aws-cdk/core';
 
 import Iam from './iam';
-import { userInfoTable } from './dynamodb';
+import { createUserInfoTable, createUserWorkTable } from './dynamodb';
 import AppSync from './appsync';
 import Lambda from './lambda';
 import APIGateway from './api-gateway';
@@ -14,19 +14,21 @@ export class ZacJobManagementCdkStack extends cdk.Stack {
     iam.createIamRoleAppSyncDynamoDb();
     const cognitoRole = iam.createLambdaCognitoIamRole();
 
-    const table = userInfoTable(this);
-    const appSync = new AppSync(this, table);
+    const userInfoTable = createUserInfoTable(this);
+    const appSync = new AppSync(this, userInfoTable);
     appSync.createAppSyncZacWorkManagement();
+
+    createUserWorkTable(this);
 
     const lambda = new Lambda(this);
     const lambdaUserCreate = lambda.createApiUserCreate(cognitoRole);
     const lambdaUserList = lambda.createApiUserList(cognitoRole);
-    const lambdaWorkList = lambda.createApiWorkList();
+    const lambdaWorkSync = lambda.createApiWorkSync();
 
     const apiGateway = new APIGateway(this);
     apiGateway.createGetApiUserList(lambdaUserList);
     apiGateway.createPostApiUserCreate(lambdaUserCreate);
-    apiGateway.createGetApiWorkList(lambdaWorkList);
+    apiGateway.createPostApiWorkSync(lambdaWorkSync);
   }
 }
 

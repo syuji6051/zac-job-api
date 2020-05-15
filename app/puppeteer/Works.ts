@@ -10,6 +10,6 @@ export class Works {
       body: JSON.stringify({
         userId, password, yearMonth
       }),
-    }).then(res => res.json());
+    }).then(res => res.json())
   }
 }
