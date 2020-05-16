@@ -13,11 +13,13 @@ export class WorkListInput extends WorkInput implements IWorkGetInput {
     authorizer: APIGatewayEventDefaultAuthorizerContext,
     body: string) {
     super();
+    console.log(body);
     this.authorizer = authorizer;
     this.body = JSON.parse(body) as { [name: string]: string };
     this.yearMonth = this.body.yearMonth;
+    console.log(this.body);
+    console.log(this.yearMonth);
     console.log(authorizer!.claims);
-    console.log(body);
   }
 
   public getUserId(): string {
