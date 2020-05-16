@@ -1,18 +1,20 @@
 import * as cdk from '@aws-cdk/core';
 import { IUserPool, UserPool } from '@aws-cdk/aws-cognito';
 import { Table } from '@aws-cdk/aws-dynamodb';
-import { GraphQLApi, MappingTemplate } from '@aws-cdk/aws-appsync';
+import { GraphQLApi, MappingTemplate, KeyCondition } from '@aws-cdk/aws-appsync';
 
 import { definition } from './schema';
 
 export default class AppSync {
   private scope: cdk.Construct;
   private userPool: IUserPool;
-  private table: Table;
-  constructor(scope: cdk.Construct, table: Table) {
+  private userInfoTable: Table;
+  private userWorkTable: Table;
+  constructor(scope: cdk.Construct, userInfoTable: Table, userWorkTable: Table) {
     this.scope = scope;
     this.userPool = UserPool.fromUserPoolId(this.scope, 'UserPool', 'ap-northeast-1_o2nkpklQf');
-    this.table = table;
+    this.userInfoTable = userInfoTable;
+    this.userWorkTable = userWorkTable;
   }
   createAppSyncZacWorkManagement() {
     const graphQLApi = new GraphQLApi(this.scope, 'ZacWorkManagement', {
@@ -26,9 +28,10 @@ export default class AppSync {
       },
       schemaDefinition: definition,
     });
-    const dataSource = graphQLApi.addDynamoDbDataSource('UserInfo', '', this.table);
+    const userInfoSource = graphQLApi.addDynamoDbDataSource('UserInfo', '', this.userInfoTable);
+    const userWorkSource = graphQLApi.addDynamoDbDataSource('UserWork', '', this.userWorkTable);
 
-    dataSource.createResolver({
+    userInfoSource.createResolver({
       typeName: 'Mutation',
       fieldName: 'setObcAuthentication',
       requestMappingTemplate: MappingTemplate.fromString(`
@@ -47,7 +50,7 @@ export default class AppSync {
       responseMappingTemplate: MappingTemplate.dynamoDbResultItem(),
     });
 
-    dataSource.createResolver({
+    userInfoSource.createResolver({
       typeName: 'Query',
       fieldName: 'getObcAuthentication',
       requestMappingTemplate: MappingTemplate.fromString(`
@@ -61,5 +64,15 @@ export default class AppSync {
           `),
       responseMappingTemplate: MappingTemplate.dynamoDbResultItem(),
     });
+
+    userWorkSource.createResolver({
+      typeName: 'Query',
+      fieldName: 'getUserWork',
+      requestMappingTemplate: MappingTemplate.dynamoDbQuery(
+        KeyCondition.eq('userId', 'userId')
+          .and(KeyCondition.between('day', 'start', 'end'))
+      ),
+      responseMappingTemplate: MappingTemplate.dynamoDbResultItem(),
+    })
   }
 }

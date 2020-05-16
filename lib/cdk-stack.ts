@@ -15,10 +15,11 @@ export class ZacJobManagementCdkStack extends cdk.Stack {
     const cognitoRole = iam.createLambdaCognitoIamRole();
 
     const userInfoTable = createUserInfoTable(this);
-    const appSync = new AppSync(this, userInfoTable);
+    const userWorkTable = createUserWorkTable(this);
+    const appSync = new AppSync(this, userInfoTable, userWorkTable);
     appSync.createAppSyncZacWorkManagement();
 
-    createUserWorkTable(this);
+
 
     const lambda = new Lambda(this);
     const lambdaUserCreate = lambda.createApiUserCreate(cognitoRole);
