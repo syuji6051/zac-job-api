@@ -1,7 +1,7 @@
 import * as cdk from "@aws-cdk/core";
 import * as apigateway from '@aws-cdk/aws-apigateway';
 import { IFunction } from "@aws-cdk/aws-lambda";
-import { AuthorizationType } from "@aws-cdk/aws-apigateway";
+import { AuthorizationType, PassthroughBehavior } from "@aws-cdk/aws-apigateway";
 import { UserPool } from "@aws-cdk/aws-cognito";
 
 export default class APIGateway {
@@ -59,7 +59,36 @@ export default class APIGateway {
   createPostApiWorkSync(lambda: IFunction) {
     const getApiWorkSyncIntegration = new apigateway.LambdaIntegration(
       lambda,
-      { proxy: true }
+      {
+        proxy: false,
+        requestParameters: {
+          'integration.request.header.X-Amz-Invocation-Type': "'Event'"
+        },
+        passthroughBehavior: PassthroughBehavior.WHEN_NO_TEMPLATES,
+        requestTemplates: {
+          "application/json": `{
+            "body": "$util.escapeJavaScript($input.body)",
+            "requestContext": {
+                "authorizer": {
+                    "claims": {
+                        #foreach($key in $context.authorizer.claims.keySet())
+                        "$key": "$util.escapeJavaScript($context.authorizer.claims.get($key))" #if($foreach.hasNext ),#end
+                        #end
+                    }
+                }
+            }
+          }`
+        },
+        integrationResponses: [{
+          statusCode: '200',
+          responseParameters: {
+            "method.response.header.Access-Control-Allow-Origin": "'*'"
+          },
+          responseTemplates: {
+            "application/json": `{}`
+          },
+        }],
+      },
     );
 
     this.worksSyncResource.addMethod(
@@ -68,8 +97,17 @@ export default class APIGateway {
       {
         authorizationType: apigateway.AuthorizationType.COGNITO,
         authorizer: { authorizerId: this.authorizer.ref },
-        methodResponses: [{ statusCode: '200' }]
+        methodResponses: [{
+          statusCode: '200',
+          responseParameters: {
+            'method.response.header.Access-Control-Allow-Origin': true
+          }
+        }]
       }
     );
+
+    this.worksSyncResource.addCorsPreflight({
+      allowOrigins: ['*']
+    })
   }
 }
