@@ -37,4 +37,44 @@ export class Works implements IWorks {
     await this.workStore.put(obcUserId!, works);
     return output.success();
   }
+
+  public async clockIn(
+    input: WorkListInput,
+    output: WorkListOutput,
+  ): Promise<APIGatewayProxyResult> {
+    const { obcUserId, obcPassword } = await this.userStore.get(input.getUserId());
+
+    await this.workStore.clockIn(obcUserId!, obcPassword!);
+    return output.success();
+  }
+
+  public async clockOut(
+    input: WorkListInput,
+    output: WorkListOutput,
+  ): Promise<APIGatewayProxyResult> {
+    const { obcUserId, obcPassword } = await this.userStore.get(input.getUserId());
+
+    await this.workStore.clockOut(obcUserId!, obcPassword!);
+    return output.success();
+  }
+
+  public async goOut(
+    input: WorkListInput,
+    output: WorkListOutput,
+  ): Promise<APIGatewayProxyResult> {
+    const { obcUserId, obcPassword } = await this.userStore.get(input.getUserId());
+
+    await this.workStore.goOut(obcUserId!, obcPassword!);
+    return output.success();
+  }
+
+  public async goReturn(
+    input: WorkListInput,
+    output: WorkListOutput,
+  ): Promise<APIGatewayProxyResult> {
+    const { obcUserId, obcPassword } = await this.userStore.get(input.getUserId());
+
+    await this.workStore.goReturn(obcUserId!, obcPassword!);
+    return output.success();
+  }
 }

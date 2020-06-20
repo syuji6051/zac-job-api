@@ -23,7 +23,8 @@ export class WorkListInput extends WorkInput implements IWorkGetInput {
   }
 
   public getUserId(): string {
-    return this.authorizer!.claims['cognito:username'];
+    const claims = this.authorizer!.claims;
+    return claims['cognito:username'] || claims['username'];
   }
 
   public getYearMonth(): string {

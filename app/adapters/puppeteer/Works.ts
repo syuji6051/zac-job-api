@@ -18,6 +18,19 @@ export class Works implements IWorks {
     return this.workApi.list(userId, password, yearMonth);
   }
 
+  public clockIn(userId: string, password: string): Promise<void> {
+    return this.workApi.clockIn(userId, password);
+  } 
+  public clockOut(userId: string, password: string): Promise<void> {
+    return this.workApi.clockOut(userId, password);
+  } 
+  public goOut(userId: string, password: string): Promise<void> {
+    return this.workApi.goOut(userId, password);
+  } 
+  public goReturn(userId: string, password: string): Promise<void> {
+    return this.workApi.goReturn(userId, password);
+  } 
+
   public async put(userId: string, works: Work[]): Promise<void> {
     return this.workDB.setWork(userId, works);
   }

@@ -12,4 +12,44 @@ export class Works {
       }),
     }).then(res => res.json())
   }
+
+  public async clockIn(userId: string, password: string) {
+    console.log('works api call start');
+    return fetch(`${BASE_URL}/works/clockIn`, {
+      method: 'POST',
+      body: JSON.stringify({
+        userId, password,
+      }),
+    }).then(res => res.json())
+  }
+
+  public async clockOut(userId: string, password: string) {
+    console.log('works api call start');
+    return fetch(`${BASE_URL}/works/clockOut`, {
+      method: 'POST',
+      body: JSON.stringify({
+        userId, password,
+      }),
+    }).then(res => res.json())
+  }
+
+  public async goOut(userId: string, password: string) {
+    console.log('works api call start');
+    return fetch(`${BASE_URL}/works/goOut`, {
+      method: 'POST',
+      body: JSON.stringify({
+        userId, password,
+      }),
+    }).then(res => res.json())
+  }
+
+  public async goReturn(userId: string, password: string) {
+    console.log('works api call start');
+    return fetch(`${BASE_URL}/works/goReturn`, {
+      method: 'POST',
+      body: JSON.stringify({
+        userId, password,
+      }),
+    }).then(res => res.json())
+  }
 }
