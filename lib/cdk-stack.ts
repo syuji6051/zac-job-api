@@ -3,8 +3,7 @@ import * as cdk from '@aws-cdk/core';
 import Iam from './iam';
 import { createUserInfoTable, createUserWorkTable } from './dynamodb';
 import AppSync from './appsync';
-import Lambda from './lambda';
-import APIGateway from './api-gateway';
+import LambdaBasicRole from './iam/lambda-basic-role';
 
 export class ZacJobManagementCdkStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
@@ -12,7 +11,9 @@ export class ZacJobManagementCdkStack extends cdk.Stack {
 
     const iam = new Iam(this);
     iam.createIamRoleAppSyncDynamoDb();
-    const cognitoRole = iam.createLambdaCognitoIamRole();
+    iam.createLambdaCognitoIamRole();
+
+    new LambdaBasicRole(this);
 
     const userInfoTable = createUserInfoTable(this);
     const userWorkTable = createUserWorkTable(this);
@@ -20,16 +21,15 @@ export class ZacJobManagementCdkStack extends cdk.Stack {
     appSync.createAppSyncZacWorkManagement();
 
 
+    // const lambda = new Lambda(this);
+    // const lambdaUserCreate = lambda.createApiUserCreate(cognitoRole);
+    // const lambdaUserList = lambda.createApiUserList(cognitoRole);
+    // const lambdaWorkSync = lambda.createApiWorkSync();
 
-    const lambda = new Lambda(this);
-    const lambdaUserCreate = lambda.createApiUserCreate(cognitoRole);
-    const lambdaUserList = lambda.createApiUserList(cognitoRole);
-    const lambdaWorkSync = lambda.createApiWorkSync();
-
-    const apiGateway = new APIGateway(this);
-    apiGateway.createGetApiUserList(lambdaUserList);
-    apiGateway.createPostApiUserCreate(lambdaUserCreate);
-    apiGateway.createPostApiWorkSync(lambdaWorkSync);
+    // const apiGateway = new APIGateway(this);
+    // apiGateway.createGetApiUserList(lambdaUserList);
+    // apiGateway.createPostApiUserCreate(lambdaUserCreate);
+    // apiGateway.createPostApiWorkSync(lambdaWorkSync);
   }
 }
 

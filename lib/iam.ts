@@ -29,9 +29,9 @@ export default class Iam {
       statements: [cognitoAllowPolicy],
     });
 
-    const serviceRole = new Role(this.scope, 'lambda-cognito-role', {
+    const serviceRole = new Role(this.scope, 'lambda-cognito-role2', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
-      roleName: 'lambda-cognito-role',
+      roleName: 'lambda-cognito-role2',
     });
     serviceRole.attachInlinePolicy(policy);
     return serviceRole;

@@ -50,4 +50,16 @@ export default class Lambda {
       sourceMaps: true
     });
   }
+  createApiClockIn() {
+    return new NodejsFunction(this.scope, 'api-work-sync', {
+      functionName: 'api-work-clock-in',
+      entry: 'app/http/handlers/works.ts',
+      handler: 'clockIn',
+      runtime: lambda.Runtime.NODEJS_12_X,
+      timeout: cdk.Duration.seconds(30),
+      role: Role.fromRoleArn(this.scope, 'createApiWorkSync', 'arn:aws:iam::105785188161:role/lambda-basic-role'),
+      sourceMaps: true
+    });
+  }
+
 }
