@@ -42,6 +42,47 @@ functions:
           authorizer:
             name: cognitoJwtAuthorizer
           async: true
+  work-clock-in:
+    name: ${self:service.name}-work-clock-in-${opt:stage}
+    handler: app/http/handlers/works.clockIn
+    events:
+      - httpApi:
+          path: /work/clock-in
+          method: post
+          cors: true
+          authorizer:
+            name: cognitoJwtAuthorizer
+  work-clock-out:
+    name: ${self:service.name}-work-clock-out-${opt:stage}
+    handler: app/http/handlers/works.clockOut
+    events:
+      - httpApi:
+          path: /work/clock-out
+          method: post
+          cors: true
+          authorizer:
+            name: cognitoJwtAuthorizer
+  work-go-out:
+    name: ${self:service.name}-work-go-out-${opt:stage}
+    handler: app/http/handlers/works.goOut
+    events:
+      - httpApi:
+          path: /work/go-out
+          method: post
+          cors: true
+          authorizer:
+            name: cognitoJwtAuthorizer
+  work-go-return:
+    name: ${self:service.name}-work-go-return-${opt:stage}
+    handler: app/http/handlers/works.goReturn
+    events:
+      - httpApi:
+          path: /work/go-return
+          method: post
+          cors: true
+          authorizer:
+            name: cognitoJwtAuthorizer
+
 custom:
   webpack:
     packager: "yarn"
