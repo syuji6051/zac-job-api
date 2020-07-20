@@ -1,8 +1,12 @@
-export interface WorkListInput {
+export interface WorkInput {
+  getUserId(): string;
+}
+
+export interface WorkListInput extends WorkInput {
   getYearMonth(): string;
 };
 
-export interface WorkClockInInput {};
-export interface WorkClockOutInput {};
-export interface WorkGoOutInput {};
-export interface WorkGoReturnInput {};
+export interface WorkClockInInput extends WorkInput {};
+export interface WorkClockOutInput extends WorkInput {};
+export interface WorkGoOutInput extends WorkInput {};
+export interface WorkGoReturnInput extends WorkInput {};

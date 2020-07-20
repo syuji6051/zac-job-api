@@ -2,8 +2,8 @@ import { injectable } from "inversify";
 import { Users as UserInfoStore } from 'app/usecases/stores/UserInfo';
 import { Works as WorkStore } from 'app/usecases/stores/Works';
 import { Works as IWorks } from 'app/usecases/Works';
-import { WorkListOutput } from "app/adapters/http/response/Works";
-import { WorkListInput } from "app/usecases/inputs/Works";
+import { WorkListOutput, WorkClockInOutput, WorkClockOutOutput, WorkGoOutOutput, WorkGoReturnOutput } from "app/adapters/http/response/Works";
+import { WorkListInput, WorkClockInInput, WorkClockOutInput, WorkGoOutInput, WorkGoReturnInput } from "app/usecases/inputs/Works";
 import { APIGatewayProxyResult } from "aws-lambda";
 import { container, TYPES } from "../../providers/container";
 
@@ -39,8 +39,8 @@ export class Works implements IWorks {
   }
 
   public async clockIn(
-    input: WorkListInput,
-    output: WorkListOutput,
+    input: WorkClockInInput,
+    output: WorkClockInOutput,
   ): Promise<APIGatewayProxyResult> {
     const { obcUserId, obcPassword } = await this.userStore.get(input.getUserId());
 
@@ -49,8 +49,8 @@ export class Works implements IWorks {
   }
 
   public async clockOut(
-    input: WorkListInput,
-    output: WorkListOutput,
+    input: WorkClockOutInput,
+    output: WorkClockOutOutput,
   ): Promise<APIGatewayProxyResult> {
     const { obcUserId, obcPassword } = await this.userStore.get(input.getUserId());
 
@@ -59,8 +59,8 @@ export class Works implements IWorks {
   }
 
   public async goOut(
-    input: WorkListInput,
-    output: WorkListOutput,
+    input: WorkGoOutInput,
+    output: WorkGoOutOutput,
   ): Promise<APIGatewayProxyResult> {
     const { obcUserId, obcPassword } = await this.userStore.get(input.getUserId());
 
@@ -69,8 +69,8 @@ export class Works implements IWorks {
   }
 
   public async goReturn(
-    input: WorkListInput,
-    output: WorkListOutput,
+    input: WorkGoReturnInput,
+    output: WorkGoReturnOutput,
   ): Promise<APIGatewayProxyResult> {
     const { obcUserId, obcPassword } = await this.userStore.get(input.getUserId());
 

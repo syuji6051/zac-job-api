@@ -1,8 +1,8 @@
 import { APIGatewayEvent, Context, APIGatewayProxyResult, Callback } from "aws-lambda";
 import { container, TYPES } from "../../providers/container";
 import { Works as UseCase } from 'app/usecases/Works';
-import { WorkListInput } from "../../adapters/http/request/Works";
-import { WorkListOutput } from "../../adapters/http/response/Works";
+import { WorkListInput, WorkClockInInput, WorkClockOutInput, WorkGoOutInput, WorkGoReturnInput } from "../../adapters/http/request/Works";
+import { WorkListOutput, WorkClockInOutput, WorkClockOutOutput, WorkGoOutOutput, WorkGoReturnOutput } from "../../adapters/http/response/Works";
 
 export const workSync = async (event: APIGatewayEvent, _content: Context, _cb: Callback): Promise<APIGatewayProxyResult> => {
   console.log(event);
@@ -19,8 +19,8 @@ export const clockIn = async (event: APIGatewayEvent, _content: Context, _cb: Ca
   const { requestContext: { authorizer }, body } = event;
   return container.get<UseCase>(TYPES.USECASE_WORKS)
     .clockIn(
-      new WorkListInput(authorizer, body!),
-      new WorkListOutput(),
+      new WorkClockInInput(authorizer, body!),
+      new WorkClockInOutput(),
     );
 };
 
@@ -29,8 +29,8 @@ export const clockOut = async (event: APIGatewayEvent, _content: Context, _cb: C
   const { requestContext: { authorizer }, body } = event;
   return container.get<UseCase>(TYPES.USECASE_WORKS)
     .clockOut(
-      new WorkListInput(authorizer, body!),
-      new WorkListOutput(),
+      new WorkClockOutInput(authorizer, body!),
+      new WorkClockOutOutput(),
     );
 };
 
@@ -39,8 +39,8 @@ export const goOut = async (event: APIGatewayEvent, _content: Context, _cb: Call
   const { requestContext: { authorizer }, body } = event;
   return container.get<UseCase>(TYPES.USECASE_WORKS)
     .goOut(
-      new WorkListInput(authorizer, body!),
-      new WorkListOutput(),
+      new WorkGoOutInput(authorizer, body!),
+      new WorkGoOutOutput(),
     );
 };
 
@@ -49,7 +49,7 @@ export const goReturn = async (event: APIGatewayEvent, _content: Context, _cb: C
   const { requestContext: { authorizer }, body } = event;
   return container.get<UseCase>(TYPES.USECASE_WORKS)
     .goReturn(
-      new WorkListInput(authorizer, body!),
-      new WorkListOutput(),
+      new WorkGoReturnInput(authorizer, body!),
+      new WorkGoReturnOutput(),
     );
 };
