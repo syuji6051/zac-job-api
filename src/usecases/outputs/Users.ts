@@ -1,0 +1,17 @@
+/* eslint-disable no-unused-vars */
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { APIGatewayProxyResult } from 'aws-lambda';
+
+import { User, Users } from '@/entities/Users';
+
+export interface UserCreateOutput {
+  success(user: User): APIGatewayProxyResult;
+}
+
+export interface UserListOutput {
+  success(users: Users): APIGatewayProxyResult;
+}
+
+export interface PutZacLoginOutput {
+  success(): APIGatewayProxyResult;
+}

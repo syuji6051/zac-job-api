@@ -13,6 +13,9 @@ module.exports = {
     extensions: ['.mjs', '.json', '.ts'],
     symlinks: false,
     cacheWithContext: false,
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
   },
   output: {
     libraryTarget: 'commonjs',

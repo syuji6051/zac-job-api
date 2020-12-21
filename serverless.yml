@@ -7,17 +7,19 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ap-northeast-1
   deploymentBucket: 
-    name: shuji-serverless-deploy-dev
-  role: 'arn:aws:iam::#{AWS::AccountId}:role/lambda-basic-role'
+    name: serverless-deploy-bucket
+  role: 'arn:aws:iam::#{AWS::AccountId}:role/lambda-basic-role-${opt:stage}'
   timeout: 29
   memorySize: 128
+  environment:
+    SECRET_ID: zac-job-dev
   httpApi:
     authorizers:
       cognitoJwtAuthorizer:
         identitySource: $request.header.Authorization
         issuerUrl: https://cognito-idp.#{AWS::Region}.amazonaws.com/ap-northeast-1_nsYbr83YQ
         audience:
-          - 4s375jt92lgobq1keg4ip8r3fm
+          - 4s375jt92lgobq1keg4ip8r3fm    
 plugins:
   - serverless-webpack
   - serverless-pseudo-parameters
@@ -25,15 +27,26 @@ plugins:
 functions:
   user-create:
     name: ${self:service.name}-user-create-${opt:stage}
-    handler: app/http/handlers/users.create
+    handler: src/handlers/users.create
     events:
       - http:
           path: /user/create
           method: post
           cors: true
+  put-zac-login:
+    name: ${self:service.name}-put-zac-login-${opt:stage}
+    handler: src/handlers/users.putZacLogin
+    role: arn:aws:iam::#{AWS::AccountId}:role/lambda-cognito-write-role-${opt:stage}
+    events:
+      - http:
+          path: /user/zac/login
+          method: put
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_Jp6VfWMAA
   work-list-sync:
     name: ${self:service.name}-work-list-sync-${opt:stage}
-    handler: app/http/handlers/works.workSync
+    handler: src/handlers/works.workSync
     events:
       - httpApi:
           path: /work/sync
@@ -44,7 +57,7 @@ functions:
           async: true
   work-clock-in:
     name: ${self:service.name}-work-clock-in-${opt:stage}
-    handler: app/http/handlers/works.clockIn
+    handler: src/handlers/works.clockIn
     events:
       - httpApi:
           path: /work/clock-in
@@ -54,7 +67,7 @@ functions:
             name: cognitoJwtAuthorizer
   work-clock-out:
     name: ${self:service.name}-work-clock-out-${opt:stage}
-    handler: app/http/handlers/works.clockOut
+    handler: src/handlers/works.clockOut
     events:
       - httpApi:
           path: /work/clock-out
@@ -64,7 +77,7 @@ functions:
             name: cognitoJwtAuthorizer
   work-go-out:
     name: ${self:service.name}-work-go-out-${opt:stage}
-    handler: app/http/handlers/works.goOut
+    handler: src/handlers/works.goOut
     events:
       - httpApi:
           path: /work/go-out
@@ -74,7 +87,7 @@ functions:
             name: cognitoJwtAuthorizer
   work-go-return:
     name: ${self:service.name}-work-go-return-${opt:stage}
-    handler: app/http/handlers/works.goReturn
+    handler: src/handlers/works.goReturn
     events:
       - httpApi:
           path: /work/go-return

@@ -1,11 +1,22 @@
 env:
-  browser: true
   es6: true
-extends: airbnb-base
+  node: true
+extends:
+  - airbnb-base
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
+parser: '@typescript-eslint/parser'
 parserOptions:
   ecmaVersion: 2018
   sourceType: module
-rules: {}
+plugins:
+  - '@typescript-eslint'
+  - prettier
+settings:
+  import/resolver: webpack
+rules:
+  max-classes-per-file: off
+  import/no-unresolved: off
+  class-methods-use-this: off
+  no-restricted-syntax: off
