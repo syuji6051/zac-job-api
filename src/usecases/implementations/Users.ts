@@ -50,11 +50,11 @@ export default class Users implements IUsers {
       ENCRYPT_SALT_KEY,
     } = this.secrets;
     const password = input.getZacPassword();
-    const { encryptedData } = encrypt(ENCRYPT_KEY, ENCRYPT_SALT_KEY, password);
+    const encryptedData = encrypt(ENCRYPT_KEY, ENCRYPT_SALT_KEY, password);
     await this.store.putZacLogin(
       input.getUserName(),
       input.getZacUserId(),
-      encryptedData.toString('base64'),
+      encryptedData,
     );
     return output.success();
   }
