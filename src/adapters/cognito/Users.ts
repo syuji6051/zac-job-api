@@ -4,7 +4,10 @@ import { UserType } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import { Users as IUsers } from '@/usecases/stores/Users';
 import UsersTable from '@/cognito/Users';
 import { UserInfo as UserInfoTable } from '@/database/User';
-import { User, Users as EntitiesUsers, UserInfo } from '@/entities/Users';
+import Puppeteer from '@/puppeteer/zac';
+import {
+  User, Users as EntitiesUsers, UserInfo, ZacWork,
+} from '@/entities/Users';
 import { TYPES } from '@/providers/container';
 import { SecretsValues } from '@/entities/Environments';
 
@@ -12,12 +15,15 @@ import { SecretsValues } from '@/entities/Environments';
 export default class Users implements IUsers {
   private cognito: UsersTable;
 
+  private puppeteer: Puppeteer;
+
   private user: UserInfoTable;
 
   constructor(
     @inject(TYPES.ASM_VALUES) private secrets: SecretsValues,
   ) {
     this.cognito = new UsersTable(secrets.COGNITO_USER_POOL);
+    this.puppeteer = new Puppeteer();
     this.user = new UserInfoTable();
   }
 
@@ -42,6 +48,10 @@ export default class Users implements IUsers {
 
   public async putZacLogin(userId: string, zacLoginId: string, zacPassword: string): Promise<void> {
     await this.cognito.putZacLogin(userId, zacLoginId, zacPassword);
+  }
+
+  public async register(props: ZacWork) {
+    await this.puppeteer.register(props);
   }
 
   private recordToEntity(user: UserType): User {

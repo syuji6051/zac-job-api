@@ -15,9 +15,11 @@ jobs:
           node-version: "12.x"
       - name: serverless deploy
         run: |
-          yarn
-          yarn deploy dev
+          npm config set //npm.pkg.github.com/:_authToken $GITHUB_TOKEN
+          npm install
+          npm run deploy dev
         env:
+          GITHUB_TOKEN: ${{ secrets.NPM_GITHUB_TOKEN }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ap-northeast-1

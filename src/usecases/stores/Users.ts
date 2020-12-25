@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
-import { User, Users as EntitiesUsers, UserInfo } from '@/entities/Users';
+import {
+  User, Users as EntitiesUsers, UserInfo, ZacWork,
+} from '@/entities/Users';
 
 export interface Users {
   create(email: string, password: string): Promise<User>;
@@ -8,4 +10,5 @@ export interface Users {
   putZacLogin(
     userName: string, zacLoginId: string, zacPassword: string
   ): Promise<void>;
+  register(props: ZacWork): Promise<void>;
 }

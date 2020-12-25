@@ -44,6 +44,16 @@ functions:
           cors: true
           authorizer:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_Jp6VfWMAA
+  user-zac-work:
+    name: ${self:service.name}-user-zac-work-${opt:stage}
+    handler: src/handlers/users.postZacRegister
+    role: arn:aws:iam::#{AWS::AccountId}:role/lambda-cognito-write-role-${opt:stage}
+      - http:
+          path: /user/zac/work
+          method: post
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_Jp6VfWMAA
   work-list-sync:
     name: ${self:service.name}-work-list-sync-${opt:stage}
     handler: src/handlers/works.workSync
@@ -98,6 +108,6 @@ functions:
 
 custom:
   webpack:
-    packager: "yarn"
+    packager: "npm"
     webpackConfig: ./webpack.config.js
   webpackIncludeModules: true

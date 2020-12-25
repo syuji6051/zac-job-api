@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import { Works as IWorks } from '@/usecases/stores/Works';
 import { Work as WEntitiesWork, Work } from '@/entities/Works';
-import { Works as WorksAPI } from '@/puppeteer/Works';
+import WorksAPI from '@/puppeteer/Works';
 import { Work as WorkDB } from '@/database/Work';
 
 @injectable()

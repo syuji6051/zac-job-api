@@ -15,3 +15,7 @@ export interface UserListOutput {
 export interface PutZacLoginOutput {
   success(): APIGatewayProxyResult;
 }
+
+export interface ZacWorkRegisterOutput {
+  success(): APIGatewayProxyResult;
+}

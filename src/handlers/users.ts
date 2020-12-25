@@ -2,8 +2,12 @@ import { APIGatewayEvent, APIGatewayProxyResult, APIGatewayProxyWithCognitoAutho
 
 import { asyncModules, container, TYPES } from '@/providers/container';
 import { Users as UseCase } from '@/usecases/Users';
-import { PutZacLoginInput, UserCreateInput, UserListInput } from '@/adapters/http/request/Users';
-import { PutZacLoginOutput, UserCreateOutput, UserListOutput } from '@/adapters/http/response/Users';
+import {
+  PutZacLoginInput, UserCreateInput, UserListInput, ZacWorkRegisterInput,
+} from '@/adapters/http/request/Users';
+import {
+  PutZacLoginOutput, UserCreateOutput, UserListOutput, ZacWorkRegisterOutput,
+} from '@/adapters/http/response/Users';
 import logger from '@/lib/logger';
 import { lambdaErrorHandler } from '@/middleware/lambda-error-handler';
 
@@ -40,6 +44,25 @@ export const putZacLogin = async (
       .putZacLogin(
         new PutZacLoginInput(requestContext, body),
         new PutZacLoginOutput(),
+      );
+  })().catch((err) => {
+    logger.log(err);
+    return lambdaErrorHandler(err);
+  });
+};
+
+export const postZacRegister = async (
+  event: APIGatewayProxyWithCognitoAuthorizerEvent,
+): Promise<APIGatewayProxyResult> => {
+  const { body, requestContext } = event;
+  logger.info(JSON.stringify(event));
+
+  return (async () => {
+    await asyncModules;
+    return container.get<UseCase>(TYPES.USECASE_USERS)
+      .ZacWorkRegister(
+        new ZacWorkRegisterInput(requestContext, body),
+        new ZacWorkRegisterOutput(),
       );
   })().catch((err) => {
     logger.log(err);

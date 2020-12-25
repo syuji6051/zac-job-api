@@ -1,11 +1,15 @@
 import { inject, injectable } from 'inversify';
 import { APIGatewayProxyResult } from 'aws-lambda';
 
-import { UserCreateInput, UserListInput, PutZacLoginInput } from '@/usecases/inputs/Users';
+import {
+  UserCreateInput, UserListInput, PutZacLoginInput, ZacWorkRegisterInput,
+} from '@/usecases/inputs/Users';
 import { Users as IUsers } from '@/usecases/Users';
 import { Users as UserStore } from '@/usecases/stores/Users';
 import { container, TYPES } from '@/providers/container';
-import { UserCreateOutput, UserListOutput, PutZacLoginOutput } from '@/usecases/outputs/Users';
+import {
+  UserCreateOutput, UserListOutput, PutZacLoginOutput, ZacWorkRegisterOutput,
+} from '@/usecases/outputs/Users';
 import { encrypt } from '@/lib/crypto';
 import { SecretsValues } from '@/entities/Environments';
 
@@ -56,6 +60,24 @@ export default class Users implements IUsers {
       input.getZacUserId(),
       encryptedData,
     );
+    return output.success();
+  }
+
+  public async ZacWorkRegister(
+    input: ZacWorkRegisterInput,
+    output: ZacWorkRegisterOutput,
+  ): Promise<APIGatewayProxyResult> {
+    await this.store.register({
+      userId: input.getUserName(),
+      workDate: input.getWorkDate(),
+      workStartHour: input.getWorkStartHour(),
+      workStartMinute: input.getWorkStartMinute(),
+      workEndHour: input.getWorkEndHour(),
+      workEndMinute: input.getWorkEndMinute(),
+      workBreakHour: input.getWorkBreakHour(),
+      workBreakMinute: input.getWorkBreakMinute(),
+      works: input.getWorks(),
+    });
     return output.success();
   }
 }

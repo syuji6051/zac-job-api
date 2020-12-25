@@ -1,0 +1,89 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "additionalProperties": false,
+    "required": [
+        "workDate",
+        "workEndHour",
+        "workEndMinute",
+        "workStartHour",
+        "workStartMinute",
+        "workBreakHour",
+        "workBreakMinute",
+        "works"
+    ],
+    "properties": {
+        "workBreakHour": {
+            "type": "number"
+        },
+        "workBreakMinute": {
+            "enum": [
+                0,
+                15,
+                30,
+                45
+            ],
+            "type": "number"
+        },
+        "workDate": {
+            "description": "Enables basic storage and retrieval of dates and times.",
+            "format": "date",
+            "type": "string"
+        },
+        "workEndHour": {
+            "type": "number"
+        },
+        "workEndMinute": {
+            "enum": [
+                0,
+                15,
+                30,
+                45
+            ],
+            "type": "number"
+        },
+        "workStartHour": {
+            "type": "number"
+        },
+        "workStartMinute": {
+            "enum": [
+                0,
+                15,
+                30,
+                45
+            ],
+            "type": "number"
+        },
+        "works": {
+            "items": {
+                "additionalProperties": false,
+                "required": [
+                    "code", "hour", "minute"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "string"
+                    },
+                    "hour": {
+                        "type": "number"
+                    },
+                    "minute": {
+                        "enum": [
+                            0,
+                            15,
+                            30,
+                            45
+                        ],
+                        "type": "number"
+                    },
+                    "text": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "type": "array"
+        }
+    },
+    "type": "object"
+}
+
