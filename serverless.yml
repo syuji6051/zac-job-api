@@ -48,6 +48,7 @@ functions:
     name: ${self:service.name}-user-zac-work-${opt:stage}
     handler: src/handlers/users.postZacRegister
     role: arn:aws:iam::#{AWS::AccountId}:role/lambda-cognito-write-role-${opt:stage}
+    events:
       - http:
           path: /user/zac/work
           method: post
