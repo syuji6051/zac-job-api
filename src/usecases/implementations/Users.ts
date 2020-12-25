@@ -2,13 +2,13 @@ import { inject, injectable } from 'inversify';
 import { APIGatewayProxyResult } from 'aws-lambda';
 
 import {
-  UserCreateInput, UserListInput, PutZacLoginInput, ZacWorkRegisterInput,
+  UserCreateInput, UserListInput, PutZacLoginInput, ZacWorkRegisterInput, PutObcLoginInput,
 } from '@/usecases/inputs/Users';
 import { Users as IUsers } from '@/usecases/Users';
 import { Users as UserStore } from '@/usecases/stores/Users';
 import { container, TYPES } from '@/providers/container';
 import {
-  UserCreateOutput, UserListOutput, PutZacLoginOutput, ZacWorkRegisterOutput,
+  UserCreateOutput, UserListOutput, PutZacLoginOutput, ZacWorkRegisterOutput, PutObcLoginOutput,
 } from '@/usecases/outputs/Users';
 import { encrypt } from '@/lib/crypto';
 import { SecretsValues } from '@/entities/Environments';
@@ -58,6 +58,24 @@ export default class Users implements IUsers {
     await this.store.putZacLogin(
       input.getUserName(),
       input.getZacUserId(),
+      encryptedData,
+    );
+    return output.success();
+  }
+
+  public async putObcLogin(
+    input: PutObcLoginInput,
+    output: PutObcLoginOutput,
+  ): Promise<APIGatewayProxyResult> {
+    const {
+      ENCRYPT_KEY,
+      ENCRYPT_SALT_KEY,
+    } = this.secrets;
+    const password = input.getObcPassword();
+    const encryptedData = encrypt(ENCRYPT_KEY, ENCRYPT_SALT_KEY, password);
+    await this.store.putObcLogin(
+      input.getUserName(),
+      input.getObcUserId(),
       encryptedData,
     );
     return output.success();

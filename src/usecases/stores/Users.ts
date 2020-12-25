@@ -10,5 +10,8 @@ export interface Users {
   putZacLogin(
     userName: string, zacLoginId: string, zacPassword: string
   ): Promise<void>;
+  putObcLogin(
+    userName: string, obcLoginId: string, obcPassword: string
+  ): Promise<void>;
   register(props: ZacWork): Promise<void>;
 }

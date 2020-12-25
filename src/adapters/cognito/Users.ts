@@ -50,6 +50,10 @@ export default class Users implements IUsers {
     await this.cognito.putZacLogin(userId, zacLoginId, zacPassword);
   }
 
+  public async putObcLogin(userId: string, obcLoginId: string, obcPassword: string): Promise<void> {
+    await this.cognito.putObcLogin(userId, obcLoginId, obcPassword);
+  }
+
   public async register(props: ZacWork) {
     await this.puppeteer.register(props);
   }

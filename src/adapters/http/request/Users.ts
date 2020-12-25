@@ -6,11 +6,12 @@ import {
   UserCreateInput as IUserCreateInput,
   UserListInput as IUserListInput,
   PutZacLoginInput as IPutZacLoginInput,
+  PutObcLoginInput as IPutObcLoginInput,
   ZacWorkRegisterInput as IZacWorkRegisterInput,
 } from '@/usecases/inputs/Users';
-import { putZacLoginValidateFunc, zacWorkRegisterFunc } from '@/validations/users';
+import { putZacLoginValidateFunc, zacWorkRegisterFunc, putObcLoginValidateFunc } from '@/validations/users';
 import { ValidationError } from '@/lib/errors';
-import { ZacUserLoginRequestBody, ZacWorkRegisterRequestBody } from '@/entities/Users';
+import { ZacUserLoginRequestBody, ObcUserLoginRequestBody, ZacWorkRegisterRequestBody } from '@/entities/Users';
 import Authorizer from '@/adapters/http/request/Authorizer';
 
 class UserInput {
@@ -97,6 +98,40 @@ export class PutZacLoginInput extends Authorizer implements IPutZacLoginInput {
 
   public getZacPassword() {
     return this.body.zacPassword;
+  }
+}
+
+export class PutObcLoginInput extends Authorizer implements IPutObcLoginInput {
+  body: ObcUserLoginRequestBody;
+
+  public constructor(
+    context: APIGatewayEventRequestContextWithAuthorizer<APIGatewayProxyCognitoAuthorizer>,
+    requestBody: string | null,
+  ) {
+    super(context);
+    if (requestBody === null) throw new Error();
+    const body = JSON.parse(requestBody);
+    const validateFunc = putObcLoginValidateFunc;
+    const isValid = validateFunc(body);
+    if (!isValid && validateFunc.errors) {
+      const errorMessage = validateFunc.errors
+        ? `invalid request ${validateFunc.errors.map((e) => e.message).join()}`
+        : 'invalid request';
+      throw new ValidationError(errorMessage);
+    }
+    this.body = body as ObcUserLoginRequestBody;
+  }
+
+  public getUserName() {
+    return super.getUserName();
+  }
+
+  public getObcUserId() {
+    return this.body.obcUserId;
+  }
+
+  public getObcPassword() {
+    return this.body.obcPassword;
   }
 }
 

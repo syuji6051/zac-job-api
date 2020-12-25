@@ -25,6 +25,11 @@ export interface ZacUserLoginRequestBody {
   zacPassword: string
 }
 
+export interface ObcUserLoginRequestBody {
+  obcUserId: string;
+  obcPassword: string
+}
+
 export interface ZacWorkRegisterRequestBody extends ZacRegisterParams {}
 
 export interface ZacWork extends ZacRegisterParams {

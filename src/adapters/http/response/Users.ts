@@ -8,6 +8,7 @@ import {
   UserCreateOutput as IUserCreateOutput,
   UserListOutput as IUserListOutput,
   PutZacLoginOutput as IPutZacLoginOutput,
+  PutObcLoginOutput as IPutObcLoginOutput,
   ZacWorkRegisterOutput as IZacWorkRegisterOutput,
 } from '@/usecases/outputs/Users';
 import { success } from '@/views/response';
@@ -30,6 +31,11 @@ export class PutZacLoginOutput implements IPutZacLoginOutput {
   }
 }
 
+export class PutObcLoginOutput implements IPutObcLoginOutput {
+  public success(): APIGatewayProxyResult {
+    return success();
+  }
+}
 export class ZacWorkRegisterOutput implements IZacWorkRegisterOutput {
   public success(): APIGatewayProxyResult {
     return success();

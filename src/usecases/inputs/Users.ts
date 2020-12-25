@@ -15,6 +15,11 @@ export interface PutZacLoginInput {
   getZacPassword(): string;
 }
 
+export interface PutObcLoginInput {
+  getUserName(): string;
+  getObcUserId(): string;
+  getObcPassword(): string;
+}
 export interface ZacWorkRegisterInput {
   getUserName(): string;
   getWorkDate(): Date

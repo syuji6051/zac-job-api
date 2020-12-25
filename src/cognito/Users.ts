@@ -48,4 +48,18 @@ export default class Users {
       }],
     }).promise();
   }
+
+  async putObcLogin(userId: string, obcLoginId: string, obcPassword: string) {
+    await this.cognito.adminUpdateUserAttributes({
+      UserPoolId: this.userPoolId,
+      Username: userId,
+      UserAttributes: [{
+        Name: 'custom:obcLoginId',
+        Value: obcLoginId,
+      }, {
+        Name: 'custom:obcPassword',
+        Value: obcPassword,
+      }],
+    }).promise();
+  }
 }

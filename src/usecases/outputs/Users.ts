@@ -16,6 +16,9 @@ export interface PutZacLoginOutput {
   success(): APIGatewayProxyResult;
 }
 
+export interface PutObcLoginOutput {
+  success(): APIGatewayProxyResult;
+}
 export interface ZacWorkRegisterOutput {
   success(): APIGatewayProxyResult;
 }
