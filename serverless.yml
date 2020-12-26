@@ -44,7 +44,7 @@ functions:
           cors: true
           authorizer:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_Jp6VfWMAA
-  put-zac-login:
+  put-obc-login:
     name: ${self:service.name}-put-obc-login-${opt:stage}
     handler: src/handlers/users.putObcLogin
     role: arn:aws:iam::#{AWS::AccountId}:role/lambda-cognito-write-role-${opt:stage}
