@@ -10,15 +10,17 @@ export interface UserListInput {
 }
 
 export interface PutZacLoginInput {
-  getUserName(): string;
-  getZacUserId(): string;
-  getZacPassword(): string;
+  getUserName(): string
+  getZacTenantId(): string
+  getZacUserId(): string
+  getZacPassword(): string
 }
 
 export interface PutObcLoginInput {
-  getUserName(): string;
-  getObcUserId(): string;
-  getObcPassword(): string;
+  getUserName(): string
+  getObcTenantId(): string
+  getObcUserId(): string
+  getObcPassword(): string
 }
 export interface ZacWorkRegisterInput {
   getUserName(): string;

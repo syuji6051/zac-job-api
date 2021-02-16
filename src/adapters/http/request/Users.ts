@@ -1,6 +1,7 @@
 import {
   APIGatewayEventRequestContextWithAuthorizer, APIGatewayProxyCognitoAuthorizer,
 } from 'aws-lambda';
+import { errors, services } from '@syuji6051/zac-job-library';
 
 import {
   UserCreateInput as IUserCreateInput,
@@ -9,7 +10,9 @@ import {
   PutObcLoginInput as IPutObcLoginInput,
   ZacWorkRegisterInput as IZacWorkRegisterInput,
 } from '@/usecases/inputs/Users';
-import { putZacLoginValidateFunc, zacWorkRegisterFunc, putObcLoginValidateFunc } from '@/validations/users';
+import putZacLoginJson from '@/schemas/Users/PutZacLogin.json';
+import putObcLoginJson from '@/schemas/Users/PutObcLogin.json';
+import { zacWorkRegisterFunc } from '@/validations/users';
 import { ValidationError } from '@/lib/errors';
 import { ZacUserLoginRequestBody, ObcUserLoginRequestBody, ZacWorkRegisterRequestBody } from '@/entities/Users';
 import Authorizer from '@/adapters/http/request/Authorizer';
@@ -75,21 +78,18 @@ export class PutZacLoginInput extends Authorizer implements IPutZacLoginInput {
     requestBody: string | null,
   ) {
     super(context);
-    if (requestBody === null) throw new Error();
+    if (requestBody === null) throw new errors.ValidationError('body is required');
     const body = JSON.parse(requestBody);
-    const validateFunc = putZacLoginValidateFunc;
-    const isValid = validateFunc(body);
-    if (!isValid && validateFunc.errors) {
-      const errorMessage = validateFunc.errors
-        ? `invalid request ${validateFunc.errors.map((e) => e.message).join()}`
-        : 'invalid request';
-      throw new ValidationError(errorMessage);
-    }
+    services.validate(putZacLoginJson, body);
     this.body = body as ZacUserLoginRequestBody;
   }
 
   public getUserName() {
     return super.getUserName();
+  }
+
+  public getZacTenantId() {
+    return this.body.zacTenantId;
   }
 
   public getZacUserId() {
@@ -109,21 +109,18 @@ export class PutObcLoginInput extends Authorizer implements IPutObcLoginInput {
     requestBody: string | null,
   ) {
     super(context);
-    if (requestBody === null) throw new Error();
+    if (requestBody === null) throw new errors.ValidationError('body is required');
     const body = JSON.parse(requestBody);
-    const validateFunc = putObcLoginValidateFunc;
-    const isValid = validateFunc(body);
-    if (!isValid && validateFunc.errors) {
-      const errorMessage = validateFunc.errors
-        ? `invalid request ${validateFunc.errors.map((e) => e.message).join()}`
-        : 'invalid request';
-      throw new ValidationError(errorMessage);
-    }
+    services.validate(putObcLoginJson, body);
     this.body = body as ObcUserLoginRequestBody;
   }
 
   public getUserName() {
     return super.getUserName();
+  }
+
+  public getObcTenantId() {
+    return this.body.obcTenantId;
   }
 
   public getObcUserId() {

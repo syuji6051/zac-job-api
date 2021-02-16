@@ -7,11 +7,15 @@
         },
         "obcUserId": {
             "type": "string"
+        },
+        "obcTenantId": {
+            "type": "string"
         }
     },
     "required": [
         "obcUserId",
-        "obcPassword"
+        "obcPassword",
+        "obcTenantId"
     ],
     "type": "object"
 }

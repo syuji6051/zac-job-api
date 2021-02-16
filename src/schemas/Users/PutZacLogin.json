@@ -7,9 +7,13 @@
         },
         "zacUserId": {
             "type": "string"
+        },
+        "zacTenantId": {
+            "type": "string"
         }
     },
     "required": [
+        "zacTenantId",
         "zacUserId",
         "zacPassword"
     ],

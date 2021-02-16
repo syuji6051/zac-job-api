@@ -21,13 +21,21 @@ export interface ZacUserLogin {
 }
 
 export interface ZacUserLoginRequestBody {
-  zacUserId: string;
+  zacTenantId: string
+  zacUserId: string
   zacPassword: string
 }
 
 export interface ObcUserLoginRequestBody {
-  obcUserId: string;
+  obcTenantId: string
+  obcUserId: string
   obcPassword: string
+}
+
+export interface Attribute {
+  tenantId: string
+  userId: string
+  password: string
 }
 
 export interface ZacWorkRegisterRequestBody extends ZacRegisterParams {}

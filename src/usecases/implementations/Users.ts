@@ -10,8 +10,8 @@ import { container, TYPES } from '@/providers/container';
 import {
   UserCreateOutput, UserListOutput, PutZacLoginOutput, ZacWorkRegisterOutput, PutObcLoginOutput,
 } from '@/usecases/outputs/Users';
-import { encrypt } from '@/lib/crypto';
 import { SecretsValues } from '@/entities/Environments';
+import { getUserAttribute } from '@/helper/user-attibute';
 
 @injectable()
 export default class Users implements IUsers {
@@ -49,16 +49,13 @@ export default class Users implements IUsers {
     input: PutZacLoginInput,
     output: PutZacLoginOutput,
   ): Promise<APIGatewayProxyResult> {
-    const {
-      ENCRYPT_KEY,
-      ENCRYPT_SALT_KEY,
-    } = this.secrets;
-    const password = input.getZacPassword();
-    const encryptedData = encrypt(ENCRYPT_KEY, ENCRYPT_SALT_KEY, password);
     await this.store.putZacLogin(
       input.getUserName(),
-      input.getZacUserId(),
-      encryptedData,
+      getUserAttribute(this.secrets, {
+        tenantId: input.getZacTenantId(),
+        userId: input.getZacUserId(),
+        password: input.getZacPassword(),
+      }),
     );
     return output.success();
   }
@@ -67,16 +64,13 @@ export default class Users implements IUsers {
     input: PutObcLoginInput,
     output: PutObcLoginOutput,
   ): Promise<APIGatewayProxyResult> {
-    const {
-      ENCRYPT_KEY,
-      ENCRYPT_SALT_KEY,
-    } = this.secrets;
-    const password = input.getObcPassword();
-    const encryptedData = encrypt(ENCRYPT_KEY, ENCRYPT_SALT_KEY, password);
     await this.store.putObcLogin(
       input.getUserName(),
-      input.getObcUserId(),
-      encryptedData,
+      getUserAttribute(this.secrets, {
+        tenantId: input.getObcTenantId(),
+        userId: input.getObcUserId(),
+        password: input.getObcPassword(),
+      }),
     );
     return output.success();
   }
