@@ -122,4 +122,6 @@ custom:
   webpack:
     packager: "npm"
     webpackConfig: ./webpack.config.js
-  webpackIncludeModules: true
+    includeModules:
+      forceExclude:
+        - aws-sdk

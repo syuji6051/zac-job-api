@@ -4,22 +4,57 @@ on:
       - master
 name: Deploy master branch
 jobs:
+  variable-set:
+    name: variable-set
+    runs-on: ubuntu-latest
+    outputs:
+      STAGE: ${{ steps.variable.outputs.STAGE }}
+    steps:
+    - id: variable
+      run: |
+        if [ ${{ github.ref }} == 'refs/heads/deployment/production' ]; then
+          echo "::set-output name=STAGE::prod"
+        else
+          echo "::set-output name=STAGE::dev"
+        fi
   deploy:
     name: deploy
     runs-on: ubuntu-latest
+    needs: variable-set
+    env:
+      STAGE: ${{ needs.variable-set.outputs.STAGE }}
+      GITHUB_TOKEN: ${{ secrets.NPM_GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@master
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: "12.x"
-      - name: serverless deploy
+      - name: Set outputs
+        id: vars
         run: |
-          npm config set //npm.pkg.github.com/:_authToken $GITHUB_TOKEN
-          npm install
-          npm run deploy dev
+          if [ ${STAGE} == 'dev' ]; then
+            echo "::set-output name=AWS_ACCESS_KEY_ID::${{ secrets.DEV_AWS_ACCESS_KEY_ID }}"
+            echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}"
+          else
+            echo "::set-output name=AWS_ACCESS_KEY_ID::${{ secrets.PROD_AWS_ACCESS_KEY_ID }}"
+            echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}"
+          fi
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ steps.vars.outputs.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ steps.vars.outputs.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+        
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
         env:
-          GITHUB_TOKEN: ${{ secrets.NPM_GITHUB_TOKEN }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ap-northeast-1
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          ECR_REPOSITORY_NAME=aktio-scm-api-linkage
+          ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY_NAME
+          docker build \
+            -t $ECR_REPOSITORY \
+            --build-arg NPM_GITHUB_TOKEN=$GITHUB_TOKEN .
+          docker push $ECR_REPOSITORY

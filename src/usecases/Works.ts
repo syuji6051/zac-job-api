@@ -1,18 +1,19 @@
-import { 
+/* eslint-disable no-unused-vars */
+import {
   WorkListInput,
   WorkClockInInput,
   WorkClockOutInput,
   WorkGoOutInput,
-  WorkGoReturnInput
-} from "appadapters/http/request/Works";
+  WorkGoReturnInput,
+} from '@/adapters/http/request/Works';
 import {
   WorkListOutput,
   WorkClockInOutput,
   WorkClockOutOutput,
   WorkGoOutOutput,
-  WorkGoReturnOutput
-} from "appadapters/http/response/Works";
-import { APIGatewayProxyResult } from "aws-lambda";
+  WorkGoReturnOutput,
+} from '@/adapters/http/response/Works';
+import { APIGatewayProxyResult } from 'aws-lambda';
 
 export interface Works {
   workSync(input: WorkListInput, output: WorkListOutput): Promise<APIGatewayProxyResult>;

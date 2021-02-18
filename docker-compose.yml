@@ -4,13 +4,13 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+      args:
+        - NPM_GITHUB_TOKEN=$GITHUB_TOKEN
     env_file:
-      - ./config/.env.local
-    command: npm run dev
+      - .env
+    tty: true
     ports:
-      - "3000:3000"
-    volumes:
-      - .:/app
+      - 9000:8080
     networks:
       - dynamo-local
   dynamodb-local:

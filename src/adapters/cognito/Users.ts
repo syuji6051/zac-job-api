@@ -6,7 +6,7 @@ import UsersTable from '@/cognito/Users';
 import { UserInfo as UserInfoTable } from '@/database/User';
 import Puppeteer from '@/puppeteer/zac';
 import {
-  User, Users as EntitiesUsers, UserInfo, ZacWork,
+  User, Users as EntitiesUsers, UserInfo, ZacWork, Attribute,
 } from '@/entities/Users';
 import { TYPES } from '@/providers/container';
 import { SecretsValues } from '@/entities/Environments';
@@ -46,12 +46,12 @@ export default class Users implements IUsers {
     };
   }
 
-  public async putZacLogin(userId: string, zacLoginId: string, zacPassword: string): Promise<void> {
-    await this.cognito.putZacLogin(userId, zacLoginId, zacPassword);
+  public async putZacLogin(userId: string, userAttribute: Attribute): Promise<void> {
+    await this.cognito.putZacLogin(userId, userAttribute);
   }
 
-  public async putObcLogin(userId: string, obcLoginId: string, obcPassword: string): Promise<void> {
-    await this.cognito.putObcLogin(userId, obcLoginId, obcPassword);
+  public async putObcLogin(userId: string, userAttribute: Attribute): Promise<void> {
+    await this.cognito.putObcLogin(userId, userAttribute);
   }
 
   public async register(props: ZacWork) {
