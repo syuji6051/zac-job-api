@@ -52,9 +52,13 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          ECR_REPOSITORY_NAME=aktio-scm-api-linkage
+          ECR_REPOSITORY_NAME=zac-job-api
           ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY_NAME
           docker build \
             -t $ECR_REPOSITORY \
             --build-arg NPM_GITHUB_TOKEN=$GITHUB_TOKEN .
-          docker push $ECR_REPOSITORY
+          echo "::set-output name=digest::$(docker push $ECR_REPOSITORY)"
+      - name: Serverless deploy
+        run: |
+          npm install -g serverless
+          serverless deploy

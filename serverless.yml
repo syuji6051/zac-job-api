@@ -19,9 +19,12 @@ provider:
         identitySource: $request.header.Authorization
         issuerUrl: https://cognito-idp.#{AWS::Region}.amazonaws.com/ap-northeast-1_nsYbr83YQ
         audience:
-          - 4s375jt92lgobq1keg4ip8r3fm    
+          - 4s375jt92lgobq1keg4ip8r3fm
+  ecr:
+    images:
+      zac-job-api:
+        path: .
 plugins:
-  - serverless-webpack
   - serverless-pseudo-parameters
 
 functions:
@@ -36,6 +39,7 @@ functions:
   put-zac-login:
     name: ${self:service.name}-put-zac-login-${opt:stage}
     handler: src/handlers/users.putZacLogin
+    image: zac-job-api
     role: arn:aws:iam::#{AWS::AccountId}:role/lambda-cognito-write-role-${opt:stage}
     events:
       - http:
@@ -47,6 +51,7 @@ functions:
   put-obc-login:
     name: ${self:service.name}-put-obc-login-${opt:stage}
     handler: src/handlers/users.putObcLogin
+    image: zac-job-api
     role: arn:aws:iam::#{AWS::AccountId}:role/lambda-cognito-write-role-${opt:stage}
     events:
       - http:
@@ -58,6 +63,7 @@ functions:
   user-zac-work:
     name: ${self:service.name}-user-zac-work-${opt:stage}
     handler: src/handlers/users.postZacRegister
+    image: zac-job-api
     role: arn:aws:iam::#{AWS::AccountId}:role/lambda-cognito-write-role-${opt:stage}
     events:
       - http:
@@ -69,6 +75,7 @@ functions:
   work-list-sync:
     name: ${self:service.name}-work-list-sync-${opt:stage}
     handler: src/handlers/works.workSync
+    image: zac-job-api
     events:
       - httpApi:
           path: /work/sync
@@ -79,6 +86,7 @@ functions:
           async: true
   work-clock-in:
     name: ${self:service.name}-work-clock-in-${opt:stage}
+    image: zac-job-api
     handler: src/handlers/works.clockIn
     events:
       - httpApi:
@@ -90,6 +98,7 @@ functions:
   work-clock-out:
     name: ${self:service.name}-work-clock-out-${opt:stage}
     handler: src/handlers/works.clockOut
+    image: zac-job-api
     events:
       - httpApi:
           path: /work/clock-out
@@ -100,6 +109,7 @@ functions:
   work-go-out:
     name: ${self:service.name}-work-go-out-${opt:stage}
     handler: src/handlers/works.goOut
+    image: zac-job-api
     events:
       - httpApi:
           path: /work/go-out
@@ -110,6 +120,7 @@ functions:
   work-go-return:
     name: ${self:service.name}-work-go-return-${opt:stage}
     handler: src/handlers/works.goReturn
+    image: zac-job-api
     events:
       - httpApi:
           path: /work/go-return
@@ -117,11 +128,3 @@ functions:
           cors: true
           authorizer:
             name: cognitoJwtAuthorizer
-
-custom:
-  webpack:
-    packager: "npm"
-    webpackConfig: ./webpack.config.js
-    includeModules:
-      forceExclude:
-        - aws-sdk
