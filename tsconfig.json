@@ -10,11 +10,11 @@
     "outDir": "./dist",
     "strict": true,
     "strictPropertyInitialization": false,
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "paths": {
       "@/*": ["*"]
     },
-    "rootDir": "./",
+    "rootDir": "src/",
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,

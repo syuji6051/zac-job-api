@@ -1,6 +1,6 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { ValidationError } from '@/lib/errors';
-import logger from '@/lib/logger';
+import { ValidationError } from '@/src/lib/errors';
+import logger from '@/src/lib/logger';
 
 export function success(body?: any): APIGatewayProxyResult {
   return {

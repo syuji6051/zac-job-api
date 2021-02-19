@@ -6,8 +6,8 @@ import {
   WorkGoOutOutput as IWorkGoOutOutput,
   WorkGoReturnOutput as IWorkGoReturnOutput,
 
-} from '@/usecases/outputs/Works';
-import { success } from '@/views/response';
+} from '@/src/usecases/outputs/Works';
+import { success } from '@/src/views/response';
 
 export class WorkListOutput implements IWorkListOutput {
   public success(): APIGatewayProxyResult {

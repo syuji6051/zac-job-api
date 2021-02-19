@@ -1,9 +1,10 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-console */
 import { Request, Response, NextFunction } from 'express';
 import {
   APIGatewayProxyResult, APIGatewayProxyWithCognitoAuthorizerEvent,
 } from 'aws-lambda';
-import apiGatewayEventGenerator from '@/middleware/apigateway-event-generator';
+import apiGatewayEventGenerator from '@/src/middleware/apigateway-event-generator';
 
 const lambdaDriver = (
   // eslint-disable-next-line no-unused-vars

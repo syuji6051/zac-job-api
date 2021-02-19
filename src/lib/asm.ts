@@ -1,4 +1,4 @@
-import { SecretsValues } from '@/entities/Environments';
+import { SecretsValues } from '@/src/entities/Environments';
 import aws from 'aws-sdk';
 
 const secretId = process.env.SECRET_ID;

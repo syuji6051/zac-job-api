@@ -1,5 +1,5 @@
-import { ValidationError } from '@/lib/errors';
-import { invalidErrorResponse, serverErrorResponse } from '@/views/response';
+import { ValidationError } from '@/src/lib/errors';
+import { invalidErrorResponse, serverErrorResponse } from '@/src/views/response';
 
 // eslint-disable-next-line import/prefer-default-export
 export const lambdaErrorHandler = (err: any) => {

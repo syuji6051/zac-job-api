@@ -1,8 +1,9 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import express from 'express';
 import {
   create, list, postZacRegister, putZacLogin, putObcLogin,
-} from '@/handlers/users';
-import lambdaDriver from '@/middleware/lambda-driver';
+} from '@/src/handlers/users';
+import lambdaDriver from '@/src/middleware/lambda-driver';
 
 const router = express.Router();
 

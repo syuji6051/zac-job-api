@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Work } from '@/entities/Works';
+import { Work } from '@/src/entities/Works';
 
 export interface Works {
   list(userId: string, password: string, yearMonth: string): Promise<Work[]>;

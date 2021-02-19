@@ -1,7 +1,7 @@
-import ajv from '@/lib/ajv';
-import putZacLoginJson from '@/schemas/Users/PutZacLogin.json';
-import putObcLoginJson from '@/schemas/Users/PutObcLogin.json';
-import zacWorkRegisterJson from '@/schemas/Users/ZacWorkRegister.json';
+import ajv from '@/src/lib/ajv';
+import putZacLoginJson from '@/src/schemas/Users/PutZacLogin.json';
+import putObcLoginJson from '@/src/schemas/Users/PutObcLogin.json';
+import zacWorkRegisterJson from '@/src/schemas/Users/ZacWorkRegister.json';
 
 const putZacLoginValidateFunc = ajv.compile(
   putZacLoginJson,

@@ -1,6 +1,6 @@
 // import intercept from 'fetch-intercept';
 // import { RequestInit } from 'node-fetch';
-// import { sig4Request } from '@/lib/sig4';
+// import { sig4Request } from '@/src/lib/sig4';
 
 // intercept.register({
 //   request: (url, config: RequestInit | undefined) => {

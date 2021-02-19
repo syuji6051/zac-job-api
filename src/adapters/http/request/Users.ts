@@ -9,13 +9,13 @@ import {
   PutZacLoginInput as IPutZacLoginInput,
   PutObcLoginInput as IPutObcLoginInput,
   ZacWorkRegisterInput as IZacWorkRegisterInput,
-} from '@/usecases/inputs/Users';
-import putZacLoginJson from '@/schemas/Users/PutZacLogin.json';
-import putObcLoginJson from '@/schemas/Users/PutObcLogin.json';
-import { zacWorkRegisterFunc } from '@/validations/users';
-import { ValidationError } from '@/lib/errors';
-import { ZacUserLoginRequestBody, ObcUserLoginRequestBody, ZacWorkRegisterRequestBody } from '@/entities/Users';
-import Authorizer from '@/adapters/http/request/Authorizer';
+} from '@/src/usecases/inputs/Users';
+import putZacLoginJson from '@/src/schemas/Users/PutZacLogin.json';
+import putObcLoginJson from '@/src/schemas/Users/PutObcLogin.json';
+import { zacWorkRegisterFunc } from '@/src/validations/users';
+import { ValidationError } from '@/src/lib/errors';
+import { ZacUserLoginRequestBody, ObcUserLoginRequestBody, ZacWorkRegisterRequestBody } from '@/src/entities/Users';
+import Authorizer from '@/src/adapters/http/request/Authorizer';
 
 class UserInput {
   headers?: { [name: string]: string }

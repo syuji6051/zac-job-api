@@ -1,8 +1,8 @@
 import { injectable } from 'inversify';
-import { Works as IWorks } from '@/usecases/stores/Works';
-import { Work as WEntitiesWork, Work } from '@/entities/Works';
-import WorksAPI from '@/puppeteer/Works';
-import { Work as WorkDB } from '@/database/Work';
+import { Works as IWorks } from '@/src/usecases/stores/Works';
+import { Work as WEntitiesWork, Work } from '@/src/entities/Works';
+import WorksAPI from '@/src/puppeteer/Works';
+import { Work as WorkDB } from '@/src/database/Work';
 
 @injectable()
 export default class Works implements IWorks {

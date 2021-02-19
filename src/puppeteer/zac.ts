@@ -1,8 +1,8 @@
 // import fetch from 'node-fetch';
-import { SecretsValues } from '@/entities/Environments';
-import { ZacWork } from '@/entities/Users';
-import { container, TYPES } from '@/providers/container';
-import { sig4Request } from '@/lib/axios';
+import { SecretsValues } from '@/src/entities/Environments';
+import { ZacWork } from '@/src/entities/Users';
+import { container, TYPES } from '@/src/providers/container';
+import { sig4Request } from '@/src/lib/axios';
 
 export default class Zac {
   secrets: SecretsValues

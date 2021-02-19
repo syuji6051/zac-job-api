@@ -1,8 +1,8 @@
 import express from 'express';
 import {
   workSync, clockIn, clockOut, goReturn, goOut,
-} from '@/handlers/works';
-import lambdaDriver from '@/middleware/lambda-driver';
+} from '@/src/handlers/works';
+import lambdaDriver from '@/src/middleware/lambda-driver';
 
 const router = express.Router();
 

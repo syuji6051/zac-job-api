@@ -5,14 +5,14 @@ import {
   WorkClockOutInput,
   WorkGoOutInput,
   WorkGoReturnInput,
-} from '@/adapters/http/request/Works';
+} from '@/src/adapters/http/request/Works';
 import {
   WorkListOutput,
   WorkClockInOutput,
   WorkClockOutOutput,
   WorkGoOutOutput,
   WorkGoReturnOutput,
-} from '@/adapters/http/response/Works';
+} from '@/src/adapters/http/response/Works';
 import { APIGatewayProxyResult } from 'aws-lambda';
 
 export interface Works {

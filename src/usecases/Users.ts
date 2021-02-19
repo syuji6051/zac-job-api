@@ -3,10 +3,10 @@ import { APIGatewayProxyResult } from 'aws-lambda';
 
 import {
   UserCreateInput, UserListInput, PutZacLoginInput, PutObcLoginInput, ZacWorkRegisterInput,
-} from '@/usecases/inputs/Users';
+} from '@/src/usecases/inputs/Users';
 import {
   UserCreateOutput, UserListOutput, PutZacLoginOutput, PutObcLoginOutput, ZacWorkRegisterOutput,
-} from '@/usecases/outputs/Users';
+} from '@/src/usecases/outputs/Users';
 
 export interface Users {
   create(input: UserCreateInput, output: UserCreateOutput): Promise<APIGatewayProxyResult>;

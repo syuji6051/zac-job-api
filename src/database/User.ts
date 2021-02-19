@@ -3,7 +3,7 @@ import {
   table,
   hashKey,
 } from '@aws/dynamodb-data-mapper-annotations';
-import mapper from '@/database/dynamo-mapper';
+import mapper from '@/src/database/dynamo-mapper';
 
 @table('UserInfo')
 export class UserInfoRecord {

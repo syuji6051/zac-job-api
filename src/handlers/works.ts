@@ -1,15 +1,15 @@
 import {
   APIGatewayEvent, APIGatewayProxyResult,
 } from 'aws-lambda';
-import { container, TYPES } from '@/providers/container';
-import { Works as UseCase } from '@/usecases/Works';
+import { container, TYPES } from '@/src/providers/container';
+import { Works as UseCase } from '@/src/usecases/Works';
 import {
   WorkListInput, WorkClockInInput, WorkClockOutInput, WorkGoOutInput, WorkGoReturnInput,
-} from '@/adapters/http/request/Works';
+} from '@/src/adapters/http/request/Works';
 import {
   WorkListOutput, WorkClockInOutput, WorkClockOutOutput, WorkGoOutOutput, WorkGoReturnOutput,
-} from '@/adapters/http/response/Works';
-import logger from '@/lib/logger';
+} from '@/src/adapters/http/response/Works';
+import logger from '@/src/lib/logger';
 
 export const workSync = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
   logger.info(event);

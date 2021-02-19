@@ -4,7 +4,7 @@ import {
   WorkClockOutInput as IWorkClockOutInput,
   WorkGoOutInput as IWorkGoOutInput,
   WorkGoReturnInput as IWorkGoReturnInput,
-} from '@/usecases/inputs/Works';
+} from '@/src/usecases/inputs/Works';
 import { APIGatewayEventDefaultAuthorizerContext } from 'aws-lambda';
 
 class WorkInput {

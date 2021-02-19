@@ -49,6 +49,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build, tag, and push image to Amazon ECR
+        id: deploy-ecr
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
@@ -59,6 +60,8 @@ jobs:
             --build-arg NPM_GITHUB_TOKEN=$GITHUB_TOKEN .
           echo "::set-output name=digest::$(docker push $ECR_REPOSITORY)"
       - name: Serverless deploy
+        env:
+          ECR_DIGEST: ${{ steps.deploy-ecr.outputs.digest }}
         run: |
-          npm install -g serverless
-          serverless deploy
+          npm install
+          npm run deploy dev

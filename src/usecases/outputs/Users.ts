@@ -2,7 +2,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { APIGatewayProxyResult } from 'aws-lambda';
 
-import { User, Users } from '@/entities/Users';
+import { User, Users } from '@/src/entities/Users';
 
 export interface UserCreateOutput {
   success(user: User): APIGatewayProxyResult;

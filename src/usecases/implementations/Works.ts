@@ -1,17 +1,17 @@
 import { injectable } from 'inversify';
 import { APIGatewayProxyResult } from 'aws-lambda';
 
-import { Users as UserInfoStore } from '@/usecases/stores/UserInfo';
-import { Works as WorkStore } from '@/usecases/stores/Works';
-import { Works as IWorks } from '@/usecases/Works';
+import { Users as UserInfoStore } from '@/src/usecases/stores/UserInfo';
+import { Works as WorkStore } from '@/src/usecases/stores/Works';
+import { Works as IWorks } from '@/src/usecases/Works';
 import {
   WorkListOutput, WorkClockInOutput, WorkClockOutOutput, WorkGoOutOutput, WorkGoReturnOutput,
-} from '@/adapters/http/response/Works';
+} from '@/src/adapters/http/response/Works';
 import {
   WorkListInput, WorkClockInInput, WorkClockOutInput, WorkGoOutInput, WorkGoReturnInput,
-} from '@/usecases/inputs/Works';
+} from '@/src/usecases/inputs/Works';
 
-import { container, TYPES } from '@/providers/container';
+import { container, TYPES } from '@/src/providers/container';
 
 @injectable()
 export default class Works implements IWorks {

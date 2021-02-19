@@ -1,15 +1,15 @@
 import { inject, injectable } from 'inversify';
 import { UserType } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 
-import { Users as IUsers } from '@/usecases/stores/Users';
-import UsersTable from '@/cognito/Users';
-import { UserInfo as UserInfoTable } from '@/database/User';
-import Puppeteer from '@/puppeteer/zac';
+import { Users as IUsers } from '@/src/usecases/stores/Users';
+import UsersTable from '@/src/cognito/Users';
+import { UserInfo as UserInfoTable } from '@/src/database/User';
+import Puppeteer from '@/src/puppeteer/zac';
 import {
   User, Users as EntitiesUsers, UserInfo, ZacWork, Attribute,
-} from '@/entities/Users';
-import { TYPES } from '@/providers/container';
-import { SecretsValues } from '@/entities/Environments';
+} from '@/src/entities/Users';
+import { TYPES } from '@/src/providers/container';
+import { SecretsValues } from '@/src/entities/Environments';
 
 @injectable()
 export default class Users implements IUsers {

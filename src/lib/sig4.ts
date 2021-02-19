@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from 'axios';
 import { sign } from 'aws4';
-import { container, TYPES } from '@/providers/container';
-import { SecretsValues } from '@/entities/Environments';
+import { container, TYPES } from '@/src/providers/container';
+import { SecretsValues } from '@/src/entities/Environments';
 
 const SERVICE_NAME = 'execute-api';
 

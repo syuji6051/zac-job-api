@@ -3,9 +3,9 @@
 require('dotenv').config();
 
 import express from 'express';
-import users from '@/controllers/users';
-import works from '@/controllers/works';
-import errorHandler from '@/middleware/error-handler';
+import users from '@/src/controllers/users';
+import works from '@/src/controllers/works';
+import errorHandler from '@/src/middleware/error-handler';
 
 const app = express();
 const port = 3000;

@@ -1,4 +1,4 @@
-import { sig4Request } from '@/lib/axios';
+import { sig4Request } from '@/src/lib/axios';
 
 const BASE_URL = 'https://3t6zj1468g.execute-api.ap-northeast-1.amazonaws.com/v1';
 

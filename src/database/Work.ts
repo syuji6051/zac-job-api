@@ -2,8 +2,8 @@ import moment from 'moment';
 import {
   table, hashKey, rangeKey, attribute,
 } from '@aws/dynamodb-data-mapper-annotations';
-import { Work as IWork } from '@/entities/Works';
-import mapper from '@/database/dynamo-mapper';
+import { Work as IWork } from '@/src/entities/Works';
+import mapper from '@/src/database/dynamo-mapper';
 
 @table('UserWork')
 export class WorkRecord {

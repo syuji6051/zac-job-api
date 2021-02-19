@@ -1,6 +1,6 @@
 import axios from 'axios';
-import logger from '@/lib/logger';
-import { setSig4AuthHeader } from '@/lib/sig4';
+import logger from '@/src/lib/logger';
+import { setSig4AuthHeader } from '@/src/lib/sig4';
 
 const request = axios;
 request.interceptors.request.use((c) => {

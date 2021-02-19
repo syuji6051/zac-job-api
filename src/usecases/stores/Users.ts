@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import {
   User, Users as EntitiesUsers, UserInfo, ZacWork, Attribute,
-} from '@/entities/Users';
+} from '@/src/entities/Users';
 
 export interface Users {
   create(email: string, password: string): Promise<User>;

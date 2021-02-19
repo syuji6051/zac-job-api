@@ -2,7 +2,7 @@
 /* eslint-disable import/first */
 import { AsyncContainerModule, Container, interfaces } from 'inversify';
 import { Credentials } from 'aws-sdk';
-import logger from '@/lib/logger';
+import logger from '@/src/lib/logger';
 import 'reflect-metadata';
 global.crypto = require('crypto');
 
@@ -17,8 +17,8 @@ export const TYPES = {
   PUPPETEER_CREDENTIAL: Symbol.for('PUPPETEER_CREDENTIAL'),
 };
 
-import { getSecretsManager } from '@/lib/asm';
-import { SecretsValues } from '@/entities/Environments';
+import { getSecretsManager } from '@/src/lib/asm';
+import { SecretsValues } from '@/src/entities/Environments';
 export const asyncModules = container.loadAsync(
   new AsyncContainerModule(async (bind: interfaces.Bind) => {
     logger.debug('initializer load start');
@@ -31,19 +31,19 @@ export const asyncModules = container.loadAsync(
   }),
 );
 
-import { Users as UseCaseUsers } from '@/usecases/Users';
-import UseCaseUsersImpl from '@/usecases/implementations/Users';
+import { Users as UseCaseUsers } from '@/src/usecases/Users';
+import UseCaseUsersImpl from '@/src/usecases/implementations/Users';
 container.bind<UseCaseUsers>(TYPES.USECASE_USERS).to(UseCaseUsersImpl);
 
-import { Works as UseCaseWorks } from '@/usecases/Works';
-import UseCaseWorksImpl from '@/usecases/implementations/Works';
+import { Works as UseCaseWorks } from '@/src/usecases/Works';
+import UseCaseWorksImpl from '@/src/usecases/implementations/Works';
 container.bind<UseCaseWorks>(TYPES.USECASE_WORKS).to(UseCaseWorksImpl);
 
-import { Users as StoreUsers } from '@/usecases/stores/Users';
-import StoreUsersImpl from '@/adapters/cognito/Users';
+import { Users as StoreUsers } from '@/src/usecases/stores/Users';
+import StoreUsersImpl from '@/src/adapters/cognito/Users';
 container.bind<StoreUsers>(TYPES.STORE_USERS).to(StoreUsersImpl);
 
-import { Works as StoreWorks } from '@/usecases/stores/Works';
-import StoreWorksImpl from '@/adapters/puppeteer/Works';
+import { Works as StoreWorks } from '@/src/usecases/stores/Works';
+import StoreWorksImpl from '@/src/adapters/puppeteer/Works';
 
 container.bind<StoreWorks>(TYPES.STORE_WORKS).to(StoreWorksImpl);
