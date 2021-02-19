@@ -38,7 +38,7 @@ jobs:
           fi
       
       - name: Serverless install
-        run: sudo npm install -g serverless
+        run: npm install serverless
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1

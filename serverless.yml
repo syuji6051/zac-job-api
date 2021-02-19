@@ -1,5 +1,4 @@
-service:
-  name: express-api
+service: express-api
 
 provider:
   name: aws
