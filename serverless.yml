@@ -23,7 +23,7 @@ provider:
   ecr:
     images:
       zac-job-api:
-        uri: 105785188161.dkr.ecr.ap-northeast-1.amazonaws.com/zac-job-api@sha256:${env:ECR_DIGEST}
+        uri: 105785188161.dkr.ecr.#{AWS::Region}.amazonaws.com/zac-job-api@sha256:${env:ECR_DIGEST}
 plugins:
   - serverless-pseudo-parameters
 

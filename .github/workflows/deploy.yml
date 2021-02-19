@@ -36,6 +36,9 @@ jobs:
             echo "::set-output name=AWS_ACCESS_KEY_ID::${{ secrets.PROD_AWS_ACCESS_KEY_ID }}"
             echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}"
           fi
+      
+      - name: Serverless install
+        run: sudo npm install -g serverless
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -63,5 +66,4 @@ jobs:
         env:
           ECR_DIGEST: ${{ steps.deploy-ecr.outputs.digest }}
         run: |
-          npm install
           npm run deploy dev
