@@ -63,6 +63,7 @@ jobs:
           ECR_REPOSITORY_NAME=zac-job-api
           ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY_NAME
           docker build \
+            -t $ECR_REPOSITORY:$SHORT_GIT_HASH \
             -t $ECR_REPOSITORY \
             --build-arg NPM_GITHUB_TOKEN=$GITHUB_TOKEN .
           docker push $ECR_REPOSITORY
