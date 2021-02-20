@@ -37,8 +37,10 @@ jobs:
             echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}"
           fi
       
-      - name: Serverless install
-        run: npm install serverless
+      - name: npm install
+        run: |
+          npm config set //npm.pkg.github.com/:_authToken $GITHUB_TOKEN
+          npm install
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
