@@ -29,6 +29,7 @@ jobs:
       - name: Set outputs
         id: vars
         run: |
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
           if [ ${STAGE} == 'dev' ]; then
             echo "::set-output name=AWS_ACCESS_KEY_ID::${{ secrets.DEV_AWS_ACCESS_KEY_ID }}"
             echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}"
@@ -57,15 +58,17 @@ jobs:
         id: deploy-ecr
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          SHORT_GIT_HASH: ${{ steps.vars.outputs.sha_short }}
         run: |
           ECR_REPOSITORY_NAME=zac-job-api
           ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY_NAME
           docker build \
             -t $ECR_REPOSITORY \
             --build-arg NPM_GITHUB_TOKEN=$GITHUB_TOKEN .
-          echo "::set-output name=digest::$(docker push $ECR_REPOSITORY)"
+          docker push $ECR_REPOSITORY
+          docker push $ECR_REPOSITORY:$SHORT_GIT_HASH
       - name: Serverless deploy
         env:
-          ECR_DIGEST: ${{ steps.deploy-ecr.outputs.digest }}
+          SHORT_GIT_HASH: ${{ steps.vars.outputs.sha_short }}
         run: |
           npm run deploy dev
