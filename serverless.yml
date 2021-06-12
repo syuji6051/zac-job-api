@@ -1,4 +1,4 @@
-service: zac-job-api
+service: ZacJobApi
 
 provider:
   name: aws
@@ -7,7 +7,7 @@ provider:
   region: ap-northeast-1
   deploymentBucket: 
     name: serverless-deploy-bucket
-  role: 'arn:aws:iam::#{AWS::AccountId}:role/lambda-basic-role-${opt:stage}'
+  role: 'arn:aws:iam::#{AWS::AccountId}:role/zac-job-basic-role-${opt:stage}'
   timeout: 29
   memorySize: 128
   environment:
@@ -23,18 +23,18 @@ plugins:
   - serverless-pseudo-parameters
 
 functions:
-  user-create:
-    name: ${self:service.name}-user-create-${opt:stage}
+  UserCreate:
+    name: zac-job-api-user-create-${opt:stage}
     handler: dist/handlers/users.create
     events:
       - http:
           path: /user/create
           method: post
           cors: true
-  put-zac-login:
-    name: ${self:service.name}-put-zac-login-${opt:stage}
+  PutZacLogin:
+    name: zac-job-api-put-zac-login-${opt:stage}
     handler: dist/handlers/users.putZacLogin
-    role: arn:aws:iam::#{AWS::AccountId}:role/lambda-cognito-write-role-${opt:stage}
+    role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-cognito-write-role-${opt:stage}
     events:
       - http:
           path: /user/zac/login
@@ -42,10 +42,10 @@ functions:
           cors: true
           authorizer:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_Jp6VfWMAA
-  put-obc-login:
-    name: ${self:service.name}-put-obc-login-${opt:stage}
+  PutObcLogin:
+    name: zac-job-api-put-obc-login-${opt:stage}
     handler: dist/handlers/users.putObcLogin
-    role: arn:aws:iam::#{AWS::AccountId}:role/lambda-cognito-write-role-${opt:stage}
+    role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-cognito-write-role-${opt:stage}
     events:
       - http:
           path: /user/obc/login
@@ -53,8 +53,8 @@ functions:
           cors: true
           authorizer:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_Jp6VfWMAA
-  user-zac-work:
-    name: ${self:service.name}-user-zac-work-${opt:stage}
+  UserZacWork:
+    name: zac-job-api-user-zac-work-${opt:stage}
     handler: src/handlers/users.postZacRegister
     role: arn:aws:iam::#{AWS::AccountId}:role/lambda-cognito-write-role-${opt:stage}
     events:
@@ -64,9 +64,10 @@ functions:
           cors: true
           authorizer:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_Jp6VfWMAA
-  work-list-sync:
-    name: ${self:service.name}-work-list-sync-${opt:stage}
+  WorkListSync:
+    name: zac-job-api-work-list-sync-${opt:stage}
     handler: dist/handlers/works.workSync
+    role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-work-results-table-write-role-${opt:stage}
     events:
       - httpApi:
           path: /work/sync
@@ -75,9 +76,10 @@ functions:
           authorizer:
             name: cognitoJwtAuthorizer
           async: true
-  work-list:
-    name: ${self:service.name}-work-list-${opt:stage}
+  WorkList:
+    name: zac-job-api-work-list-${opt:stage}
     handler: dist/handlers/works.workList
+    role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-work-results-table-write-role-${opt:stage}
     events:
       - httpApi:
           path: /work
@@ -85,8 +87,8 @@ functions:
           cors: true
           authorizer:
             name: cognitoJwtAuthorizer
-  work-clock-in:
-    name: ${self:service.name}-work-clock-in-${opt:stage}
+  WorkClockIn:
+    name: zac-job-api-work-clock-in-${opt:stage}
     handler: dist/handlers/works.clockIn
     events:
       - httpApi:
@@ -95,8 +97,8 @@ functions:
           cors: true
           authorizer:
             name: cognitoJwtAuthorizer
-  work-clock-out:
-    name: ${self:service.name}-work-clock-out-${opt:stage}
+  WorkClockOut:
+    name: zac-job-api-work-clock-out-${opt:stage}
     handler: dist/handlers/works.clockOut
     events:
       - httpApi:
@@ -105,8 +107,8 @@ functions:
           cors: true
           authorizer:
             name: cognitoJwtAuthorizer
-  work-go-out:
-    name: ${self:service.name}-work-go-out-${opt:stage}
+  WorkGoOut:
+    name: zac-job-api-work-go-out-${opt:stage}
     handler: dist/handlers/works.goOut
     events:
       - httpApi:
@@ -115,8 +117,8 @@ functions:
           cors: true
           authorizer:
             name: cognitoJwtAuthorizer
-  work-go-return:
-    name: ${self:service.name}-work-go-return-${opt:stage}
+  WorkGoReturn:
+    name: zac-job-api-work-go-return-${opt:stage}
     handler: dist/handlers/works.goReturn
     events:
       - httpApi:
