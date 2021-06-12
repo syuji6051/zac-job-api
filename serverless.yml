@@ -7,12 +7,14 @@ provider:
   region: ap-northeast-1
   deploymentBucket: 
     name: serverless-deploy-bucket
-  role: 'arn:aws:iam::#{AWS::AccountId}:role/zac-job-basic-role-${opt:stage}'
-  timeout: 29
+  iam:
+    role: 'arn:aws:iam::#{AWS::AccountId}:role/zac-job-basic-role-${opt:stage}'
+  timeout: 28
   memorySize: 128
   environment:
     SECRET_ID: zac-job-dev
   httpApi:
+    cors: true
     authorizers:
       cognitoJwtAuthorizer:
         identitySource: $request.header.Authorization
@@ -30,7 +32,6 @@ functions:
       - http:
           path: /user/create
           method: post
-          cors: true
   PutZacLogin:
     name: zac-job-api-put-zac-login-${opt:stage}
     handler: dist/handlers/users.putZacLogin
@@ -39,7 +40,6 @@ functions:
       - http:
           path: /user/zac/login
           method: put
-          cors: true
           authorizer:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_Jp6VfWMAA
   PutObcLogin:
@@ -50,7 +50,6 @@ functions:
       - http:
           path: /user/obc/login
           method: put
-          cors: true
           authorizer:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_Jp6VfWMAA
   UserZacWork:
@@ -61,7 +60,6 @@ functions:
       - http:
           path: /user/zac/work
           method: post
-          cors: true
           authorizer:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_Jp6VfWMAA
   WorkListSync:
@@ -72,7 +70,6 @@ functions:
       - httpApi:
           path: /work/sync
           method: get
-          cors: true
           authorizer:
             name: cognitoJwtAuthorizer
           async: true
@@ -84,7 +81,6 @@ functions:
       - httpApi:
           path: /work
           method: get
-          cors: true
           authorizer:
             name: cognitoJwtAuthorizer
   WorkClockIn:
@@ -94,7 +90,6 @@ functions:
       - httpApi:
           path: /work/clock-in
           method: post
-          cors: true
           authorizer:
             name: cognitoJwtAuthorizer
   WorkClockOut:
@@ -104,7 +99,6 @@ functions:
       - httpApi:
           path: /work/clock-out
           method: post
-          cors: true
           authorizer:
             name: cognitoJwtAuthorizer
   WorkGoOut:
@@ -114,7 +108,6 @@ functions:
       - httpApi:
           path: /work/go-out
           method: post
-          cors: true
           authorizer:
             name: cognitoJwtAuthorizer
   WorkGoReturn:
@@ -124,6 +117,5 @@ functions:
       - httpApi:
           path: /work/go-return
           method: post
-          cors: true
           authorizer:
             name: cognitoJwtAuthorizer
