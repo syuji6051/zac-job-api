@@ -2,7 +2,7 @@
 /* eslint-disable import/first */
 import { AsyncContainerModule, Container, interfaces } from 'inversify';
 import { Credentials } from 'aws-sdk';
-import logger from '@/src/lib/logger';
+import { logger, getSecretsManager } from '@syuji6051/zac-job-library';
 import 'reflect-metadata';
 global.crypto = require('crypto');
 
@@ -17,12 +17,11 @@ export const TYPES = {
   PUPPETEER_CREDENTIAL: Symbol.for('PUPPETEER_CREDENTIAL'),
 };
 
-import { getSecretsManager } from '@/src/lib/asm';
 import { SecretsValues } from '@/src/entities/environments';
 export const asyncModules = container.loadAsync(
   new AsyncContainerModule(async (bind: interfaces.Bind) => {
     logger.debug('initializer load start');
-    const secrets = await getSecretsManager();
+    const secrets = await getSecretsManager<SecretsValues>();
     bind<SecretsValues>(TYPES.ASM_VALUES).toConstantValue(secrets);
     const credential = new Credentials(
       secrets.PUPPETEER_API_ACCESS_KEY, secrets.PUPPETEER_API_SECRET_KEY,

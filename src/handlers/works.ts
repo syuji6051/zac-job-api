@@ -1,6 +1,8 @@
 import {
   APIGatewayProxyResult, APIGatewayProxyWithCognitoAuthorizerEvent, Handler,
 } from 'aws-lambda';
+import { logger } from '@syuji6051/zac-job-library';
+
 import { container, TYPES } from '@/src/providers/container';
 import { Works as UseCase } from '@/src/usecases/works';
 import {
@@ -10,7 +12,6 @@ import {
 import {
   WorkListOutput, WorkClockVoidOutput,
 } from '@/src/adapters/http/response/works';
-import logger from '@/src/lib/logger';
 
 export const workSync: Handler = async (
   event: APIGatewayProxyWithCognitoAuthorizerEvent,

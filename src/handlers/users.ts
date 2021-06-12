@@ -1,6 +1,7 @@
 import {
   APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyWithCognitoAuthorizerEvent, Handler,
 } from 'aws-lambda';
+import { logger, middleware } from '@syuji6051/zac-job-library';
 
 import { asyncModules, container, TYPES } from '@/src/providers/container';
 import { Users as UseCase } from '@/src/usecases/users';
@@ -10,8 +11,6 @@ import {
 import {
   PutZacLoginOutput, PutObcLoginOutput, UserCreateOutput, UserListOutput, ZacWorkRegisterOutput,
 } from '@/src/adapters/http/response/users';
-import logger from '@/src/lib/logger';
-import { lambdaErrorHandler } from '@/src/middleware/lambda-error-handler';
 
 export const create: Handler = async (
   event: APIGatewayProxyEvent,
@@ -47,10 +46,11 @@ export const putZacLogin: Handler = async (
         new PutZacLoginInput(requestContext, body),
         new PutZacLoginOutput(),
       );
-  })().catch((err) => {
-    logger.log(err);
-    return lambdaErrorHandler(err);
-  });
+  })()
+    .catch((err) => middleware.lambdaErrorHandler(err))
+    .finally(() => {
+      logger.info('putZacLogin function end');
+    });
 };
 
 export const putObcLogin: Handler = async (
@@ -66,10 +66,11 @@ export const putObcLogin: Handler = async (
         new PutObcLoginInput(requestContext, body),
         new PutObcLoginOutput(),
       );
-  })().catch((err) => {
-    logger.log(err);
-    return lambdaErrorHandler(err);
-  });
+  })()
+    .catch((err) => middleware.lambdaErrorHandler(err))
+    .finally(() => {
+      logger.info('putObcLogin function end');
+    });
 };
 
 export const postZacRegister: Handler = async (
@@ -85,8 +86,9 @@ export const postZacRegister: Handler = async (
         new ZacWorkRegisterInput(requestContext, body),
         new ZacWorkRegisterOutput(),
       );
-  })().catch((err) => {
-    logger.log(err);
-    return lambdaErrorHandler(err);
-  });
+  })()
+    .catch((err) => middleware.lambdaErrorHandler(err))
+    .finally(() => {
+      logger.info('postZacRegister function end');
+    });
 };

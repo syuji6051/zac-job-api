@@ -1,6 +1,5 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { ValidationError } from '@/src/lib/errors';
-import logger from '@/src/lib/logger';
+import { logger, errors } from '@syuji6051/zac-job-library';
 
 export function success(body?: any): APIGatewayProxyResult {
   return {
@@ -12,7 +11,7 @@ export function success(body?: any): APIGatewayProxyResult {
   };
 }
 
-export function invalidErrorResponse(error: ValidationError): APIGatewayProxyResult {
+export function invalidErrorResponse(error: errors.ValidationError): APIGatewayProxyResult {
   const { code, message } = error;
   return {
     statusCode: 400,

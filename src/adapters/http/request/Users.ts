@@ -11,7 +11,6 @@ import {
   ZacWorkRegisterInput as IZacWorkRegisterInput,
 } from '@/src/usecases/inputs/users';
 import { putObcLoginValidateFunc, putZacLoginValidateFunc, zacWorkRegisterFunc } from '@/src/validations/users';
-import { ValidationError } from '@/src/lib/errors';
 import { ZacUserLoginRequestBody, ObcUserLoginRequestBody, ZacWorkRegisterRequestBody } from '@/src/entities/users';
 import Authorizer from '@/src/adapters/http/request/authorizer';
 
@@ -146,7 +145,7 @@ export class ZacWorkRegisterInput extends Authorizer implements IZacWorkRegister
       const errorMessage = validateFunc.errors
         ? `invalid request ${validateFunc.errors.map((e) => e.message).join()}`
         : 'invalid request';
-      throw new ValidationError(errorMessage);
+      throw new errors.ValidationError(errorMessage);
     }
     this.body = body as ZacWorkRegisterRequestBody;
   }
