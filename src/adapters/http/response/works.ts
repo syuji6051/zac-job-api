@@ -16,10 +16,10 @@ export class WorkListOutput implements IWorkListOutput {
         clock_out: work.clockOut,
         go_out_1: work.goOut1,
         returned_1: work.returned1,
-        go_out_2: work.goOut1,
-        returned_2: work.returned1,
-        go_out_3: work.goOut1,
-        returned_3: work.returned1,
+        go_out_2: work.goOut2,
+        returned_2: work.returned2,
+        go_out_3: work.goOut3,
+        returned_3: work.returned3,
       })));
   }
 }

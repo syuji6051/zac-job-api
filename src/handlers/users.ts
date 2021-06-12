@@ -3,7 +3,7 @@ import {
 } from 'aws-lambda';
 import { logger, middleware } from '@syuji6051/zac-job-library';
 
-import { asyncModules, container, TYPES } from '@/src/providers/container';
+import { container, TYPES } from '@/src/providers/container';
 import { Users as UseCase } from '@/src/usecases/users';
 import {
   PutZacLoginInput, PutObcLoginInput, UserCreateInput, UserListInput, ZacWorkRegisterInput,
@@ -11,14 +11,32 @@ import {
 import {
   PutZacLoginOutput, PutObcLoginOutput, UserCreateOutput, UserListOutput, ZacWorkRegisterOutput,
 } from '@/src/adapters/http/response/users';
+import { seriesLoadAsync } from '@/src/helper/container';
+import { asyncAsmContainerModule } from '@/src/modules/common';
+
+const loadAsyncModules = seriesLoadAsync([
+  asyncAsmContainerModule,
+]);
 
 export const create: Handler = async (
   event: APIGatewayProxyEvent,
-): Promise<APIGatewayProxyResult> => container.get<UseCase>(TYPES.USECASE_USERS)
-  .create(
+): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
+  logger.info(JSON.stringify(event));
+
+  return (async () => container.get<UseCase>(TYPES.USECASE_USERS).create(
     new UserCreateInput(event.headers, JSON.parse(event.body!) as any),
     new UserCreateOutput(),
-  );
+  ))()
+    .catch((err) => middleware.lambdaErrorHandler(err))
+    .finally(() => {
+      logger.info('workSync function end');
+    });
+});
+// ): Promise<APIGatewayProxyResult> => container.get<UseCase>(TYPES.USECASE_USERS)
+//   .create(
+//     new UserCreateInput(event.headers, JSON.parse(event.body!) as any),
+//     new UserCreateOutput(),
+//   );
 
 export const list: Handler = async (
   event: APIGatewayProxyEvent,
@@ -39,18 +57,11 @@ export const putZacLogin: Handler = async (
   const { body, requestContext } = event;
   logger.info(JSON.stringify(event));
 
-  return (async () => {
-    await asyncModules;
-    return container.get<UseCase>(TYPES.USECASE_USERS)
-      .putZacLogin(
-        new PutZacLoginInput(requestContext, body),
-        new PutZacLoginOutput(),
-      );
-  })()
-    .catch((err) => middleware.lambdaErrorHandler(err))
-    .finally(() => {
-      logger.info('putZacLogin function end');
-    });
+  return container.get<UseCase>(TYPES.USECASE_USERS)
+    .putZacLogin(
+      new PutZacLoginInput(requestContext, body),
+      new PutZacLoginOutput(),
+    );
 };
 
 export const putObcLogin: Handler = async (
@@ -59,18 +70,11 @@ export const putObcLogin: Handler = async (
   const { body, requestContext } = event;
   logger.info(JSON.stringify(event));
 
-  return (async () => {
-    await asyncModules;
-    return container.get<UseCase>(TYPES.USECASE_USERS)
-      .putObcLogin(
-        new PutObcLoginInput(requestContext, body),
-        new PutObcLoginOutput(),
-      );
-  })()
-    .catch((err) => middleware.lambdaErrorHandler(err))
-    .finally(() => {
-      logger.info('putObcLogin function end');
-    });
+  return container.get<UseCase>(TYPES.USECASE_USERS)
+    .putObcLogin(
+      new PutObcLoginInput(requestContext, body),
+      new PutObcLoginOutput(),
+    );
 };
 
 export const postZacRegister: Handler = async (
@@ -79,16 +83,9 @@ export const postZacRegister: Handler = async (
   const { body, requestContext } = event;
   logger.info(JSON.stringify(event));
 
-  return (async () => {
-    await asyncModules;
-    return container.get<UseCase>(TYPES.USECASE_USERS)
-      .ZacWorkRegister(
-        new ZacWorkRegisterInput(requestContext, body),
-        new ZacWorkRegisterOutput(),
-      );
-  })()
-    .catch((err) => middleware.lambdaErrorHandler(err))
-    .finally(() => {
-      logger.info('postZacRegister function end');
-    });
+  return container.get<UseCase>(TYPES.USECASE_USERS)
+    .ZacWorkRegister(
+      new ZacWorkRegisterInput(requestContext, body),
+      new ZacWorkRegisterOutput(),
+    );
 };
