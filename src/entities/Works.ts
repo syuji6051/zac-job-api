@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 export interface Work {
   clockIn: string;
   clockOut: string;
@@ -8,4 +9,12 @@ export interface Work {
   goOut3: string;
   returned3: string;
   day: string;
+}
+
+export interface WorkSyncRequestParameter {
+  year_month: string
+}
+
+export interface WorkSyncRequest {
+  yearMonth: string
 }

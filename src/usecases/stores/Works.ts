@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-vars */
-import { Work } from '@/src/entities/Works';
+import { WorkRecord } from '@/src/entities/dynamodb/works';
+import { Work } from '@/src/entities/works';
 
 export interface Works {
-  list(userId: string, password: string, yearMonth: string): Promise<Work[]>;
+  obcWorkList(userId: string, yearMonth: string): Promise<Work[]>;
+  workList(userId: string, yearMonth: string): Promise<WorkRecord[]>;
   put(userId: string, work: Work[]): Promise<void>;
-  clockIn(userId: string, password: string): Promise<void>;
-  clockOut(userId: string, password: string): Promise<void>;
-  goOut(userId: string, password: string): Promise<void>;
-  goReturn(userId: string, password: string): Promise<void>;
+  clockIn(userId: string): Promise<void>;
+  clockOut(userId: string): Promise<void>;
+  goOut(userId: string): Promise<void>;
+  goReturn(userId: string): Promise<void>;
 }

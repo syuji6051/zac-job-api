@@ -1,7 +1,7 @@
 import {
   APIGatewayEventRequestContextWithAuthorizer, APIGatewayProxyCognitoAuthorizer,
 } from 'aws-lambda';
-import { errors, services } from '@syuji6051/zac-job-library';
+import { errors, validation } from '@syuji6051/zac-job-library';
 
 import {
   UserCreateInput as IUserCreateInput,
@@ -9,13 +9,11 @@ import {
   PutZacLoginInput as IPutZacLoginInput,
   PutObcLoginInput as IPutObcLoginInput,
   ZacWorkRegisterInput as IZacWorkRegisterInput,
-} from '@/src/usecases/inputs/Users';
-import putZacLoginJson from '@/src/schemas/Users/PutZacLogin.json';
-import putObcLoginJson from '@/src/schemas/Users/PutObcLogin.json';
-import { zacWorkRegisterFunc } from '@/src/validations/users';
+} from '@/src/usecases/inputs/users';
+import { putObcLoginValidateFunc, putZacLoginValidateFunc, zacWorkRegisterFunc } from '@/src/validations/users';
 import { ValidationError } from '@/src/lib/errors';
-import { ZacUserLoginRequestBody, ObcUserLoginRequestBody, ZacWorkRegisterRequestBody } from '@/src/entities/Users';
-import Authorizer from '@/src/adapters/http/request/Authorizer';
+import { ZacUserLoginRequestBody, ObcUserLoginRequestBody, ZacWorkRegisterRequestBody } from '@/src/entities/users';
+import Authorizer from '@/src/adapters/http/request/authorizer';
 
 class UserInput {
   headers?: { [name: string]: string }
@@ -80,7 +78,7 @@ export class PutZacLoginInput extends Authorizer implements IPutZacLoginInput {
     super(context);
     if (requestBody === null) throw new errors.ValidationError('body is required');
     const body = JSON.parse(requestBody);
-    services.validate(putZacLoginJson, body);
+    validation.check(putZacLoginValidateFunc, body);
     this.body = body as ZacUserLoginRequestBody;
   }
 
@@ -111,7 +109,7 @@ export class PutObcLoginInput extends Authorizer implements IPutObcLoginInput {
     super(context);
     if (requestBody === null) throw new errors.ValidationError('body is required');
     const body = JSON.parse(requestBody);
-    services.validate(putObcLoginJson, body);
+    validation.check(putObcLoginValidateFunc, body);
     this.body = body as ObcUserLoginRequestBody;
   }
 

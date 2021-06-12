@@ -1,75 +1,52 @@
 on:
   push:
     branches:
-      - master
-name: Deploy master branch
+      - '**'
+
+name: Build and Deploy
 jobs:
-  variable-set:
-    name: variable-set
+  install:
+    name: install
     runs-on: ubuntu-latest
     outputs:
       STAGE: ${{ steps.variable.outputs.STAGE }}
     steps:
-    - id: variable
-      run: |
-        if [ ${{ github.ref }} == 'refs/heads/deployment/production' ]; then
-          echo "::set-output name=STAGE::prod"
-        else
-          echo "::set-output name=STAGE::dev"
-        fi
-  deploy:
-    name: deploy
+      - id: variable
+        run: |
+          if [ ${{ github.ref }} == 'refs/heads/deployment/production' ]; then
+            echo "::set-output name=STAGE::prod"
+          else
+            echo "::set-output name=STAGE::dev"
+          fi
+  build-deploy:
+    name: build and deploy
     runs-on: ubuntu-latest
-    needs: variable-set
+    needs:
+      - install
     env:
-      STAGE: ${{ needs.variable-set.outputs.STAGE }}
+      STAGE: ${{ needs.install.outputs.STAGE }}
       GITHUB_TOKEN: ${{ secrets.NPM_GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@master
-      - name: Set outputs
-        id: vars
+      - name: variable
+        id: variable
         run: |
-          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-          if [ ${STAGE} == 'dev' ]; then
-            echo "::set-output name=AWS_ACCESS_KEY_ID::${{ secrets.DEV_AWS_ACCESS_KEY_ID }}"
-            echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}"
-          else
+          if [ $STAGE == 'prod' ]; then
             echo "::set-output name=AWS_ACCESS_KEY_ID::${{ secrets.PROD_AWS_ACCESS_KEY_ID }}"
             echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}"
+          else
+            echo "::set-output name=AWS_ACCESS_KEY_ID::${{ secrets.DEV_AWS_ACCESS_KEY_ID }}"
+            echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}"
           fi
-      
-      - name: npm install
-        run: |
-          npm config set //npm.pkg.github.com/:_authToken $GITHUB_TOKEN
-          npm install
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ steps.vars.outputs.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ steps.vars.outputs.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ steps.variable.outputs.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ steps.variable.outputs.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-1
-        
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Build, tag, and push image to Amazon ECR
-        id: deploy-ecr
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          SHORT_GIT_HASH: ${{ steps.vars.outputs.sha_short }}
+      - name: Serverless build and deploy
         run: |
-          ECR_REPOSITORY_NAME=zac-job-api
-          ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY_NAME
-          docker build \
-            -t $ECR_REPOSITORY:$SHORT_GIT_HASH \
-            -t $ECR_REPOSITORY \
-            --build-arg NPM_GITHUB_TOKEN=$GITHUB_TOKEN .
-          docker push $ECR_REPOSITORY
-          docker push $ECR_REPOSITORY:$SHORT_GIT_HASH
-      - name: Serverless deploy
-        env:
-          SHORT_GIT_HASH: ${{ steps.vars.outputs.sha_short }}
-        run: |
-          npm run deploy dev
+          npm config set //npm.pkg.github.com/:_authToken $GITHUB_TOKEN
+          npm install
+          npm run build
+          npm run deploy ${STAGE}

@@ -1,62 +1,85 @@
 import {
-  APIGatewayEvent, APIGatewayProxyResult,
+  APIGatewayProxyResult, APIGatewayProxyWithCognitoAuthorizerEvent, Handler,
 } from 'aws-lambda';
 import { container, TYPES } from '@/src/providers/container';
-import { Works as UseCase } from '@/src/usecases/Works';
+import { Works as UseCase } from '@/src/usecases/works';
 import {
-  WorkListInput, WorkClockInInput, WorkClockOutInput, WorkGoOutInput, WorkGoReturnInput,
-} from '@/src/adapters/http/request/Works';
+  WorkInput,
+  WorkListInput,
+} from '@/src/adapters/http/request/works';
 import {
-  WorkListOutput, WorkClockInOutput, WorkClockOutOutput, WorkGoOutOutput, WorkGoReturnOutput,
-} from '@/src/adapters/http/response/Works';
+  WorkListOutput, WorkClockVoidOutput,
+} from '@/src/adapters/http/response/works';
 import logger from '@/src/lib/logger';
 
-export const workSync = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
-  logger.info(event);
-  const { requestContext: { authorizer }, body } = event;
+export const workSync: Handler = async (
+  event: APIGatewayProxyWithCognitoAuthorizerEvent,
+): Promise<APIGatewayProxyResult> => {
+  logger.info(JSON.stringify(event));
+  const { requestContext: { authorizer }, queryStringParameters } = event;
   return container.get<UseCase>(TYPES.USECASE_WORKS)
     .workSync(
-      new WorkListInput(authorizer, body!),
+      new WorkListInput(authorizer, queryStringParameters),
+      new WorkClockVoidOutput(),
+    );
+};
+
+export const workList: Handler = async (
+  event: APIGatewayProxyWithCognitoAuthorizerEvent,
+): Promise<APIGatewayProxyResult> => {
+  logger.info(JSON.stringify(event));
+  const { requestContext: { authorizer }, queryStringParameters } = event;
+  return container.get<UseCase>(TYPES.USECASE_WORKS)
+    .workList(
+      new WorkListInput(authorizer, queryStringParameters),
       new WorkListOutput(),
     );
 };
 
-export const clockIn = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
+export const clockIn: Handler = async (
+  event: APIGatewayProxyWithCognitoAuthorizerEvent,
+): Promise<APIGatewayProxyResult> => {
   logger.info(event);
-  const { requestContext: { authorizer }, body } = event;
+  const { requestContext: { authorizer } } = event;
   return container.get<UseCase>(TYPES.USECASE_WORKS)
     .clockIn(
-      new WorkClockInInput(authorizer, body!),
-      new WorkClockInOutput(),
+      new WorkInput(authorizer),
+      new WorkClockVoidOutput(),
     );
 };
 
-export const clockOut = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
+export const clockOut: Handler = async (
+  event: APIGatewayProxyWithCognitoAuthorizerEvent,
+): Promise<APIGatewayProxyResult> => {
   logger.info(event);
-  const { requestContext: { authorizer }, body } = event;
+  const { requestContext: { authorizer } } = event;
   return container.get<UseCase>(TYPES.USECASE_WORKS)
     .clockOut(
-      new WorkClockOutInput(authorizer, body!),
-      new WorkClockOutOutput(),
+      new WorkInput(authorizer),
+      new WorkClockVoidOutput(),
     );
 };
 
-export const goOut = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
+export const goOut: Handler = async (
+  event: APIGatewayProxyWithCognitoAuthorizerEvent,
+): Promise<APIGatewayProxyResult> => {
   logger.info(event);
-  const { requestContext: { authorizer }, body } = event;
+  const { requestContext: { authorizer } } = event;
   return container.get<UseCase>(TYPES.USECASE_WORKS)
     .goOut(
-      new WorkGoOutInput(authorizer, body!),
-      new WorkGoOutOutput(),
+      new WorkInput(authorizer),
+      new WorkClockVoidOutput(),
     );
 };
 
-export const goReturn = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
+export const goReturn: Handler = async (
+  event: APIGatewayProxyWithCognitoAuthorizerEvent,
+): Promise<APIGatewayProxyResult> => {
   logger.info(event);
-  const { requestContext: { authorizer }, body } = event;
+  const { requestContext: { authorizer } } = event;
   return container.get<UseCase>(TYPES.USECASE_WORKS)
     .goReturn(
-      new WorkGoReturnInput(authorizer, body!),
-      new WorkGoReturnOutput(),
+      new WorkInput(authorizer),
+      new WorkClockVoidOutput(),
     );
 };

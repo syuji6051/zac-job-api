@@ -4,6 +4,6 @@ import { DynamoDB } from 'aws-sdk';
 export default new DataMapper({
   client: new DynamoDB({
     endpoint: process.env.DYNAMO_ENDPOINT,
-    region: process.env.AWS_DEFAULT_REGION,
+    region: process.env.AWS_REGION,
   }),
 });

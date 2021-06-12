@@ -10,8 +10,8 @@ export interface User {
 
 export interface UserInfo {
   userId: string;
-  obcUserId?: string;
-  obcPassword?: string;
+  obcUserId: string;
+  obcPassword: string;
 }
 
 export interface ZacUserLogin {

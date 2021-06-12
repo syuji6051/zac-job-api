@@ -3,9 +3,10 @@
 require('dotenv').config();
 
 import express from 'express';
+import { middleware } from '@syuji6051/zac-job-library';
+
 import users from '@/src/controllers/users';
 import works from '@/src/controllers/works';
-import errorHandler from '@/src/middleware/error-handler';
 
 const app = express();
 const port = 3000;
@@ -18,7 +19,7 @@ app.use(users);
 app.use(works);
 
 // catch 404 and forward to error handler
-app.use(errorHandler);
+app.use(middleware.errorHandler());
 
 // eslint-disable-next-line no-console
 app.listen(port, () => console.log(`app listening on port ${port}!`));

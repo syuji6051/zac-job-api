@@ -1,15 +1,14 @@
 import { inject, injectable } from 'inversify';
 import { UserType } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 
-import { Users as IUsers } from '@/src/usecases/stores/Users';
-import UsersTable from '@/src/cognito/Users';
-import { UserInfo as UserInfoTable } from '@/src/database/User';
+import { Users as IUsers } from '@/src/usecases/stores/users';
+import UsersTable from '@/src/cognito/users';
 import Puppeteer from '@/src/puppeteer/zac';
 import {
-  User, Users as EntitiesUsers, UserInfo, ZacWork, Attribute,
-} from '@/src/entities/Users';
+  User, Users as EntitiesUsers, ZacWork, Attribute,
+} from '@/src/entities/users';
 import { TYPES } from '@/src/providers/container';
-import { SecretsValues } from '@/src/entities/Environments';
+import { SecretsValues } from '@/src/entities/environments';
 
 @injectable()
 export default class Users implements IUsers {
@@ -17,23 +16,16 @@ export default class Users implements IUsers {
 
   private puppeteer: Puppeteer;
 
-  private user: UserInfoTable;
-
   constructor(
     @inject(TYPES.ASM_VALUES) private secrets: SecretsValues,
   ) {
     this.cognito = new UsersTable(secrets.COGNITO_USER_POOL);
     this.puppeteer = new Puppeteer();
-    this.user = new UserInfoTable();
   }
 
   public async create(email: string): Promise<User> {
     const user = await this.cognito.create(email);
     return user ? this.recordToEntity(user) : {};
-  }
-
-  public async get(userId: string): Promise<UserInfo> {
-    return this.user.get(userId);
   }
 
   public async list(paramPaginationToken: string): Promise<EntitiesUsers> {

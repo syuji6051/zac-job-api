@@ -1,4 +1,4 @@
-import { Attribute } from '@/src/entities/Users';
+import { Attribute } from '@/src/entities/users';
 import { CognitoIdentityServiceProvider } from 'aws-sdk';
 import { ListUsersResponse, UserType } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 

@@ -1,26 +1,28 @@
-import { APIGatewayEvent, APIGatewayProxyResult, APIGatewayProxyWithCognitoAuthorizerEvent } from 'aws-lambda';
+import {
+  APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyWithCognitoAuthorizerEvent, Handler,
+} from 'aws-lambda';
 
 import { asyncModules, container, TYPES } from '@/src/providers/container';
-import { Users as UseCase } from '@/src/usecases/Users';
+import { Users as UseCase } from '@/src/usecases/users';
 import {
   PutZacLoginInput, PutObcLoginInput, UserCreateInput, UserListInput, ZacWorkRegisterInput,
-} from '@/src/adapters/http/request/Users';
+} from '@/src/adapters/http/request/users';
 import {
   PutZacLoginOutput, PutObcLoginOutput, UserCreateOutput, UserListOutput, ZacWorkRegisterOutput,
-} from '@/src/adapters/http/response/Users';
+} from '@/src/adapters/http/response/users';
 import logger from '@/src/lib/logger';
 import { lambdaErrorHandler } from '@/src/middleware/lambda-error-handler';
 
-export const create = async (
-  event: APIGatewayEvent,
+export const create: Handler = async (
+  event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => container.get<UseCase>(TYPES.USECASE_USERS)
   .create(
     new UserCreateInput(event.headers, JSON.parse(event.body!) as any),
     new UserCreateOutput(),
   );
 
-export const list = async (
-  event: APIGatewayEvent,
+export const list: Handler = async (
+  event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => {
   logger.debug(event);
   const { headers, queryStringParameters } = event;
@@ -32,7 +34,7 @@ export const list = async (
     );
 };
 
-export const putZacLogin = async (
+export const putZacLogin: Handler = async (
   event: APIGatewayProxyWithCognitoAuthorizerEvent,
 ): Promise<APIGatewayProxyResult> => {
   const { body, requestContext } = event;
@@ -51,7 +53,7 @@ export const putZacLogin = async (
   });
 };
 
-export const putObcLogin = async (
+export const putObcLogin: Handler = async (
   event: APIGatewayProxyWithCognitoAuthorizerEvent,
 ): Promise<APIGatewayProxyResult> => {
   const { body, requestContext } = event;
@@ -70,7 +72,7 @@ export const putObcLogin = async (
   });
 };
 
-export const postZacRegister = async (
+export const postZacRegister: Handler = async (
   event: APIGatewayProxyWithCognitoAuthorizerEvent,
 ): Promise<APIGatewayProxyResult> => {
   const { body, requestContext } = event;

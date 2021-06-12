@@ -1,22 +1,11 @@
-import { Work } from '../../entities/Works';
+/* eslint-disable no-unused-vars */
 import { APIGatewayProxyResult } from 'aws-lambda';
+import { WorkRecord } from '@/src/entities/dynamodb/works';
 
 export interface WorkListOutput {
-  success(works: Work[]): APIGatewayProxyResult;
+  success(works: WorkRecord[]): APIGatewayProxyResult;
 }
 
-export interface WorkClockInOutput {
-  success(): APIGatewayProxyResult;
-}
-
-export interface WorkClockOutOutput {
-  success(): APIGatewayProxyResult;
-}
-
-export interface WorkGoOutOutput {
-  success(): APIGatewayProxyResult;
-}
-
-export interface WorkGoReturnOutput {
+export interface WorkClockVoidOutput {
   success(): APIGatewayProxyResult;
 }

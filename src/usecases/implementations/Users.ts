@@ -3,15 +3,15 @@ import { APIGatewayProxyResult } from 'aws-lambda';
 
 import {
   UserCreateInput, UserListInput, PutZacLoginInput, ZacWorkRegisterInput, PutObcLoginInput,
-} from '@/src/usecases/inputs/Users';
-import { Users as IUsers } from '@/src/usecases/Users';
-import { Users as UserStore } from '@/src/usecases/stores/Users';
+} from '@/src/usecases/inputs/users';
+import { Users as IUsers } from '@/src/usecases/users';
+import { Users as UserStore } from '@/src/usecases/stores/users';
 import { container, TYPES } from '@/src/providers/container';
 import {
   UserCreateOutput, UserListOutput, PutZacLoginOutput, ZacWorkRegisterOutput, PutObcLoginOutput,
-} from '@/src/usecases/outputs/Users';
-import { SecretsValues } from '@/src/entities/Environments';
-import { getUserAttribute } from '@/src/helper/user-attibute';
+} from '@/src/usecases/outputs/users';
+import { SecretsValues } from '@/src/entities/environments';
+import { getUserAttribute } from '@/src/helper/user-attribute';
 
 @injectable()
 export default class Users implements IUsers {

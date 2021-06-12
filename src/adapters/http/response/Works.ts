@@ -1,39 +1,30 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
 import {
   WorkListOutput as IWorkListOutput,
-  WorkClockInOutput as IWorkClockInOutput,
-  WorkClockOutOutput as IWorkClockOutOutput,
-  WorkGoOutOutput as IWorkGoOutOutput,
-  WorkGoReturnOutput as IWorkGoReturnOutput,
-
-} from '@/src/usecases/outputs/Works';
+  WorkClockVoidOutput as IWorkClockVoidOutput,
+} from '@/src/usecases/outputs/works';
 import { success } from '@/src/views/response';
+import { WorkRecord } from '@/src/entities/dynamodb/works';
 
 export class WorkListOutput implements IWorkListOutput {
-  public success(): APIGatewayProxyResult {
-    return success({});
+  public success(works: WorkRecord[]): APIGatewayProxyResult {
+    return success(works
+      .filter((work) => work.clockIn || work.clockOut)
+      .map((work) => ({
+        day: work.day,
+        clock_in: work.clockIn,
+        clock_out: work.clockOut,
+        go_out_1: work.goOut1,
+        returned_1: work.returned1,
+        go_out_2: work.goOut1,
+        returned_2: work.returned1,
+        go_out_3: work.goOut1,
+        returned_3: work.returned1,
+      })));
   }
 }
 
-export class WorkClockInOutput implements IWorkClockInOutput {
-  public success(): APIGatewayProxyResult {
-    return success({});
-  }
-}
-
-export class WorkClockOutOutput implements IWorkClockOutOutput {
-  public success(): APIGatewayProxyResult {
-    return success({});
-  }
-}
-
-export class WorkGoOutOutput implements IWorkGoOutOutput {
-  public success(): APIGatewayProxyResult {
-    return success({});
-  }
-}
-
-export class WorkGoReturnOutput implements IWorkGoReturnOutput {
+export class WorkClockVoidOutput implements IWorkClockVoidOutput {
   public success(): APIGatewayProxyResult {
     return success({});
   }

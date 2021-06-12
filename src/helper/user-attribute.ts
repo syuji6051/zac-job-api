@@ -1,7 +1,7 @@
 import { encrypt } from '@syuji6051/zac-job-library';
 
-import { SecretsValues } from '@/src/entities/Environments';
-import { Attribute } from '@/src/entities/Users';
+import { SecretsValues } from '@/src/entities/environments';
+import { Attribute } from '@/src/entities/users';
 
 // eslint-disable-next-line import/prefer-default-export
 export const getUserAttribute = (secrets: SecretsValues, userAttribute: Attribute): Attribute => {

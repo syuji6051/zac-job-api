@@ -1,24 +1,16 @@
 /* eslint-disable no-unused-vars */
 import {
-  WorkListInput,
-  WorkClockInInput,
-  WorkClockOutInput,
-  WorkGoOutInput,
-  WorkGoReturnInput,
-} from '@/src/adapters/http/request/Works';
-import {
   WorkListOutput,
-  WorkClockInOutput,
-  WorkClockOutOutput,
-  WorkGoOutOutput,
-  WorkGoReturnOutput,
-} from '@/src/adapters/http/response/Works';
+  WorkClockVoidOutput,
+} from '@/src/adapters/http/response/works';
 import { APIGatewayProxyResult } from 'aws-lambda';
+import { WorkListInput, WorkInput } from '@/src/usecases/inputs/works';
 
 export interface Works {
-  workSync(input: WorkListInput, output: WorkListOutput): Promise<APIGatewayProxyResult>;
-  clockIn(input: WorkClockInInput, output: WorkClockInOutput): Promise<APIGatewayProxyResult>;
-  clockOut(input: WorkClockOutInput, output: WorkClockOutOutput): Promise<APIGatewayProxyResult>;
-  goOut(input: WorkGoOutInput, output: WorkGoOutOutput): Promise<APIGatewayProxyResult>;
-  goReturn(input: WorkGoReturnInput, output: WorkGoReturnOutput): Promise<APIGatewayProxyResult>;
+  workSync(input: WorkListInput, output: WorkClockVoidOutput): Promise<APIGatewayProxyResult>;
+  workList(input: WorkListInput, output: WorkListOutput): Promise<APIGatewayProxyResult>;
+  clockIn(input: WorkInput, output: WorkClockVoidOutput): Promise<APIGatewayProxyResult>;
+  clockOut(input: WorkInput, output: WorkClockVoidOutput): Promise<APIGatewayProxyResult>;
+  goOut(input: WorkInput, output: WorkClockVoidOutput): Promise<APIGatewayProxyResult>;
+  goReturn(input: WorkInput, output: WorkClockVoidOutput): Promise<APIGatewayProxyResult>;
 }

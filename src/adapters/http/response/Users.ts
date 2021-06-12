@@ -3,14 +3,14 @@ import { APIGatewayProxyResult } from 'aws-lambda';
 import {
   User as UserEntity,
   Users as UsersEntity,
-} from '@/src/entities/Users';
+} from '@/src/entities/users';
 import {
   UserCreateOutput as IUserCreateOutput,
   UserListOutput as IUserListOutput,
   PutZacLoginOutput as IPutZacLoginOutput,
   PutObcLoginOutput as IPutObcLoginOutput,
   ZacWorkRegisterOutput as IZacWorkRegisterOutput,
-} from '@/src/usecases/outputs/Users';
+} from '@/src/usecases/outputs/users';
 import { success } from '@/src/views/response';
 
 export class UserCreateOutput implements IUserCreateOutput {

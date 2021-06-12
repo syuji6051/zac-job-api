@@ -18,7 +18,7 @@ export const TYPES = {
 };
 
 import { getSecretsManager } from '@/src/lib/asm';
-import { SecretsValues } from '@/src/entities/Environments';
+import { SecretsValues } from '@/src/entities/environments';
 export const asyncModules = container.loadAsync(
   new AsyncContainerModule(async (bind: interfaces.Bind) => {
     logger.debug('initializer load start');
@@ -31,19 +31,18 @@ export const asyncModules = container.loadAsync(
   }),
 );
 
-import { Users as UseCaseUsers } from '@/src/usecases/Users';
-import UseCaseUsersImpl from '@/src/usecases/implementations/Users';
+import { Users as UseCaseUsers } from '@/src/usecases/users';
+import UseCaseUsersImpl from '@/src/usecases/implementations/users';
 container.bind<UseCaseUsers>(TYPES.USECASE_USERS).to(UseCaseUsersImpl);
 
-import { Works as UseCaseWorks } from '@/src/usecases/Works';
-import UseCaseWorksImpl from '@/src/usecases/implementations/Works';
+import { Works as UseCaseWorks } from '@/src/usecases/works';
+import UseCaseWorksImpl from '@/src/usecases/implementations/works';
 container.bind<UseCaseWorks>(TYPES.USECASE_WORKS).to(UseCaseWorksImpl);
 
-import { Users as StoreUsers } from '@/src/usecases/stores/Users';
-import StoreUsersImpl from '@/src/adapters/cognito/Users';
+import { Users as StoreUsers } from '@/src/usecases/stores/users';
+import StoreUsersImpl from '@/src/adapters/stores/users';
 container.bind<StoreUsers>(TYPES.STORE_USERS).to(StoreUsersImpl);
 
-import { Works as StoreWorks } from '@/src/usecases/stores/Works';
-import StoreWorksImpl from '@/src/adapters/puppeteer/Works';
-
+import { Works as StoreWorks } from '@/src/usecases/stores/works';
+import StoreWorksImpl from '@/src/adapters/stores/works';
 container.bind<StoreWorks>(TYPES.STORE_WORKS).to(StoreWorksImpl);

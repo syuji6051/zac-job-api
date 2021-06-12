@@ -1,16 +1,16 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import express from 'express';
+import { middleware } from '@syuji6051/zac-job-library';
 import {
   create, list, postZacRegister, putZacLogin, putObcLogin,
 } from '@/src/handlers/users';
-import lambdaDriver from '@/src/middleware/lambda-driver';
 
 const router = express.Router();
 
-router.post('/user', lambdaDriver(create));
-router.get('/users', lambdaDriver(list));
-router.put('/user/attribute/zac', lambdaDriver(putZacLogin));
-router.put('/user/attribute/obc', lambdaDriver(putObcLogin));
-router.post('/user/zac/work', lambdaDriver(postZacRegister));
+router.post('/user', middleware.lambdaDriver(create));
+router.get('/users', middleware.lambdaDriver(list));
+router.put('/user/attribute/zac', middleware.lambdaDriver(putZacLogin));
+router.put('/user/attribute/obc', middleware.lambdaDriver(putObcLogin));
+router.post('/user/zac/work', middleware.lambdaDriver(postZacRegister));
 
 export default router;

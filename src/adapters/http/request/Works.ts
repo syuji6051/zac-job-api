@@ -1,83 +1,45 @@
+import { APIGatewayProxyCognitoAuthorizer, APIGatewayProxyEventQueryStringParameters } from 'aws-lambda';
+import { validation, errors } from '@syuji6051/zac-job-library';
+import camelcaseKeys from 'camelcase-keys';
+
 import {
   WorkListInput as IWorkListInput,
-  WorkClockInInput as IWorkClockInInput,
-  WorkClockOutInput as IWorkClockOutInput,
-  WorkGoOutInput as IWorkGoOutInput,
-  WorkGoReturnInput as IWorkGoReturnInput,
-} from '@/src/usecases/inputs/Works';
-import { APIGatewayEventDefaultAuthorizerContext } from 'aws-lambda';
+} from '@/src/usecases/inputs/works';
+import { workSyncRequestFunc } from '@/src/validations/works';
+import { WorkSyncRequest } from '@/src/entities/works';
 
-class WorkInput {
-  protected authorizer: APIGatewayEventDefaultAuthorizerContext;
-
-  protected body: { [name: string]: string };
+export class WorkInput {
+  protected authorizer: APIGatewayProxyCognitoAuthorizer;
 
   public constructor(
-    authorizer: APIGatewayEventDefaultAuthorizerContext,
-    body: string,
+    authorizer: APIGatewayProxyCognitoAuthorizer,
   ) {
     this.authorizer = authorizer;
-    this.body = JSON.parse(body) as { [name: string]: string };
   }
 
   public getUserId(): string {
-    const { claims } = this.authorizer!;
+    const { claims } = this.authorizer;
     return claims['cognito:username'] || claims.username;
   }
 }
 
 export class WorkListInput extends WorkInput implements IWorkListInput {
-  private yearMonth: string;
+  private workSyncRequest: WorkSyncRequest;
 
   public constructor(
-    authorizer: APIGatewayEventDefaultAuthorizerContext,
-    body: string,
+    authorizer: APIGatewayProxyCognitoAuthorizer,
+    query: APIGatewayProxyEventQueryStringParameters | null = {},
   ) {
-    super(authorizer, body);
-    this.yearMonth = this.body.yearMonth;
+    super(authorizer);
+    try {
+      validation.check(workSyncRequestFunc, query);
+    } catch (err) {
+      throw new errors.ValidationError(err.message);
+    }
+    this.workSyncRequest = camelcaseKeys(query!) as unknown as WorkSyncRequest;
   }
 
   public getYearMonth(): string {
-    return this.yearMonth;
-  }
-}
-
-export class WorkClockInInput extends WorkInput implements IWorkClockInInput {
-  public constructor(
-    authorizer: APIGatewayEventDefaultAuthorizerContext,
-    body: string,
-  ) {
-    super(authorizer, body);
-    this.authorizer = authorizer;
-  }
-}
-
-export class WorkClockOutInput extends WorkInput implements IWorkClockOutInput {
-  public constructor(
-    authorizer: APIGatewayEventDefaultAuthorizerContext,
-    body: string,
-  ) {
-    super(authorizer, body);
-    this.authorizer = authorizer;
-  }
-}
-
-export class WorkGoOutInput extends WorkInput implements IWorkGoOutInput {
-  public constructor(
-    authorizer: APIGatewayEventDefaultAuthorizerContext,
-    body: string,
-  ) {
-    super(authorizer, body);
-    this.authorizer = authorizer;
-  }
-}
-
-export class WorkGoReturnInput extends WorkInput implements IWorkGoReturnInput {
-  public constructor(
-    authorizer: APIGatewayEventDefaultAuthorizerContext,
-    body: string,
-  ) {
-    super(authorizer, body);
-    this.authorizer = authorizer;
+    return this.workSyncRequest.yearMonth;
   }
 }

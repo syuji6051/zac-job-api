@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { UserInfo } from '@/src/entities/Users';
+import { UserInfo } from '@/src/entities/users';
 
 export interface Users {
   get(userId: string): Promise<UserInfo>;

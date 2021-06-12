@@ -1,59 +1,65 @@
-import { sig4Request } from '@/src/lib/axios';
-
-const BASE_URL = 'https://3t6zj1468g.execute-api.ap-northeast-1.amazonaws.com/v1';
+import { logger, request } from '@syuji6051/zac-job-library';
+import { container, TYPES } from '@/src/providers/container';
+import { SecretsValues } from '@/src/entities/environments';
 
 export default class Works {
-  public async list(userId: string, password: string, yearMonth: string) {
-    console.log('works api call start');
-    return sig4Request({
-      url: `${BASE_URL}/works`,
-      method: 'POST',
-      data: {
-        userId, password, yearMonth,
+  secrets: SecretsValues;
+
+  constructor() {
+    this.secrets = container.get<SecretsValues>(TYPES.ASM_VALUES);
+  }
+
+  public async list(userId: string, yearMonth: string) {
+    logger.debug('works api call start');
+    return request({
+      url: `${this.secrets.PUPPETEER_API_URL}/works/list`,
+      method: 'GET',
+      params: {
+        user_id: userId, period: yearMonth,
       },
     }).then((res) => res.data);
   }
 
-  public async clockIn(userId: string, password: string) {
-    console.log('works api call start');
-    return sig4Request({
-      url: `${BASE_URL}/works/clockIn`,
+  public async clockIn(userId: string) {
+    logger.debug('works api call start');
+    return request({
+      url: `${this.secrets.PUPPETEER_API_URL}/works/clock-in`,
       method: 'POST',
       data: {
-        userId, password,
+        userId,
       },
     }).then((res) => res.data);
   }
 
-  public async clockOut(userId: string, password: string) {
-    console.log('works api call start');
-    return sig4Request({
-      url: `${BASE_URL}/works/clockOut`,
+  public async clockOut(userId: string) {
+    logger.debug('works api call start');
+    return request({
+      url: `${this.secrets.PUPPETEER_API_URL}/works/clock-out`,
       method: 'POST',
       data: {
-        userId, password,
+        userId,
       },
     }).then((res) => res.data);
   }
 
-  public async goOut(userId: string, password: string) {
-    console.log('works api call start');
-    return sig4Request({
-      url: `${BASE_URL}/works/goOut`,
+  public async goOut(userId: string) {
+    logger.debug('works api call start');
+    return request({
+      url: `${this.secrets.PUPPETEER_API_URL}/works/go-out`,
       method: 'POST',
       data: {
-        userId, password,
+        user_id: userId,
       },
     }).then((res) => res.data);
   }
 
-  public async goReturn(userId: string, password: string) {
-    console.log('works api call start');
-    return sig4Request({
-      url: `${BASE_URL}/works/goReturn`,
+  public async goReturn(userId: string) {
+    logger.debug('works api call start');
+    return request({
+      url: `${this.secrets.PUPPETEER_API_URL}/works/go-return`,
       method: 'POST',
       data: {
-        userId, password,
+        user_id: userId,
       },
     }).then((res) => res.data);
   }

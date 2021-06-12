@@ -1,8 +1,7 @@
-// import fetch from 'node-fetch';
-import { SecretsValues } from '@/src/entities/Environments';
-import { ZacWork } from '@/src/entities/Users';
+import { request } from '@syuji6051/zac-job-library';
+import { SecretsValues } from '@/src/entities/environments';
+import { ZacWork } from '@/src/entities/users';
 import { container, TYPES } from '@/src/providers/container';
-import { sig4Request } from '@/src/lib/axios';
 
 export default class Zac {
   secrets: SecretsValues
@@ -12,9 +11,7 @@ export default class Zac {
   }
 
   public register(props: ZacWork) {
-    // eslint-disable-next-line no-undef
-
-    return sig4Request({
+    return request({
       url: `${this.secrets.PUPPETEER_API_URL}/zac/register`,
       data: props,
       method: 'POST',
