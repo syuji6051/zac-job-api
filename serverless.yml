@@ -1,8 +1,8 @@
-service: express-api
+service: zac-job-api
 
 provider:
   name: aws
-  # runtime: 'nodejs12.x'
+  runtime: 'nodejs14.x'
   stage: ${opt:stage, 'dev'}
   region: ap-northeast-1
   deploymentBucket: 
@@ -19,23 +19,13 @@ provider:
         issuerUrl: https://cognito-idp.#{AWS::Region}.amazonaws.com/ap-northeast-1_nsYbr83YQ
         audience:
           - 4s375jt92lgobq1keg4ip8r3fm
-  ecr:
-    images:
-      zac-job-api:
-        uri: 105785188161.dkr.ecr.ap-northeast-1.amazonaws.com/zac-job-api:${env:SHORT_GIT_HASH}
 plugins:
   - serverless-pseudo-parameters
 
 functions:
   user-create:
     name: ${self:service.name}-user-create-${opt:stage}
-    # handler: src/handlers/users.create
-    image:
-      name: zac-job-api
-      command:
-        - dist/handlers/users.create
-      entryPoint:
-        - /lambda-entrypoint.sh
+    handler: dist/handlers/users.create
     events:
       - http:
           path: /user/create
@@ -43,13 +33,7 @@ functions:
           cors: true
   put-zac-login:
     name: ${self:service.name}-put-zac-login-${opt:stage}
-    # handler: src/handlers/users.putZacLogin
-    image:
-      name: zac-job-api
-      command:
-        - dist/handlers/users.putZacLogin
-      entryPoint:
-        - /lambda-entrypoint.sh
+    handler: dist/handlers/users.putZacLogin
     role: arn:aws:iam::#{AWS::AccountId}:role/lambda-cognito-write-role-${opt:stage}
     events:
       - http:
@@ -60,13 +44,7 @@ functions:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_Jp6VfWMAA
   put-obc-login:
     name: ${self:service.name}-put-obc-login-${opt:stage}
-    # handler: src/handlers/users.putObcLogin
-    image:
-      name: zac-job-api
-      command:
-        - dist/handlers/users.putObcLogin
-      entryPoint:
-        - /lambda-entrypoint.sh
+    handler: dist/handlers/users.putObcLogin
     role: arn:aws:iam::#{AWS::AccountId}:role/lambda-cognito-write-role-${opt:stage}
     events:
       - http:
@@ -77,13 +55,7 @@ functions:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_Jp6VfWMAA
   user-zac-work:
     name: ${self:service.name}-user-zac-work-${opt:stage}
-    # handler: src/handlers/users.postZacRegister
-    image:
-      name: zac-job-api
-      command:
-        - dist/handlers/users.postZacRegister
-      entryPoint:
-        - /lambda-entrypoint.sh
+    handler: src/handlers/users.postZacRegister
     role: arn:aws:iam::#{AWS::AccountId}:role/lambda-cognito-write-role-${opt:stage}
     events:
       - http:
@@ -94,30 +66,28 @@ functions:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_Jp6VfWMAA
   work-list-sync:
     name: ${self:service.name}-work-list-sync-${opt:stage}
-    # handler: src/handlers/works.workSync
-    image:
-      name: zac-job-api
-      command:
-        - dist/handlers/works.workSync
-      entryPoint:
-        - /lambda-entrypoint.sh
+    handler: dist/handlers/works.workSync
     events:
       - httpApi:
           path: /work/sync
-          method: post
+          method: get
           cors: true
           authorizer:
             name: cognitoJwtAuthorizer
           async: true
+  work-list-sync:
+    name: ${self:service.name}-work-list-${opt:stage}
+    handler: dist/handlers/works.workList
+    events:
+      - httpApi:
+          path: /work
+          method: get
+          cors: true
+          authorizer:
+            name: cognitoJwtAuthorizer
   work-clock-in:
     name: ${self:service.name}-work-clock-in-${opt:stage}
-    image:
-      name: zac-job-api
-      command:
-        - dist/handlers/works.clockIn
-      entryPoint:
-        - /lambda-entrypoint.sh
-    # handler: src/handlers/works.clockIn
+    handler: dist/handlers/works.clockIn
     events:
       - httpApi:
           path: /work/clock-in
@@ -127,13 +97,7 @@ functions:
             name: cognitoJwtAuthorizer
   work-clock-out:
     name: ${self:service.name}-work-clock-out-${opt:stage}
-    # handler: src/handlers/works.clockOut
-    image:
-      name: zac-job-api
-      command:
-        - dist/handlers/works.clockOut
-      entryPoint:
-        - /lambda-entrypoint.sh
+    handler: dist/handlers/works.clockOut
     events:
       - httpApi:
           path: /work/clock-out
@@ -143,13 +107,7 @@ functions:
             name: cognitoJwtAuthorizer
   work-go-out:
     name: ${self:service.name}-work-go-out-${opt:stage}
-    # handler: src/handlers/works.goOut
-    image:
-      name: zac-job-api
-      command:
-        - dist/handlers/works.goOut
-      entryPoint:
-        - /lambda-entrypoint.sh
+    handler: dist/handlers/works.goOut
     events:
       - httpApi:
           path: /work/go-out
@@ -159,13 +117,7 @@ functions:
             name: cognitoJwtAuthorizer
   work-go-return:
     name: ${self:service.name}-work-go-return-${opt:stage}
-    # handler: src/handlers/works.goReturn
-    image:
-      name: zac-job-api
-      command:
-        - dist/handlers/works.goReturn
-      entryPoint:
-        - /lambda-entrypoint.sh
+    handler: dist/handlers/works.goReturn
     events:
       - httpApi:
           path: /work/go-return
