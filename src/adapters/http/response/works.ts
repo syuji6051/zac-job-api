@@ -1,14 +1,14 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
+import { views } from '@syuji6051/zac-job-library';
 import {
   WorkListOutput as IWorkListOutput,
   WorkClockVoidOutput as IWorkClockVoidOutput,
 } from '@/src/usecases/outputs/works';
-import { success } from '@/src/views/response';
 import { WorkRecord } from '@/src/entities/dynamodb/works';
 
 export class WorkListOutput implements IWorkListOutput {
   public success(works: WorkRecord[]): APIGatewayProxyResult {
-    return success(works
+    return views.success(works
       .filter((work) => work.clockIn || work.clockOut)
       .map((work) => ({
         day: work.day,
@@ -26,6 +26,6 @@ export class WorkListOutput implements IWorkListOutput {
 
 export class WorkClockVoidOutput implements IWorkClockVoidOutput {
   public success(): APIGatewayProxyResult {
-    return success({});
+    return views.success({});
   }
 }

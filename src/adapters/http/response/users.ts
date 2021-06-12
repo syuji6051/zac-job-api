@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { APIGatewayProxyResult } from 'aws-lambda';
+import { views } from '@syuji6051/zac-job-library';
 import {
   User as UserEntity,
   Users as UsersEntity,
@@ -11,33 +12,32 @@ import {
   PutObcLoginOutput as IPutObcLoginOutput,
   ZacWorkRegisterOutput as IZacWorkRegisterOutput,
 } from '@/src/usecases/outputs/users';
-import { success } from '@/src/views/response';
 
 export class UserCreateOutput implements IUserCreateOutput {
   public success(user: UserEntity): APIGatewayProxyResult {
-    return success(user);
+    return views.success(user);
   }
 }
 
 export class UserListOutput implements IUserListOutput {
   public success(users: UsersEntity): APIGatewayProxyResult {
-    return success(users);
+    return views.success(users);
   }
 }
 
 export class PutZacLoginOutput implements IPutZacLoginOutput {
   public success(): APIGatewayProxyResult {
-    return success();
+    return views.success();
   }
 }
 
 export class PutObcLoginOutput implements IPutObcLoginOutput {
   public success(): APIGatewayProxyResult {
-    return success();
+    return views.success();
   }
 }
 export class ZacWorkRegisterOutput implements IZacWorkRegisterOutput {
   public success(): APIGatewayProxyResult {
-    return success();
+    return views.success();
   }
 }

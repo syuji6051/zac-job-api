@@ -51,22 +51,6 @@ export const workList: Handler = async (
     });
 });
 
-//   logger.info(JSON.stringify(event));
-//   const { requestContext: { authorizer }, queryStringParameters } = event;
-//   return container.get<UseCase>(TYPES.USECASE_WORKS)
-//     .workList(
-//       new WorkListInput(authorizer, queryStringParameters),
-//       new WorkListOutput(),
-//     ).;
-
-//   return (async () => container.get<UseCase>(TYPES.USECASE_DEVICE)
-//     .linkageHistory()
-//   )()
-//     .finally(() => {
-//       logger.info('device linkage history function end');
-//     });
-// }));
-
 export const clockIn: Handler = async (
   event: APIGatewayProxyEventV2,
 ): Promise<APIGatewayProxyResult> => {
