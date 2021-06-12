@@ -13,6 +13,7 @@ provider:
   memorySize: 128
   environment:
     SECRET_ID: zac-job-dev
+    STAGE: ${opt:stage, 'dev'}
   httpApi:
     cors: true
     authorizers:
