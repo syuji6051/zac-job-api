@@ -75,7 +75,7 @@ functions:
           authorizer:
             name: cognitoJwtAuthorizer
           async: true
-  work-list-sync:
+  work-list:
     name: ${self:service.name}-work-list-${opt:stage}
     handler: dist/handlers/works.workList
     events:
