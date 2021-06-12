@@ -1,5 +1,5 @@
 import {
-  APIGatewayProxyResult, APIGatewayProxyWithCognitoAuthorizerEvent, Handler,
+  APIGatewayProxyEventV2, APIGatewayProxyResult, Handler,
 } from 'aws-lambda';
 import { logger, middleware } from '@syuji6051/zac-job-library';
 
@@ -20,7 +20,7 @@ const loadAsyncModules = seriesLoadAsync([
 ]);
 
 export const workSync: Handler = async (
-  event: APIGatewayProxyWithCognitoAuthorizerEvent,
+  event: APIGatewayProxyEventV2,
 ): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
   logger.info(JSON.stringify(event));
   const { requestContext: { authorizer }, queryStringParameters } = event;
@@ -36,7 +36,7 @@ export const workSync: Handler = async (
 });
 
 export const workList: Handler = async (
-  event: APIGatewayProxyWithCognitoAuthorizerEvent,
+  event: APIGatewayProxyEventV2,
 ): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
   logger.info(JSON.stringify(event));
   const { requestContext: { authorizer }, queryStringParameters } = event;
@@ -68,7 +68,7 @@ export const workList: Handler = async (
 // }));
 
 export const clockIn: Handler = async (
-  event: APIGatewayProxyWithCognitoAuthorizerEvent,
+  event: APIGatewayProxyEventV2,
 ): Promise<APIGatewayProxyResult> => {
   logger.info(event);
   const { requestContext: { authorizer } } = event;
@@ -80,7 +80,7 @@ export const clockIn: Handler = async (
 };
 
 export const clockOut: Handler = async (
-  event: APIGatewayProxyWithCognitoAuthorizerEvent,
+  event: APIGatewayProxyEventV2,
 ): Promise<APIGatewayProxyResult> => {
   logger.info(event);
   const { requestContext: { authorizer } } = event;
@@ -92,7 +92,7 @@ export const clockOut: Handler = async (
 };
 
 export const goOut: Handler = async (
-  event: APIGatewayProxyWithCognitoAuthorizerEvent,
+  event: APIGatewayProxyEventV2,
 ): Promise<APIGatewayProxyResult> => {
   logger.info(event);
   const { requestContext: { authorizer } } = event;
@@ -104,7 +104,7 @@ export const goOut: Handler = async (
 };
 
 export const goReturn: Handler = async (
-  event: APIGatewayProxyWithCognitoAuthorizerEvent,
+  event: APIGatewayProxyEventV2,
 ): Promise<APIGatewayProxyResult> => {
   logger.info(event);
   const { requestContext: { authorizer } } = event;

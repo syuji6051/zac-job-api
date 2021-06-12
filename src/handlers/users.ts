@@ -59,7 +59,7 @@ export const putZacLogin: Handler = async (
 
   return container.get<UseCase>(TYPES.USECASE_USERS)
     .putZacLogin(
-      new PutZacLoginInput(requestContext, body),
+      new PutZacLoginInput(body, requestContext.authorizer),
       new PutZacLoginOutput(),
     );
 };
@@ -72,7 +72,7 @@ export const putObcLogin: Handler = async (
 
   return container.get<UseCase>(TYPES.USECASE_USERS)
     .putObcLogin(
-      new PutObcLoginInput(requestContext, body),
+      new PutObcLoginInput(body, requestContext.authorizer),
       new PutObcLoginOutput(),
     );
 };
@@ -85,7 +85,7 @@ export const postZacRegister: Handler = async (
 
   return container.get<UseCase>(TYPES.USECASE_USERS)
     .ZacWorkRegister(
-      new ZacWorkRegisterInput(requestContext, body),
+      new ZacWorkRegisterInput(body, requestContext.authorizer),
       new ZacWorkRegisterOutput(),
     );
 };

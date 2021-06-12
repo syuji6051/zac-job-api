@@ -7,19 +7,22 @@ import { middleware } from '@syuji6051/zac-job-library';
 
 const router = express.Router();
 
-router.get('/works', middleware.apiGatewayCognitoEventGenerator());
-router.get('/works', middleware.lambdaCognitoAuthorizerDriver(workList));
+router.get('/works', middleware.apiGatewayV2EventGenerator());
+router.get('/works', middleware.lambdaEventV2AuthorizerDriver(workList));
 
-router.get('/works/sync', middleware.apiGatewayCognitoEventGenerator());
-router.get('/works/sync', middleware.lambdaCognitoAuthorizerDriver(workSync));
+router.get('/works/sync', middleware.apiGatewayV2EventGenerator());
+router.get('/works/sync', middleware.lambdaEventV2AuthorizerDriver(workSync));
 
-router.post('/works/clock-in', middleware.apiGatewayCognitoEventGenerator());
-router.post('/works/clock-in', middleware.lambdaCognitoAuthorizerDriver(clockIn));
+router.post('/works/clock-in', middleware.apiGatewayV2EventGenerator());
+router.post('/works/clock-in', middleware.lambdaEventV2AuthorizerDriver(clockIn));
 
-router.post('/works/clock-out', middleware.apiGatewayCognitoEventGenerator());
-router.post('/works/clock-out', middleware.lambdaCognitoAuthorizerDriver(clockOut));
+router.post('/works/clock-out', middleware.apiGatewayV2EventGenerator());
+router.post('/works/clock-out', middleware.lambdaEventV2AuthorizerDriver(clockOut));
 
-router.post('/works/go-out', middleware.lambdaDriver(goOut));
-router.post('/works/go-return', middleware.lambdaDriver(goReturn));
+router.post('/works/go-out', middleware.apiGatewayV2EventGenerator());
+router.post('/works/clock-out', middleware.lambdaEventV2AuthorizerDriver(goOut));
+
+router.post('/works/go-out', middleware.apiGatewayV2EventGenerator());
+router.post('/works/go-return', middleware.lambdaEventV2AuthorizerDriver(goReturn));
 
 export default router;

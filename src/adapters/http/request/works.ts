@@ -1,4 +1,4 @@
-import { APIGatewayProxyCognitoAuthorizer, APIGatewayProxyEventQueryStringParameters } from 'aws-lambda';
+import { APIGatewayProxyEventQueryStringParameters } from 'aws-lambda';
 import { validation, errors } from '@syuji6051/zac-job-library';
 import camelcaseKeys from 'camelcase-keys';
 
@@ -7,19 +7,14 @@ import {
 } from '@/src/usecases/inputs/works';
 import { workSyncRequestFunc } from '@/src/validations/works';
 import { WorkSyncRequest } from '@/src/entities/works';
+import { APIGatewayProxyEventV2Authorizer } from '@/src/entities/users';
+import { EventV2Authorizer } from '@/src/adapters/http/request/authorizer';
 
-export class WorkInput {
-  protected authorizer: APIGatewayProxyCognitoAuthorizer;
-
-  public constructor(
-    authorizer: APIGatewayProxyCognitoAuthorizer,
-  ) {
-    this.authorizer = authorizer;
-  }
+export class WorkInput extends EventV2Authorizer {
+  protected authorizer?: APIGatewayProxyEventV2Authorizer;
 
   public getUserId(): string {
-    const { claims } = this.authorizer;
-    return claims['cognito:username'] || claims.username;
+    return this.getUserName();
   }
 }
 
@@ -27,7 +22,7 @@ export class WorkListInput extends WorkInput implements IWorkListInput {
   private workSyncRequest: WorkSyncRequest;
 
   public constructor(
-    authorizer: APIGatewayProxyCognitoAuthorizer,
+    authorizer?: APIGatewayProxyEventV2Authorizer,
     query: APIGatewayProxyEventQueryStringParameters | null = {},
   ) {
     super(authorizer);

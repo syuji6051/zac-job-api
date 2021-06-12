@@ -1,6 +1,3 @@
-import {
-  APIGatewayEventRequestContextWithAuthorizer, APIGatewayProxyCognitoAuthorizer,
-} from 'aws-lambda';
 import { errors, validation } from '@syuji6051/zac-job-library';
 
 import {
@@ -11,8 +8,11 @@ import {
   ZacWorkRegisterInput as IZacWorkRegisterInput,
 } from '@/src/usecases/inputs/users';
 import { putObcLoginValidateFunc, putZacLoginValidateFunc, zacWorkRegisterFunc } from '@/src/validations/users';
-import { ZacUserLoginRequestBody, ObcUserLoginRequestBody, ZacWorkRegisterRequestBody } from '@/src/entities/users';
-import Authorizer from '@/src/adapters/http/request/authorizer';
+import {
+  ZacUserLoginRequestBody, ObcUserLoginRequestBody, ZacWorkRegisterRequestBody,
+  APIGatewayProxyWithCognitoAuthorizer,
+} from '@/src/entities/users';
+import { CognitoAuthorizer } from '@/src/adapters/http/request/authorizer';
 
 class UserInput {
   headers?: { [name: string]: string }
@@ -67,12 +67,12 @@ export class UserListInput extends UserInput implements IUserListInput {
   }
 }
 
-export class PutZacLoginInput extends Authorizer implements IPutZacLoginInput {
+export class PutZacLoginInput extends CognitoAuthorizer implements IPutZacLoginInput {
   body: ZacUserLoginRequestBody;
 
   public constructor(
-    context: APIGatewayEventRequestContextWithAuthorizer<APIGatewayProxyCognitoAuthorizer>,
     requestBody: string | null,
+    context?: APIGatewayProxyWithCognitoAuthorizer,
   ) {
     super(context);
     if (requestBody === null) throw new errors.ValidationError('body is required');
@@ -98,12 +98,12 @@ export class PutZacLoginInput extends Authorizer implements IPutZacLoginInput {
   }
 }
 
-export class PutObcLoginInput extends Authorizer implements IPutObcLoginInput {
+export class PutObcLoginInput extends CognitoAuthorizer implements IPutObcLoginInput {
   body: ObcUserLoginRequestBody;
 
   public constructor(
-    context: APIGatewayEventRequestContextWithAuthorizer<APIGatewayProxyCognitoAuthorizer>,
     requestBody: string | null,
+    context?: APIGatewayProxyWithCognitoAuthorizer,
   ) {
     super(context);
     if (requestBody === null) throw new errors.ValidationError('body is required');
@@ -129,12 +129,12 @@ export class PutObcLoginInput extends Authorizer implements IPutObcLoginInput {
   }
 }
 
-export class ZacWorkRegisterInput extends Authorizer implements IZacWorkRegisterInput {
+export class ZacWorkRegisterInput extends CognitoAuthorizer implements IZacWorkRegisterInput {
   body: ZacWorkRegisterRequestBody
 
   public constructor(
-    context: APIGatewayEventRequestContextWithAuthorizer<APIGatewayProxyCognitoAuthorizer>,
     requestBody: string | null,
+    context?: APIGatewayProxyWithCognitoAuthorizer,
   ) {
     super(context);
     if (requestBody === null) throw new Error();

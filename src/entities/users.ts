@@ -1,6 +1,19 @@
 import { ZacRegisterParams } from '@syuji6051/zac-client';
 import { AttributeListType } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 
+export interface APIGatewayProxyEventV2Authorizer {
+  jwt: {
+      claims: { [name: string]: string | number | boolean | string[] };
+      scopes: string[];
+  };
+}
+
+export interface APIGatewayProxyWithCognitoAuthorizer {
+  claims: {
+    [name: string]: string;
+  };
+}
+
 export interface User {
   userName?: string;
   enabled?: boolean;
