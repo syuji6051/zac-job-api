@@ -31,7 +31,7 @@ functions:
     handler: dist/handlers/users.create
     events:
       - http:
-          path: /user/create
+          path: /users/create
           method: post
   PutZacLogin:
     name: zac-job-api-put-zac-login-${opt:stage}
@@ -39,7 +39,7 @@ functions:
     role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-cognito-write-role-${opt:stage}
     events:
       - http:
-          path: /user/zac/login
+          path: /users/zac/login
           method: put
           authorizer:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_Jp6VfWMAA
@@ -49,7 +49,7 @@ functions:
     role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-cognito-write-role-${opt:stage}
     events:
       - http:
-          path: /user/obc/login
+          path: /users/obc/login
           method: put
           authorizer:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_Jp6VfWMAA
@@ -59,7 +59,7 @@ functions:
     role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-cognito-write-role-${opt:stage}
     events:
       - http:
-          path: /user/zac/work
+          path: /users/zac/work
           method: post
           authorizer:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/ap-northeast-1_Jp6VfWMAA
@@ -69,7 +69,7 @@ functions:
     role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-work-results-table-write-role-${opt:stage}
     events:
       - httpApi:
-          path: /work/sync
+          path: /works/sync
           method: get
           authorizer:
             name: cognitoJwtAuthorizer
@@ -80,7 +80,7 @@ functions:
     role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-work-results-table-write-role-${opt:stage}
     events:
       - httpApi:
-          path: /work
+          path: /works
           method: get
           authorizer:
             name: cognitoJwtAuthorizer
@@ -89,7 +89,7 @@ functions:
     handler: dist/handlers/works.clockIn
     events:
       - httpApi:
-          path: /work/clock-in
+          path: /works/clock-in
           method: post
           authorizer:
             name: cognitoJwtAuthorizer
@@ -98,7 +98,7 @@ functions:
     handler: dist/handlers/works.clockOut
     events:
       - httpApi:
-          path: /work/clock-out
+          path: /works/clock-out
           method: post
           authorizer:
             name: cognitoJwtAuthorizer
@@ -107,7 +107,7 @@ functions:
     handler: dist/handlers/works.goOut
     events:
       - httpApi:
-          path: /work/go-out
+          path: /works/go-out
           method: post
           authorizer:
             name: cognitoJwtAuthorizer
@@ -116,7 +116,7 @@ functions:
     handler: dist/handlers/works.goReturn
     events:
       - httpApi:
-          path: /work/go-return
+          path: /works/go-return
           method: post
           authorizer:
             name: cognitoJwtAuthorizer
