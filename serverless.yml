@@ -68,7 +68,7 @@ functions:
     handler: dist/handlers/works.workSync
     role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-work-results-table-write-role-${opt:stage}
     vpc:
-      subnetIds: vpc-03cb6e07fcc9e427a
+      subnetIds: subnet-09e40f8637f9139f0
       securityGroupIds: sg-0fcd4bf6bd4373a7d
     events:
       - httpApi:
