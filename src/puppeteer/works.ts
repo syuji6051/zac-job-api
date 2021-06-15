@@ -48,7 +48,7 @@ export default class Works {
       url: `${this.secrets.PUPPETEER_API_URL}/works/go-out`,
       method: 'POST',
       data: {
-        user_id: userId,
+        userId,
       },
     }).then((res) => res.data);
   }
@@ -59,7 +59,7 @@ export default class Works {
       url: `${this.secrets.PUPPETEER_API_URL}/works/go-return`,
       method: 'POST',
       data: {
-        user_id: userId,
+        userId,
       },
     }).then((res) => res.data);
   }
