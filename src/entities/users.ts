@@ -1,4 +1,3 @@
-import { ZacRegisterParams } from '@syuji6051/zac-client';
 import { AttributeListType } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 
 export interface APIGatewayProxyEventV2Authorizer {
@@ -51,11 +50,6 @@ export interface Attribute {
   password: string
 }
 
-export interface ZacWorkRegisterRequestBody extends ZacRegisterParams {}
-
-export interface ZacWork extends ZacRegisterParams {
-  userId: string
-}
 export interface Users {
   paginationToken: string;
   users: User[];

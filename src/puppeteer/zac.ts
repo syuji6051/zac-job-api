@@ -1,6 +1,8 @@
+import snakecase from 'snakecase-keys';
 import { request } from '@syuji6051/zac-job-library';
+
 import { SecretsValues } from '@/src/entities/environments';
-import { ZacWork } from '@/src/entities/users';
+import { ZacWork } from '@/src/entities/zac';
 import { container, TYPES } from '@/src/providers/container';
 
 export default class Zac {
@@ -13,7 +15,7 @@ export default class Zac {
   public register(props: ZacWork) {
     return request({
       url: `${this.secrets.PUPPETEER_API_URL}/zac/register`,
-      data: props,
+      data: snakecase(props),
       method: 'POST',
       headers: {
         'content-type': 'application/json',

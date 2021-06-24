@@ -28,6 +28,7 @@
     "http-errors": "^1.7.3",
     "inversify": "^5.0.1",
     "reflect-metadata": "^0.1.13",
+    "snakecase-keys": "^4.0.2",
     "winston": "^3.3.3"
   },
   "devDependencies": {

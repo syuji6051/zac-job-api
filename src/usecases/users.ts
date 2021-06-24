@@ -13,7 +13,4 @@ export interface Users {
   list(input: UserListInput, output: UserListOutput): Promise<APIGatewayProxyResult>;
   putZacLogin(input: PutZacLoginInput, output: PutZacLoginOutput): Promise<APIGatewayProxyResult>;
   putObcLogin(input: PutObcLoginInput, output: PutObcLoginOutput): Promise<APIGatewayProxyResult>;
-  ZacWorkRegister(
-    input: ZacWorkRegisterInput, output: ZacWorkRegisterOutput
-  ): Promise<APIGatewayProxyResult>;
 }

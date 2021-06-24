@@ -1,4 +1,6 @@
 import { injectable } from 'inversify';
+import dayjs from 'dayjs';
+
 import { Works as IWorks } from '@/src/usecases/stores/works';
 import { Work as WEntitiesWork, Work } from '@/src/entities/works';
 import Puppeteer from '@/src/puppeteer/works';
@@ -42,5 +44,9 @@ export default class Works implements IWorks {
 
   public async put(userId: string, works: Work[]): Promise<void> {
     return this.database.setWork(userId, works);
+  }
+
+  public async get(userId: string, day: Date): Promise<WorkRecord> {
+    return this.database.get(userId, dayjs(day).local().toDate());
   }
 }

@@ -5,7 +5,7 @@ import { Users as IUsers } from '@/src/usecases/stores/users';
 import UsersTable from '@/src/cognito/users';
 import Puppeteer from '@/src/puppeteer/zac';
 import {
-  User, Users as EntitiesUsers, ZacWork, Attribute,
+  User, Users as EntitiesUsers, Attribute,
 } from '@/src/entities/users';
 import { TYPES } from '@/src/providers/container';
 import { SecretsValues } from '@/src/entities/environments';
@@ -44,10 +44,6 @@ export default class Users implements IUsers {
 
   public async putObcLogin(userId: string, userAttribute: Attribute): Promise<void> {
     await this.cognito.putObcLogin(userId, userAttribute);
-  }
-
-  public async register(props: ZacWork) {
-    await this.puppeteer.register(props);
   }
 
   private recordToEntity(user: UserType): User {

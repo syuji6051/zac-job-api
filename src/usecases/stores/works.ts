@@ -5,6 +5,7 @@ import { Work } from '@/src/entities/works';
 export interface Works {
   obcWorkList(userId: string, yearMonth: string): Promise<Work[]>;
   workList(userId: string, yearMonth: string): Promise<WorkRecord[]>;
+  get(userId: string, day: Date): Promise<WorkRecord>;
   put(userId: string, work: Work[]): Promise<void>;
   clockIn(userId: string): Promise<void>;
   clockOut(userId: string): Promise<void>;

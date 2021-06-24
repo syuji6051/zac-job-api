@@ -1,5 +1,9 @@
 import { Work, WorkMinute } from '@syuji6051/zac-client';
 
+export interface Authorizer {
+  getUserId(): string;
+}
+
 export interface UserCreateInput {
   getUserName(): string;
   getPassword(): string;

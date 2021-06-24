@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import {
-  User, Users as EntitiesUsers, ZacWork, Attribute,
+  User, Users as EntitiesUsers, Attribute,
 } from '@/src/entities/users';
 
 export interface Users {
@@ -8,5 +8,4 @@ export interface Users {
   list(paramPaginationToken: string): Promise<EntitiesUsers>
   putZacLogin(userId: string, userAttribute: Attribute): Promise<void>;
   putObcLogin(userId: string, userAttribute: Attribute): Promise<void>;
-  register(props: ZacWork): Promise<void>;
 }

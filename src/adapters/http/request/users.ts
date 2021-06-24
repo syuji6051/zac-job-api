@@ -5,11 +5,10 @@ import {
   UserListInput as IUserListInput,
   PutZacLoginInput as IPutZacLoginInput,
   PutObcLoginInput as IPutObcLoginInput,
-  ZacWorkRegisterInput as IZacWorkRegisterInput,
 } from '@/src/usecases/inputs/users';
-import { putObcLoginValidateFunc, putZacLoginValidateFunc, zacWorkRegisterFunc } from '@/src/validations/users';
+import { putObcLoginValidateFunc, putZacLoginValidateFunc } from '@/src/validations/users';
 import {
-  ZacUserLoginRequestBody, ObcUserLoginRequestBody, ZacWorkRegisterRequestBody,
+  ZacUserLoginRequestBody, ObcUserLoginRequestBody,
   APIGatewayProxyWithCognitoAuthorizer,
 } from '@/src/entities/users';
 import { CognitoAuthorizer } from '@/src/adapters/http/request/authorizer';
@@ -126,63 +125,5 @@ export class PutObcLoginInput extends CognitoAuthorizer implements IPutObcLoginI
 
   public getObcPassword() {
     return this.body.obcPassword;
-  }
-}
-
-export class ZacWorkRegisterInput extends CognitoAuthorizer implements IZacWorkRegisterInput {
-  body: ZacWorkRegisterRequestBody
-
-  public constructor(
-    requestBody: string | null,
-    context?: APIGatewayProxyWithCognitoAuthorizer,
-  ) {
-    super(context);
-    if (requestBody === null) throw new Error();
-    const body = JSON.parse(requestBody);
-    const validateFunc = zacWorkRegisterFunc;
-    const isValid = validateFunc(body);
-    if (!isValid && validateFunc.errors) {
-      const errorMessage = validateFunc.errors
-        ? `invalid request ${validateFunc.errors.map((e) => e.message).join()}`
-        : 'invalid request';
-      throw new errors.ValidationError(errorMessage);
-    }
-    this.body = body as ZacWorkRegisterRequestBody;
-  }
-
-  public getUserName() {
-    return super.getUserName();
-  }
-
-  public getWorkDate() {
-    return this.body.workDate;
-  }
-
-  public getWorkStartHour() {
-    return this.body.workStartHour;
-  }
-
-  public getWorkStartMinute() {
-    return this.body.workStartMinute;
-  }
-
-  public getWorkEndHour() {
-    return this.body.workEndHour;
-  }
-
-  public getWorkEndMinute() {
-    return this.body.workEndMinute;
-  }
-
-  public getWorkBreakHour() {
-    return this.body.workBreakHour;
-  }
-
-  public getWorkBreakMinute() {
-    return this.body.workBreakMinute;
-  }
-
-  public getWorks() {
-    return this.body.works;
   }
 }

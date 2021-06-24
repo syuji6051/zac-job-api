@@ -23,6 +23,11 @@ export class Work {
     return works;
   }
 
+  public async get(userId: string, day: Date): Promise<WorkRecord> {
+    // eslint-disable-next-line new-parens
+    return mapper.get(Object.assign(new WorkRecord, { userId, day }));
+  }
+
   public async setWork(userId: string, works: IWork[]): Promise<void> {
     const toSave = works.map((work) => Object.assign(new WorkRecord(), {
       userId,
