@@ -43,4 +43,7 @@ export class WorkRecord {
 
   @attribute({ attributeName: 'go_out3' })
   goOut3?: string | null;
+
+  @attribute({ attributeName: 'flex_total_time' })
+  flexTotalTime?: string | null;
 }

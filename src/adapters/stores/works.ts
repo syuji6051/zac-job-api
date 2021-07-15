@@ -2,7 +2,7 @@ import { injectable } from 'inversify';
 import dayjs from 'dayjs';
 
 import { Works as IWorks } from '@/src/usecases/stores/works';
-import { Work as WEntitiesWork, Work } from '@/src/entities/works';
+import { Work as EntitiesWork, Work } from '@/src/entities/works';
 import Puppeteer from '@/src/puppeteer/works';
 import { Work as DynamoDB } from '@/src/database/works';
 import { WorkRecord } from '@/src/entities/dynamodb/works';
@@ -18,7 +18,7 @@ export default class Works implements IWorks {
     this.database = new DynamoDB();
   }
 
-  public obcWorkList(userId: string, yearMonth: string): Promise<WEntitiesWork[]> {
+  public obcWorkList(userId: string, yearMonth: string): Promise<EntitiesWork[]> {
     return this.puppeteer.list(userId, yearMonth);
   }
 

@@ -31,7 +31,7 @@ export class RegisterWorkInput extends EventV2Authorizer {
       throw new errors.ValidationError(err.message);
     }
     this.registerWorks = {
-      day: dayjs.utc(query!.day, 'YYYY/MM/DD').local().toDate(),
+      day: dayjs.utc(query!.day, 'YYYY/MM/DD').toDate(),
     };
   }
 

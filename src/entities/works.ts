@@ -8,6 +8,7 @@ export interface Work {
   returned2: string;
   goOut3: string;
   returned3: string;
+  flexTotalTime: string;
   day: string;
 }
 

@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { injectable } from 'inversify';
 import { errors } from '@syuji6051/zac-job-library';
 
@@ -8,7 +9,11 @@ import { WorkClockVoidOutput } from '@/src/usecases/outputs/works';
 import { container, TYPES } from '@/src/providers/container';
 import { Works as WorkStore } from '@/src/usecases/stores/works';
 import ZacStore from '@/src/usecases/stores/zac';
-import { covertWorkMinute, round } from '@/src/helper/day';
+import {
+  convert60to10minute, covertWorkMinute, round,
+} from '@/src/helper/day';
+
+dayjs.extend(utc);
 
 @injectable()
 export default class Zac implements IZac {
@@ -28,17 +33,20 @@ export default class Zac implements IZac {
     const userId = input.getUserId();
     const day = input.getDay();
     const work = await this.workStore.get(userId, day);
-    if (!work || !work.clockIn || !work.clockOut) {
+    if (!work || !work.clockIn || !work.clockOut || !work.flexTotalTime) {
       throw new errors.ValidationError('obc work data is invalid');
     }
-    const workStartDay = dayjs(day).format('YYYY/MM/DD');
+    const workStartDay = dayjs.utc(day).format('YYYY/MM/DD');
     const workStart = round(dayjs(`${workStartDay} ${work.clockIn}`, 'YYYY/MM/DD H:mm'), 15, true);
     const workEnd = round(dayjs(`${workStartDay} ${work.clockOut}`, 'YYYY/MM/DD H:mm'), 15, false);
+    const totalTime = round(dayjs(`${workStartDay} ${work.flexTotalTime}`, 'YYYY/MM/DD H:mm'), 15, false);
 
     console.log(workStart);
     console.log(workEnd);
+    const workTime = convert60to10minute(totalTime.format('H:mm'));
 
     const diff = workEnd.diff(workStart, 'minute');
+    const adjustTime = diff - (workTime * 60);
 
     await this.zacStore.register({
       userId,
@@ -47,12 +55,12 @@ export default class Zac implements IZac {
       workStartMinute: covertWorkMinute(Number(workStart.format('mm'))),
       workEndHour: Number(workEnd.format('H')),
       workEndMinute: covertWorkMinute(Number(workEnd.format('mm'))),
-      workBreakHour: 0,
-      workBreakMinute: 0,
+      workBreakHour: Math.trunc(adjustTime / 60),
+      workBreakMinute: covertWorkMinute(Math.trunc(adjustTime % 60)),
       works: [{
-        code: '111',
-        hour: Math.trunc(diff / 60),
-        minute: covertWorkMinute(diff % 60),
+        code: '0603804',
+        hour: Math.trunc((diff - adjustTime) / 60),
+        minute: covertWorkMinute((diff - adjustTime) % 60),
       }],
     });
 

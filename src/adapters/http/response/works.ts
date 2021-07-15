@@ -27,6 +27,7 @@ export class WorkListOutput implements IWorkListOutput {
         returned_2: work.returned2,
         go_out_3: work.goOut3,
         returned_3: work.returned3,
+        flexTotalTime: work.flexTotalTime,
       })));
   }
 }
