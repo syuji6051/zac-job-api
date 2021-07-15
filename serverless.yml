@@ -131,7 +131,7 @@ functions:
           authorizer:
             name: cognitoJwtAuthorizer
   ZacWork:
-    name: zac-job-api-user-zac-work-${opt:stage}
+    name: zac-job-api-zac-work-${opt:stage}
     handler: src/handlers/zac.registerWorks
     vpc:
       subnetIds: subnet-09e40f8637f9139f0
