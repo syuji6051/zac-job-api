@@ -1,0 +1,39 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "additionalProperties": false,
+    "definitions": {
+        "WorkCode": {
+            "additionalProperties": false,
+            "properties": {
+                "code": {
+                    "type": "number"
+                },
+                "default": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "code",
+                "default"
+            ],
+            "type": "object"
+        }
+    },
+    "properties": {
+        "code_list": {
+            "items": {
+                "$ref": "#/definitions/WorkCode"
+            },
+            "type": "array"
+        },
+        "year_month": {
+            "type": "number"
+        }
+    },
+    "required": [
+        "code_list",
+        "year_month"
+    ],
+    "type": "object"
+}
+

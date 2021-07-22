@@ -34,7 +34,7 @@ export class CognitoAuthorizer {
     context?: APIGatewayProxyWithCognitoAuthorizer,
   ) {
     if (context === undefined) {
-      throw new errors.ValidationError('APIGatewayProxyEventV2 Authorizer is require');
+      throw new errors.ValidationError('CognitoAuthorizer is require');
     }
     const { claims } = context;
     const userName = claims['cognito:username'];

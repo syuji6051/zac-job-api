@@ -4,8 +4,9 @@ import { injectable } from 'inversify';
 import { errors } from '@syuji6051/zac-job-library';
 
 import { Zac as IZac } from '@/src/usecases/zac';
-import { RegisterWorksInput } from '@/src/usecases/inputs/zac';
+import { GetWorkCodeListInput, RegisterWorksInput, SetWorkCodeListInput } from '@/src/usecases/inputs/zac';
 import { WorkClockVoidOutput } from '@/src/usecases/outputs/works';
+import { GetWorkCodeListOutput, VoidOutput } from '@/src/usecases/outputs/zac';
 import { container, TYPES } from '@/src/providers/container';
 import { Works as WorkStore } from '@/src/usecases/stores/works';
 import ZacStore from '@/src/usecases/stores/zac';
@@ -64,6 +65,29 @@ export default class Zac implements IZac {
       }],
     });
 
+    return output.success();
+  }
+
+  public async getWorkCodeList(
+    input: GetWorkCodeListInput,
+    output: GetWorkCodeListOutput,
+  ) {
+    const userId = input.getUserId();
+    const yearMonth = input.getYearMonth();
+
+    const workCodeList = await this.zacStore.getWorkCodeList(userId, yearMonth);
+    return output.success(workCodeList);
+  }
+
+  public async setWorkCodeList(
+    input: SetWorkCodeListInput,
+    output: VoidOutput,
+  ) {
+    const userId = input.getUserId();
+    const yearMonth = input.getYearMonth();
+    const workCodeList = input.getWorkCodeList();
+
+    await this.zacStore.setWorkCodeList(userId, yearMonth, workCodeList);
     return output.success();
   }
 }

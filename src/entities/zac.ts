@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { ZacRegisterParams } from '@syuji6051/zac-client';
 
 // export interface ZacWorkRegisterRequestBody extends ZacRegisterParams {}
@@ -12,4 +13,18 @@ export interface RegisterWorksRequestParameter {
 
 export interface RegisterWorksRequest {
   day: Date
+}
+
+export interface GetWorkCodeListRequest {
+  year_month: number
+}
+
+export interface SetWorkCodeListRequest {
+  year_month: number
+  code_list: WorkCode []
+}
+
+export interface WorkCode {
+  code: number
+  default: boolean
 }

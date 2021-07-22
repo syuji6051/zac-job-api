@@ -38,5 +38,5 @@ import StoreWorksImpl from '@/src/adapters/stores/works';
 container.bind<StoreWorks>(TYPES.STORE_WORKS).to(StoreWorksImpl);
 
 import StoreZac from '@/src/usecases/stores/zac';
-import StoreZacImpl from '@/src/adapters/puppeteer/zac';
+import StoreZacImpl from '@/src/adapters/stores/zac';
 container.bind<StoreZac>(TYPES.STORE_ZAC).to(StoreZacImpl);
