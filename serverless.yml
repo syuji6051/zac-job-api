@@ -58,7 +58,7 @@ functions:
   GetWorkCodeList:
     name: zac-job-api-get-work-code-list-${opt:stage}
     handler: dist/handlers/zac.getWorkCodeList
-    role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-work-results-table-write-role-${opt:stage}
+    role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-work-table-read-write-role-${opt:stage}
     events:
       - http:
           path: /zac/works/code-list
@@ -69,7 +69,7 @@ functions:
   SetWorkCodeList:
     name: zac-job-api-set-work-code-list-${opt:stage}
     handler: dist/handlers/zac.setWorkCodeList
-    role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-work-results-table-write-role-${opt:stage}
+    role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-work-table-read-write-role-${opt:stage}
     events:
       - http:
           path: /zac/works/code-list
