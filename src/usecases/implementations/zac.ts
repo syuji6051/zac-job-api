@@ -59,7 +59,7 @@ export default class Zac implements IZac {
       workBreakHour: Math.trunc(adjustTime / 60),
       workBreakMinute: covertWorkMinute(Math.trunc(adjustTime % 60)),
       works: [{
-        code: '0603804',
+        code: '0603805',
         hour: Math.trunc((diff - adjustTime) / 60),
         minute: covertWorkMinute((diff - adjustTime) % 60),
       }],
