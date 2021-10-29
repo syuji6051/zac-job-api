@@ -38,9 +38,15 @@ export default class Zac implements IZac {
       throw new errors.ValidationError('obc work data is invalid');
     }
     const workStartDay = dayjs.utc(day).format('YYYY/MM/DD');
+    const workYearMonth = Number(dayjs.utc(day).format('YYYYMM'));
     const workStart = round(dayjs(`${workStartDay} ${work.clockIn}`, 'YYYY/MM/DD H:mm'), 15, true);
     const workEnd = round(dayjs(`${workStartDay} ${work.clockOut}`, 'YYYY/MM/DD H:mm'), 15, false);
     const totalTime = round(dayjs(`${workStartDay} ${work.flexTotalTime}`, 'YYYY/MM/DD H:mm'), 15, false);
+
+    const workCode = (await this.zacStore.getWorkCodeList(userId, workYearMonth))
+      .find((code) => code.default);
+
+    if (!workCode) throw new Error('work code not found!');
 
     console.log(workStart);
     console.log(workEnd);
@@ -59,7 +65,7 @@ export default class Zac implements IZac {
       workBreakHour: Math.trunc(adjustTime / 60),
       workBreakMinute: covertWorkMinute(Math.trunc(adjustTime % 60)),
       works: [{
-        code: '0603805',
+        code: workCode.code.toString(),
         hour: Math.trunc((diff - adjustTime) / 60),
         minute: covertWorkMinute((diff - adjustTime) % 60),
       }],

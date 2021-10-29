@@ -13,7 +13,7 @@ export class ZacWorkCode {
       }));
       return codeList;
     } catch (err) {
-      if (err.name === ItemNotFoundException.name) {
+      if (err instanceof Error && err.name === ItemNotFoundException.name) {
         return [];
       }
       throw err;

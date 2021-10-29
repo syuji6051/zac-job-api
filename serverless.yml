@@ -163,6 +163,5 @@ functions:
       - httpApi:
           path: /zac/works
           method: post
-          async: true
           authorizer:
             name: cognitoJwtAuthorizer

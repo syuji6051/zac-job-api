@@ -29,7 +29,10 @@ export class WorkListInput extends WorkInput implements IWorkListInput {
     try {
       validation.check(workSyncRequestFunc, query);
     } catch (err) {
-      throw new errors.ValidationError(err.message);
+      if (err instanceof Error) {
+        throw new errors.ValidationError(err.message);
+      }
+      throw err;
     }
     this.workSyncRequest = camelcaseKeys(query!) as unknown as WorkSyncRequest;
   }
