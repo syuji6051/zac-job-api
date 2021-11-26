@@ -3,7 +3,9 @@
     "additionalProperties": false,
     "properties": {
         "year_month": {
-            "type": "number"
+            "type": [
+                "string"
+            ]
         }
     },
     "required": [

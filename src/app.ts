@@ -3,6 +3,7 @@
 require('dotenv').config();
 
 import express from 'express';
+import cors from 'cors';
 import { middleware } from '@syuji6051/zac-job-library';
 
 import users from '@/src/controllers/users';
@@ -14,6 +15,9 @@ const port = 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+  origin: ['http://localhost:3001'],
+}));
 app.set('port', port);
 
 app.use(users);

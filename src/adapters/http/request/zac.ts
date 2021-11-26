@@ -27,7 +27,9 @@ export class RegisterWorkInput extends EventV2Authorizer {
       console.log(query);
       validation.check(registerWorks, query);
     } catch (err) {
-      throw new errors.ValidationError(err.message);
+      if (err instanceof Error) {
+        throw new errors.ValidationError(err.message);
+      }
     }
     this.registerWorks = {
       day: dayjs.utc(query!.day, 'YYYY/MM/DD').toDate(),
@@ -54,10 +56,11 @@ export class GetWorkCodeListInput extends CognitoAuthorizer {
   ) {
     super(authorizer);
     try {
-      console.log(query);
       validation.check(getWorkCodeListValidation, query);
     } catch (err) {
-      throw new errors.ValidationError(err.message);
+      if (err instanceof Error) {
+        throw new errors.ValidationError(err.message);
+      }
     }
     this.yearMonth = Number(query!.year_month);
   }
@@ -89,7 +92,9 @@ export class SetWorkCodeListInput extends CognitoAuthorizer {
     try {
       validation.check(setWorkCodeListValidation, data);
     } catch (err) {
-      throw new errors.ValidationError(err.message);
+      if (err instanceof Error) {
+        throw new errors.ValidationError(err.message);
+      }
     }
     this.yearMonth = data.year_month;
     this.workCodeList = data.code_list;

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { injectable } from 'inversify';
-import { errors } from '@syuji6051/zac-job-library';
+import { errors, logger } from '@syuji6051/zac-job-library';
 
 import { Zac as IZac } from '@/src/usecases/zac';
 import { GetWorkCodeListInput, RegisterWorksInput, SetWorkCodeListInput } from '@/src/usecases/inputs/zac';
@@ -92,6 +92,16 @@ export default class Zac implements IZac {
     const userId = input.getUserId();
     const yearMonth = input.getYearMonth();
     const workCodeList = input.getWorkCodeList();
+    logger.debug(JSON.stringify(workCodeList));
+
+    const uniqueKeys = workCodeList
+      .map(({ code }) => code)
+      .filter((val, index, self) => self.indexOf(val) === index);
+    logger.debug(uniqueKeys);
+
+    if (workCodeList.length !== uniqueKeys.length) {
+      throw new errors.ValidationError('work code unique key error');
+    }
 
     await this.zacStore.setWorkCodeList(userId, yearMonth, workCodeList);
     return output.success();

@@ -6,7 +6,7 @@
             "additionalProperties": false,
             "properties": {
                 "code": {
-                    "type": "number"
+                    "type": "string"
                 },
                 "default": {
                     "type": "boolean"

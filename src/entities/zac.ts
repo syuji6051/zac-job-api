@@ -25,6 +25,6 @@ export interface SetWorkCodeListRequest {
 }
 
 export interface WorkCode {
-  code: number
+  code: string
   default: boolean
 }
