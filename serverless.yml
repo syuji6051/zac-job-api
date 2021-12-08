@@ -165,16 +165,21 @@ functions:
           method: post
           authorizer:
             name: cognitoJwtAuthorizer
-  UsersAttributes:
-    name: zac-job-api-post-users-attributes-${opt:stage}
+  SlackAuth:
+    name: zac-job-api-post-slack-auth-${opt:stage}
     handler: dist/handlers/slack.setUserAttribute
     role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-lambda-role-${opt:stage}
-    vpc:
-      subnetIds: subnet-09e40f8637f9139f0
-      securityGroupIds: sg-0fcd4bf6bd4373a7d
     events:
       - httpApi:
-          path: /users/attributes
+          path: /slack/auth
           method: post
           authorizer:
             name: cognitoJwtAuthorizer
+  SlackActionEvents:
+    name: zac-job-api-post-slack-action-events-${opt:stage}
+    handler: dist/handlers/slack.actionEvents
+    role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-lambda-role-${opt:stage}
+    events:
+      - httpApi:
+          path: /slack/action-events
+          method: post
