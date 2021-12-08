@@ -1,0 +1,133 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "anyOf": [
+        {
+            "$ref": "#/definitions/EventActionVerificationTokenRequest"
+        },
+        {
+            "$ref": "#/definitions/EventActionMessageRequest"
+        }
+    ],
+    "definitions": {
+        "EventActionMessageRequest": {
+            "additionalProperties": false,
+            "properties": {
+                "api_app_id": {
+                    "additionalProperties": false,
+                    "description": "Allows manipulation and formatting of text strings and determination and location of substrings within strings.",
+                    "patternProperties": {
+                        "^[0-9]+$": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "authed_teams": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "event": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "bot_id": {
+                            "type": "string"
+                        },
+                        "channel": {
+                            "type": "string"
+                        },
+                        "channel_type": {
+                            "type": "string"
+                        },
+                        "client_msg_id": {
+                            "type": "string"
+                        },
+                        "event_ts": {
+                            "type": "string"
+                        },
+                        "text": {
+                            "type": "string"
+                        },
+                        "ts": {
+                            "type": "string"
+                        },
+                        "type": {
+                            "type": "string"
+                        },
+                        "user": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "channel",
+                        "channel_type",
+                        "event_ts",
+                        "text",
+                        "ts",
+                        "type",
+                        "user"
+                    ],
+                    "type": "object"
+                },
+                "event_id": {
+                    "type": "string"
+                },
+                "event_time": {
+                    "type": "number"
+                },
+                "team_id": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/EventActionType"
+                }
+            },
+            "required": [
+                "api_app_id",
+                "authed_teams",
+                "event",
+                "event_id",
+                "event_time",
+                "team_id",
+                "token",
+                "type"
+            ],
+            "type": "object"
+        },
+        "EventActionType": {
+            "enum": [
+                "message",
+                "rich_text_section"
+            ],
+            "type": "string"
+        },
+        "EventActionVerificationTokenRequest": {
+            "additionalProperties": false,
+            "properties": {
+                "challenge": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "url_verification"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "challenge",
+                "token",
+                "type"
+            ],
+            "type": "object"
+        }
+    }
+}
+

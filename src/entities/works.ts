@@ -1,4 +1,6 @@
 /* eslint-disable camelcase */
+export type WorkType = 'clockIn' | 'clockOut' | 'goOut' | 'returned'
+
 export interface Work {
   clockIn: string;
   clockOut: string;

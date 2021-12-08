@@ -10,9 +10,11 @@ export const TYPES = {
   USECASE_USERS: Symbol.for('USECASE_USERS'),
   USECASE_WORKS: Symbol.for('USECASE_WORKS'),
   USECASE_ZAC: Symbol.for('USECASE_ZAC'),
+  USECASE_SLACK: Symbol.for('USECASE_SLACK'),
   STORE_USERS: Symbol.for('STORE_USERS'),
   STORE_WORKS: Symbol.for('STORE_WORKS'),
   STORE_ZAC: Symbol.for('STORE_ZAC'),
+  STORE_SLACK: Symbol.for('STORE_SLACK'),
   ASM_VALUES: Symbol.for('ASM_VALUES'),
   PUPPETEER_CREDENTIAL: Symbol.for('PUPPETEER_CREDENTIAL'),
 };
@@ -29,6 +31,10 @@ import { Zac as UseCaseZac } from '@/src/usecases/zac';
 import UseCaseZacImpl from '@/src/usecases/implementations/zac';
 container.bind<UseCaseZac>(TYPES.USECASE_ZAC).to(UseCaseZacImpl);
 
+import { Slack as UseCaseSlack } from '@/src/usecases/slack';
+import UseCaseSlackImpl from '@/src/usecases/implementations/slack';
+container.bind<UseCaseSlack>(TYPES.USECASE_SLACK).to(UseCaseSlackImpl);
+
 import { Users as StoreUsers } from '@/src/usecases/stores/users';
 import StoreUsersImpl from '@/src/adapters/stores/users';
 container.bind<StoreUsers>(TYPES.STORE_USERS).to(StoreUsersImpl);
@@ -40,3 +46,7 @@ container.bind<StoreWorks>(TYPES.STORE_WORKS).to(StoreWorksImpl);
 import StoreZac from '@/src/usecases/stores/zac';
 import StoreZacImpl from '@/src/adapters/stores/zac';
 container.bind<StoreZac>(TYPES.STORE_ZAC).to(StoreZacImpl);
+
+import { Slack as StoreSlack } from '@/src/usecases/stores/slack';
+import StoreSlackImpl from '@/src/adapters/stores/slack';
+container.bind<StoreSlack>(TYPES.STORE_SLACK).to(StoreSlackImpl);

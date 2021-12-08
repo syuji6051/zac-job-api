@@ -9,6 +9,7 @@ import { middleware } from '@syuji6051/zac-job-library';
 import users from '@/src/controllers/users';
 import works from '@/src/controllers/works';
 import zac from '@/src/controllers/zac';
+import slack from '@/src/controllers/slack';
 
 const app = express();
 const port = 3000;
@@ -23,6 +24,7 @@ app.set('port', port);
 app.use(users);
 app.use(works);
 app.use(zac);
+app.use(slack);
 
 // catch 404 and forward to error handler
 app.use(middleware.errorHandler());

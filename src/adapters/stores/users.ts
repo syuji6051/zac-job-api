@@ -9,6 +9,8 @@ import {
 } from '@/src/entities/users';
 import { TYPES } from '@/src/providers/container';
 import { SecretsValues } from '@/src/entities/environments';
+import UserAttributes from '@/src/database/user-attributes';
+import { UserAttributesRecord } from '@/src/entities/dynamodb/user-attributes';
 
 @injectable()
 export default class Users implements IUsers {
@@ -16,11 +18,14 @@ export default class Users implements IUsers {
 
   private puppeteer: Puppeteer;
 
+  private userAttributes: UserAttributes;
+
   constructor(
     @inject(TYPES.ASM_VALUES) private secrets: SecretsValues,
   ) {
     this.cognito = new UsersTable(secrets.COGNITO_USER_POOL);
     this.puppeteer = new Puppeteer();
+    this.userAttributes = new UserAttributes();
   }
 
   public async create(email: string): Promise<User> {
@@ -53,5 +58,14 @@ export default class Users implements IUsers {
       userStatus: user.UserStatus,
       attributes: user.Attributes,
     };
+  }
+
+  public async setAttribute(user: UserAttributesRecord) {
+    await this.userAttributes.set(user);
+  }
+
+  public async getUserFromSlackId(slackId: string) {
+    const users = await this.userAttributes.scan();
+    return users.find((user) => user.slackUserId === slackId);
   }
 }
