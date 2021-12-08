@@ -1,4 +1,6 @@
-import { APIGatewayProxyResult, APIGatewayProxyWithCognitoAuthorizerEvent, Handler } from 'aws-lambda';
+import {
+  APIGatewayProxyEventV2, APIGatewayProxyResult, Handler,
+} from 'aws-lambda';
 import { logger, middleware } from '@syuji6051/zac-job-library';
 
 import { container, TYPES } from '@/src/providers/container';
@@ -14,7 +16,7 @@ const loadAsyncModules = seriesLoadAsync([
 
 // eslint-disable-next-line import/prefer-default-export
 export const setUserAttribute: Handler = async (
-  event: APIGatewayProxyWithCognitoAuthorizerEvent,
+  event: APIGatewayProxyEventV2,
 ): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
   logger.info(JSON.stringify(event));
   const { requestContext: { authorizer }, body } = event;

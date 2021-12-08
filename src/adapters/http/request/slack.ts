@@ -5,17 +5,17 @@ import {
   SetUserAttributeInput as ISetUserAttributeInput,
   ActionEventsInput as IActionEventsInput,
 } from '@/src/usecases/inputs/slack';
-import { APIGatewayProxyCognitoAuthorizer } from 'aws-lambda';
-import { CognitoAuthorizer } from '@/src/adapters/http/request/authorizer';
+import { EventV2Authorizer } from '@/src/adapters/http/request/authorizer';
 import { SetUserAttributeValidateFunc } from '@/src/validations/slack';
+import { APIGatewayProxyEventV2Authorizer } from '@/src/entities/users';
 
 // eslint-disable-next-line import/prefer-default-export
-export class SetUserAttributeInput extends CognitoAuthorizer implements ISetUserAttributeInput {
+export class SetUserAttributeInput extends EventV2Authorizer implements ISetUserAttributeInput {
   code: string;
 
   public constructor(
-    authorizer: APIGatewayProxyCognitoAuthorizer,
-    body: string | null,
+    authorizer: APIGatewayProxyEventV2Authorizer | undefined,
+    body: string | undefined,
   ) {
     super(authorizer);
     if (body == null) {

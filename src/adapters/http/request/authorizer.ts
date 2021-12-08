@@ -2,14 +2,14 @@ import { APIGatewayProxyEventV2Authorizer, APIGatewayProxyWithCognitoAuthorizer 
 import { errors } from '@syuji6051/zac-job-library';
 
 export class EventV2Authorizer {
-  context: APIGatewayProxyEventV2Authorizer
+  context?: APIGatewayProxyEventV2Authorizer
 
   userName: string
 
   constructor(
-    context?: APIGatewayProxyEventV2Authorizer,
+    context?: APIGatewayProxyEventV2Authorizer | null,
   ) {
-    if (context === undefined) {
+    if (context == null) {
       throw new errors.ValidationError('APIGatewayProxyEventV2 Authorizer is require');
     }
     const { jwt } = context;

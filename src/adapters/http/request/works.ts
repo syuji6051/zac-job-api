@@ -22,7 +22,7 @@ export class WorkListInput extends WorkInput implements IWorkListInput {
   private workSyncRequest: WorkSyncRequest;
 
   public constructor(
-    authorizer?: APIGatewayProxyEventV2Authorizer,
+    authorizer: APIGatewayProxyEventV2Authorizer | undefined,
     query: APIGatewayProxyEventQueryStringParameters | null = {},
   ) {
     super(authorizer);
