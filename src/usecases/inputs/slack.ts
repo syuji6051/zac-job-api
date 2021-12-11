@@ -1,7 +1,7 @@
-import { EventV2Authorizer } from '@/src/adapters/http/request/authorizer';
+import { EventV2CognitoAuthorizer } from '@/src/adapters/http/request/authorizer';
 import { EventActionRequest } from '@/src/entities/slack';
 
-export interface SetUserAttributeInput extends EventV2Authorizer {
+export interface SetUserAttributeInput extends EventV2CognitoAuthorizer {
   getCode(): string;
 }
 
