@@ -8,5 +8,6 @@ export type SecretsValues = {
   SLACK_TOKEN: string
   SLACK_CLIENT_ID: string
   SLACK_CLIENT_SECRET: string
+  SLACK_REDIRECT_URL: string
   SLACK_VERIFICATION_TOKEN: string
 };

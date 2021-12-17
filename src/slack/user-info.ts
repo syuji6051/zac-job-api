@@ -17,7 +17,7 @@ export default class UserInfo {
       client_id: this.secrets.SLACK_CLIENT_ID,
       client_secret: this.secrets.SLACK_CLIENT_SECRET,
       code,
-      redirect_uri: 'https://1f90-240d-1a-6b8-1000-91bb-2c9f-3ec7-d12b.ngrok.io/',
+      redirect_uri: this.secrets.SLACK_REDIRECT_URL,
     });
     if (!res.ok) throw new Error('Slack response not ok');
     logger.debug(`slack getAccessToken success: response ${JSON.stringify(res)}`);
