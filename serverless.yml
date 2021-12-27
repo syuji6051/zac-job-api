@@ -183,3 +183,7 @@ functions:
       - httpApi:
           path: /slack/action-events
           method: post
+  BotMessage:
+    name: zac-job-api-post-slack-bot-message-${opt:stage}
+    handler: dist/handlers/slack.botMessage
+    role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-lambda-role-${opt:stage}

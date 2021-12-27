@@ -4,10 +4,13 @@ import { SetUserAttributeRequest, EventActionRequest } from '@/src/entities/slac
 import {
   SetUserAttributeInput as ISetUserAttributeInput,
   ActionEventsInput as IActionEventsInput,
+  BotMessageInput as IBotMessageInput,
 } from '@/src/usecases/inputs/slack';
 import { EventV2CognitoAuthorizer } from '@/src/adapters/http/request/authorizer';
-import { SetUserAttributeValidateFunc } from '@/src/validations/slack';
+import { BotMessagesRequestValidationFunc, SetUserAttributeValidateFunc } from '@/src/validations/slack';
 import { APIGatewayProxyEventV2Authorizer } from '@/src/entities/users';
+import { BotMessage } from '@/src/entities/sns';
+import { SNSEventRecord } from 'aws-lambda';
 
 // eslint-disable-next-line import/prefer-default-export
 export class SetUserAttributeInput
@@ -47,5 +50,19 @@ export class ActionEventsInput implements IActionEventsInput {
 
   getRequest() {
     return this.request;
+  }
+}
+
+export class BotMessageInput implements IBotMessageInput {
+  input: BotMessage[];
+
+  constructor(body: SNSEventRecord[]) {
+    const messages = body.map((event) => JSON.parse(event.Sns.Message));
+    validation.check(BotMessagesRequestValidationFunc, messages);
+    this.input = messages as BotMessage [];
+  }
+
+  getInput(): BotMessage[] {
+    return this.input;
   }
 }

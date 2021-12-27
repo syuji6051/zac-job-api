@@ -1,17 +1,21 @@
 import { sns } from '@syuji6051/zac-job-library';
 import { WorkType } from '@/src/entities/works';
-import { WorkLink } from '@/src/entities/sns';
+import { BotMessage, WorkLink } from '@/src/entities/sns';
 
 const {
   PUPPETEER_API_SNS_TOPIC,
   STAGE,
 } = process.env;
 
-const workLink = (workType: WorkType) => publish<WorkLink>(PUPPETEER_API_SNS_TOPIC || '', {
+const workLink = (workType: WorkType) => publish<WorkLink>({
   work_type: workType,
 });
 
-const publish = async <T>(topicArn: string, data: T) => {
+const publishBotMessage = (chanel: string, message: string) => publish<BotMessage>({
+  chanel, message,
+});
+
+const publish = async <T>(data: T, topicArn: string = PUPPETEER_API_SNS_TOPIC || '') => {
   await sns.snsInstance.publish({
     TopicArn: topicArn,
     Message: JSON.stringify(data),
@@ -26,5 +30,6 @@ const publish = async <T>(topicArn: string, data: T) => {
 
 export {
   publish,
+  publishBotMessage,
   workLink,
 };

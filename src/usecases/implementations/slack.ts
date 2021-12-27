@@ -6,9 +6,10 @@ import { container, TYPES } from '@/src/providers/container';
 import { Slack as ISlack } from '@/src/usecases/slack';
 import { Slack as SlackStore } from '@/src/usecases/stores/slack';
 import { Users as UserStore } from '@/src/usecases/stores/users';
-import { SetUserAttributeInput, ActionEventsInput } from '@/src/usecases/inputs/slack';
+import { SetUserAttributeInput, ActionEventsInput, BotMessageInput } from '@/src/usecases/inputs/slack';
 import { SetUserAttributeOutput, ActionEventsOutput } from '@/src/usecases/outputs/slack';
 import { SecretsValues } from '@/src/entities/environments';
+import { publishBotMessage } from '@/src/helper/sns';
 
 @injectable()
 export default class Slack implements ISlack {
@@ -57,13 +58,24 @@ export default class Slack implements ISlack {
       });
     }
 
-    const { token, event: { user, channel, bot_id: botId } } = request;
+    const { event: { user, channel, bot_id: botId } } = request;
 
     if (botId === undefined) {
       const userInfo = await this.user.getUserFromSlackId(user);
       if (userInfo === undefined) throw new Error('User not found');
-      await this.slack.sendMessage(token, channel, '受け付けました');
+      await publishBotMessage(channel, '受けつけました');
     }
     return output.success({});
+  }
+
+  public async botMessage(
+    input: BotMessageInput,
+  ) {
+    const { SLACK_TOKEN } = this.secrets;
+    const messages = input.getInput();
+    for (const { chanel, message } of messages) {
+      // eslint-disable-next-line no-await-in-loop
+      await this.slack.sendMessage(SLACK_TOKEN, chanel, message);
+    }
   }
 }

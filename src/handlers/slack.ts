@@ -1,5 +1,5 @@
 import {
-  APIGatewayProxyEventV2, APIGatewayProxyResult, Handler,
+  APIGatewayProxyEventV2, APIGatewayProxyResult, Handler, SNSEvent,
 } from 'aws-lambda';
 import { logger, middleware } from '@syuji6051/zac-job-library';
 
@@ -7,7 +7,7 @@ import { container, TYPES } from '@/src/providers/container';
 import { seriesLoadAsync } from '@/src/helper/container';
 import { asyncAsmContainerModule } from '@/src/modules/common';
 import { Slack as UseCase } from '@/src/usecases/slack';
-import { SetUserAttributeInput, ActionEventsInput } from '@/src/adapters/http/request/slack';
+import { SetUserAttributeInput, ActionEventsInput, BotMessageInput } from '@/src/adapters/http/request/slack';
 import { SetUserAttributeOutput, ActionEventOutput } from '@/src/adapters/http/response/slack';
 
 const loadAsyncModules = seriesLoadAsync([
@@ -45,5 +45,20 @@ export const actionEvents: Handler = async (
     .catch((err) => middleware.lambdaErrorHandler(err))
     .finally(() => {
       logger.info('workSync function end');
+    });
+});
+
+export const botMessage: Handler = async (
+  event: SNSEvent,
+): Promise<void> => loadAsyncModules.then(async () => {
+  logger.info(JSON.stringify(event));
+  const { Records } = event;
+
+  await (async () => container.get<UseCase>(TYPES.USECASE_SLACK).botMessage(
+    new BotMessageInput(Records),
+  ))()
+    .catch((err) => middleware.lambdaErrorHandler(err))
+    .finally(() => {
+      logger.info('botMessage function end');
     });
 });

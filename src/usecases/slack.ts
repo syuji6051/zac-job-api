@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { SetUserAttributeInput, ActionEventsInput } from '@/src/usecases/inputs/slack';
+import { SetUserAttributeInput, ActionEventsInput, BotMessageInput } from '@/src/usecases/inputs/slack';
 import { SetUserAttributeOutput, ActionEventsOutput } from '@/src/usecases/outputs/slack';
 
 export interface Slack {
@@ -11,4 +11,8 @@ export interface Slack {
   actionEvents(
     input: ActionEventsInput, output: ActionEventsOutput
   ): Promise<APIGatewayProxyResult>
+
+  botMessage(
+    input: BotMessageInput,
+  ): Promise<void>
 }
