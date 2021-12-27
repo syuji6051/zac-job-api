@@ -187,3 +187,7 @@ functions:
     name: zac-job-api-post-slack-bot-message-${opt:stage}
     handler: dist/handlers/slack.botMessage
     role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-lambda-role-${opt:stage}
+    events:
+      - sns:
+          topicName: zac-api-bot-message-${self:provider.stage}
+          displayName: zac-api-bot-message-${self:provider.stage}
