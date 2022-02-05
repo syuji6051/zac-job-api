@@ -1,6 +1,5 @@
 import { sns } from '@syuji6051/zac-job-library';
-import { WorkType } from '@/src/entities/works';
-import { BotMessage, WorkLink } from '@/src/entities/sns';
+import { BotMessage } from '@/src/entities/sns';
 
 const {
   PUPPETEER_API_SNS_TOPIC,
@@ -11,6 +10,6 @@ const publishBotMessage = (chanel: string, message: string) => sns.publish<BotMe
 }, PUPPETEER_API_SNS_TOPIC || '');
 
 export {
+  // eslint-disable-next-line import/prefer-default-export
   publishBotMessage,
-  workLink,
 };
