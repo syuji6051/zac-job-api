@@ -1,6 +1,7 @@
 import { logger, request } from '@syuji6051/zac-job-library';
 import { container, TYPES } from '@/src/providers/container';
 import { SecretsValues } from '@/src/entities/environments';
+import { WorkType } from '@/src/entities/works';
 
 export default class Works {
   secrets: SecretsValues;
@@ -62,5 +63,23 @@ export default class Works {
         userId,
       },
     }).then((res) => res.data);
+  }
+
+  public async workPunch(userId: string, workType: WorkType) {
+    switch (workType) {
+      case 'clockIn':
+        await this.clockIn(userId);
+        break;
+      case 'clockOut':
+        await this.clockOut(userId);
+        break;
+      case 'goOut':
+        await this.goOut(userId);
+        break;
+      case 'returned':
+        await this.goReturn(userId);
+        break;
+      default:
+    }
   }
 }

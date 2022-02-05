@@ -13,7 +13,7 @@ export class EventV2Authorizer {
       throw new errors.ValidationError('APIGatewayProxyEventV2 Authorizer is require');
     }
     const { jwt } = context;
-    const userName = jwt.claims.username;
+    const userName = jwt.claims['cognito:username'];
     if (typeof userName !== 'string') {
       throw new errors.ValidationError('APIGatewayProxyEventV2 Authorizer username type not string');
     }
