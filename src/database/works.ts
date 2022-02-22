@@ -26,8 +26,15 @@ export class Work {
   }
 
   public async get(userId: string, day: Date): Promise<WorkRecord> {
-    // eslint-disable-next-line new-parens
-    return mapper.get(Object.assign(new WorkRecord, { userId, day }));
+    try {
+      // eslint-disable-next-line new-parens
+      return mapper.get(Object.assign(new WorkRecord, { userId, day }));
+    } catch (err) {
+      if (err instanceof Error) {
+        logger.debug(err.stack);
+      }
+      throw err;
+    }
   }
 
   public async setWork(userId: string, works: IWork[]): Promise<void> {

@@ -3,13 +3,15 @@ import { APIGatewayProxyResult } from 'aws-lambda';
 import { views } from '@syuji6051/zac-job-library';
 import {
   User as UserEntity,
+  UserInfo,
   Users as UsersEntity,
 } from '@/src/entities/users';
 import {
   UserCreateOutput as IUserCreateOutput,
   UserListOutput as IUserListOutput,
-  PutZacLoginOutput as IPutZacLoginOutput,
-  PutObcLoginOutput as IPutObcLoginOutput,
+  GetUserInfoOutput as IGetUserInfoOutput,
+  PutZacInfoOutput as IPutZacInfoOutput,
+  PutObcInfoOutput as IPutObcInfoOutput,
   ZacWorkRegisterOutput as IZacWorkRegisterOutput,
 } from '@/src/usecases/outputs/users';
 
@@ -25,13 +27,19 @@ export class UserListOutput implements IUserListOutput {
   }
 }
 
-export class PutZacLoginOutput implements IPutZacLoginOutput {
+export class GetUserInfoOutput implements IGetUserInfoOutput {
+  public success(userInfo: UserInfo): APIGatewayProxyResult {
+    return views.success(userInfo);
+  }
+}
+
+export class PutZacInfoOutput implements IPutZacInfoOutput {
   public success(): APIGatewayProxyResult {
     return views.success();
   }
 }
 
-export class PutObcLoginOutput implements IPutObcLoginOutput {
+export class PutObcInfoOutput implements IPutObcInfoOutput {
   public success(): APIGatewayProxyResult {
     return views.success();
   }

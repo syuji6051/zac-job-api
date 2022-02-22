@@ -4,9 +4,7 @@ import { UserType } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import { Users as IUsers } from '@/src/usecases/stores/users';
 import UsersTable from '@/src/cognito/users';
 import Puppeteer from '@/src/puppeteer/zac';
-import {
-  User, Users as EntitiesUsers, Attribute,
-} from '@/src/entities/users';
+import { User, Users as EntitiesUsers, UserInfo } from '@/src/entities/users';
 import { TYPES } from '@/src/providers/container';
 import { SecretsValues } from '@/src/entities/environments';
 import UserAttributes from '@/src/database/user-attributes';
@@ -43,12 +41,13 @@ export default class Users implements IUsers {
     };
   }
 
-  public async putZacLogin(userId: string, userAttribute: Attribute): Promise<void> {
-    await this.cognito.putZacLogin(userId, userAttribute);
-  }
-
-  public async putObcLogin(userId: string, userAttribute: Attribute): Promise<void> {
-    await this.cognito.putObcLogin(userId, userAttribute);
+  public async getUserInfo(userId: string): Promise<UserInfo> {
+    const {
+      obcTenantId, obcUserId, zacTenantId, zacUserId,
+    } = await this.userAttributes.get(userId);
+    return {
+      userId, obcTenantId, obcUserId, zacTenantId, zacUserId,
+    };
   }
 
   private recordToEntity(user: UserType): User {
@@ -60,8 +59,12 @@ export default class Users implements IUsers {
     };
   }
 
-  public async setAttribute(user: UserAttributesRecord) {
-    await this.userAttributes.set(user);
+  public async setAttribute(userAttributes: UserAttributesRecord) {
+    const user = await this.userAttributes.get(userAttributes.userId);
+    await this.userAttributes.set({
+      ...user,
+      ...userAttributes,
+    });
   }
 
   public async getUserFromSlackId(slackId: string) {

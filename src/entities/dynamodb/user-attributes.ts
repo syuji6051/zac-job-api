@@ -14,17 +14,47 @@ export class UserAttributesRecord {
   userId: string;
 
   @attribute({
+    attributeName: 'zac_tenant_id',
+  })
+  zacTenantId?: string | null;
+
+  @attribute({
+    attributeName: 'zac_user_id',
+  })
+  zacUserId?: string | null;
+
+  @attribute({
+    attributeName: 'zac_password',
+  })
+  zacPassword?: string | null;
+
+  @attribute({
+    attributeName: 'obc_tenant_id',
+  })
+  obcTenantId?: string | null;
+
+  @attribute({
+    attributeName: 'obc_user_id',
+  })
+  obcUserId?: string | null;
+
+  @attribute({
+    attributeName: 'obc_password',
+  })
+  obcPassword?: string | null;
+
+  @attribute({
     attributeName: 'slack_user_id',
   })
-  slackUserId: string;
+  slackUserId?: string | null;
 
   @attribute({
     attributeName: 'slack_user_name',
   })
-  slackUserName: string;
+  slackUserName?: string | null;
 
   @attribute({
     attributeName: 'slack_access_token',
   })
-  slackAccessToken: string
+  slackAccessToken?: string | null
 }

@@ -1,15 +1,15 @@
 import {
-  APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyWithCognitoAuthorizerEvent, Handler,
+  APIGatewayProxyEvent, APIGatewayProxyEventV2, APIGatewayProxyResult, Handler,
 } from 'aws-lambda';
 import { logger, middleware } from '@syuji6051/zac-job-library';
 
 import { container, TYPES } from '@/src/providers/container';
 import { Users as UseCase } from '@/src/usecases/users';
 import {
-  PutZacLoginInput, PutObcLoginInput, UserCreateInput, UserListInput,
+  PutZacInfoInput, PutObcInfoInput, UserCreateInput, UserListInput, GetUserInfoInput,
 } from '@/src/adapters/http/request/users';
 import {
-  PutZacLoginOutput, PutObcLoginOutput, UserCreateOutput, UserListOutput,
+  PutZacInfoOutput, PutObcInfoOutput, UserCreateOutput, UserListOutput, GetUserInfoOutput,
 } from '@/src/adapters/http/response/users';
 import { seriesLoadAsync } from '@/src/helper/container';
 import { asyncAsmContainerModule } from '@/src/modules/common';
@@ -51,15 +51,15 @@ export const list: Handler = async (
     );
 };
 
-export const putZacLogin: Handler = async (
-  event: APIGatewayProxyWithCognitoAuthorizerEvent,
-): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
+export const getUserInfo: Handler = async (
+  event: APIGatewayProxyEventV2,
+): Promise<APIGatewayProxyResult> => loadAsyncModules.then(async () => {
   logger.info(JSON.stringify(event));
-  const { body, requestContext } = event;
+  const { requestContext } = event;
 
-  return (async () => container.get<UseCase>(TYPES.USECASE_USERS).putZacLogin(
-    new PutZacLoginInput(body, requestContext.authorizer),
-    new PutZacLoginOutput(),
+  return (async () => container.get<UseCase>(TYPES.USECASE_USERS).getUserInfo(
+    new GetUserInfoInput(requestContext.authorizer),
+    new GetUserInfoOutput(),
   ))()
     .catch((err) => middleware.lambdaErrorHandler(err))
     .finally(() => {
@@ -67,15 +67,31 @@ export const putZacLogin: Handler = async (
     });
 });
 
-export const putObcLogin: Handler = async (
-  event: APIGatewayProxyWithCognitoAuthorizerEvent,
+export const putZacInfo: Handler = async (
+  event: APIGatewayProxyEventV2,
+): Promise<APIGatewayProxyResult> => loadAsyncModules.then(async () => {
+  logger.info(JSON.stringify(event));
+  const { body, requestContext } = event;
+
+  return (async () => container.get<UseCase>(TYPES.USECASE_USERS).putZacInfo(
+    new PutZacInfoInput(requestContext.authorizer, body),
+    new PutZacInfoOutput(),
+  ))()
+    .catch((err) => middleware.lambdaErrorHandler(err))
+    .finally(() => {
+      logger.info('workSync function end');
+    });
+});
+
+export const putObcInfo: Handler = async (
+  event: APIGatewayProxyEventV2,
 ): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
   logger.info(JSON.stringify(event));
   const { body, requestContext } = event;
 
-  return (async () => container.get<UseCase>(TYPES.USECASE_USERS).putObcLogin(
-    new PutObcLoginInput(body, requestContext.authorizer),
-    new PutObcLoginOutput(),
+  return (async () => container.get<UseCase>(TYPES.USECASE_USERS).putObcInfo(
+    new PutObcInfoInput(requestContext.authorizer, body),
+    new PutObcInfoOutput(),
   ))()
     .catch((err) => middleware.lambdaErrorHandler(err))
     .finally(() => {

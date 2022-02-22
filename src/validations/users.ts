@@ -1,24 +1,18 @@
 import { getAjv } from '@syuji6051/zac-job-library';
-import putZacLoginJson from '@/src/schemas/Users/PutZacLogin.json';
-import putObcLoginJson from '@/src/schemas/Users/PutObcLogin.json';
+import putZacInfoJson from '@/src/validations/schema/PutZacInfoRequest.json';
+import putObcInfoJson from '@/src/validations/schema/PutObcInfoRequest.json';
 import zacWorkRegisterJson from '@/src/schemas/Users/ZacWorkRegister.json';
 
 const ajv = getAjv({ removeAdditional: true });
 
-const putZacLoginValidateFunc = ajv.compile(
-  putZacLoginJson,
-);
+const putZacInfoValidateFunc = ajv.compile(putZacInfoJson);
 
-const putObcLoginValidateFunc = ajv.compile(
-  putObcLoginJson,
-);
+const putObcLoginValidateFunc = ajv.compile(putObcInfoJson);
 
-const zacWorkRegisterFunc = ajv.compile(
-  zacWorkRegisterJson,
-);
+const zacWorkRegisterFunc = ajv.compile(zacWorkRegisterJson);
 
 export {
-  putZacLoginValidateFunc,
+  putZacInfoValidateFunc,
   putObcLoginValidateFunc,
   zacWorkRegisterFunc,
 };

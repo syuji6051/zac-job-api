@@ -1,3 +1,5 @@
+import { EventV2CognitoAuthorizer } from '@/src/adapters/http/request/authorizer';
+import { ObcInfo, ZacInfo } from '@/src/entities/users';
 import { Work, WorkMinute } from '@syuji6051/zac-client';
 
 export interface Authorizer {
@@ -13,18 +15,15 @@ export interface UserListInput {
   getPaginationToken(): string;
 }
 
-export interface PutZacLoginInput {
-  getUserName(): string
-  getZacTenantId(): string
-  getZacUserId(): string
-  getZacPassword(): string
+export interface GetUserInfoInput extends EventV2CognitoAuthorizer {
 }
 
-export interface PutObcLoginInput {
-  getUserName(): string
-  getObcTenantId(): string
-  getObcUserId(): string
-  getObcPassword(): string
+export interface PutZacInfoInput extends EventV2CognitoAuthorizer {
+  getZacInfo(): ZacInfo;
+}
+
+export interface PutObcInfoInput extends EventV2CognitoAuthorizer {
+  getObcInfo(): ObcInfo;
 }
 export interface ZacWorkRegisterInput {
   getUserName(): string;

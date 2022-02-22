@@ -3,15 +3,18 @@ import { errors, validation } from '@syuji6051/zac-job-library';
 import {
   UserCreateInput as IUserCreateInput,
   UserListInput as IUserListInput,
-  PutZacLoginInput as IPutZacLoginInput,
-  PutObcLoginInput as IPutObcLoginInput,
+  GetUserInfoInput as IGetUserInfoInput,
+  PutZacInfoInput as IPutZacInfoInput,
+  PutObcInfoInput as IPutObcInfoInput,
 } from '@/src/usecases/inputs/users';
-import { putObcLoginValidateFunc, putZacLoginValidateFunc } from '@/src/validations/users';
+import { putObcLoginValidateFunc, putZacInfoValidateFunc } from '@/src/validations/users';
 import {
-  ZacUserLoginRequestBody, ObcUserLoginRequestBody,
-  APIGatewayProxyWithCognitoAuthorizer,
+  APIGatewayProxyEventV2Authorizer,
+  ZacInfo,
+  ObcInfo,
 } from '@/src/entities/users';
-import { CognitoAuthorizer } from '@/src/adapters/http/request/authorizer';
+import { EventV2CognitoAuthorizer } from '@/src/adapters/http/request/authorizer';
+import camelcaseKeys from 'camelcase-keys';
 
 class UserInput {
   headers?: { [name: string]: string }
@@ -66,64 +69,49 @@ export class UserListInput extends UserInput implements IUserListInput {
   }
 }
 
-export class PutZacLoginInput extends CognitoAuthorizer implements IPutZacLoginInput {
-  body: ZacUserLoginRequestBody;
-
+export class GetUserInfoInput extends EventV2CognitoAuthorizer implements IGetUserInfoInput {
+  // eslint-disable-next-line no-useless-constructor
   public constructor(
-    requestBody: string | null,
-    context?: APIGatewayProxyWithCognitoAuthorizer,
+    authorizer: APIGatewayProxyEventV2Authorizer | undefined,
   ) {
-    super(context);
-    if (requestBody === null) throw new errors.ValidationError('body is required');
-    const body = JSON.parse(requestBody);
-    validation.check(putZacLoginValidateFunc, body);
-    this.body = body as ZacUserLoginRequestBody;
-  }
-
-  public getUserName() {
-    return super.getUserName();
-  }
-
-  public getZacTenantId() {
-    return this.body.zacTenantId;
-  }
-
-  public getZacUserId() {
-    return this.body.zacUserId;
-  }
-
-  public getZacPassword() {
-    return this.body.zacPassword;
+    super(authorizer);
   }
 }
 
-export class PutObcLoginInput extends CognitoAuthorizer implements IPutObcLoginInput {
-  body: ObcUserLoginRequestBody;
+export class PutZacInfoInput extends EventV2CognitoAuthorizer implements IPutZacInfoInput {
+  data: ZacInfo;
 
   public constructor(
-    requestBody: string | null,
-    context?: APIGatewayProxyWithCognitoAuthorizer,
+    authorizer: APIGatewayProxyEventV2Authorizer | undefined,
+    requestBody: string | undefined,
   ) {
-    super(context);
-    if (requestBody === null) throw new errors.ValidationError('body is required');
+    super(authorizer);
+    if (requestBody == null) throw new errors.ValidationError('body is required');
+    const body = JSON.parse(requestBody);
+    validation.check(putZacInfoValidateFunc, body);
+    this.data = camelcaseKeys(body);
+  }
+
+  public getZacInfo() {
+    return this.data;
+  }
+}
+
+export class PutObcInfoInput extends EventV2CognitoAuthorizer implements IPutObcInfoInput {
+  data: ObcInfo;
+
+  public constructor(
+    authorizer: APIGatewayProxyEventV2Authorizer | undefined,
+    requestBody: string | undefined,
+  ) {
+    super(authorizer);
+    if (requestBody == null) throw new errors.ValidationError('body is required');
     const body = JSON.parse(requestBody);
     validation.check(putObcLoginValidateFunc, body);
-    this.body = body as ObcUserLoginRequestBody;
+    this.data = camelcaseKeys(body);
   }
 
-  public getUserName() {
-    return super.getUserName();
-  }
-
-  public getObcTenantId() {
-    return this.body.obcTenantId;
-  }
-
-  public getObcUserId() {
-    return this.body.obcUserId;
-  }
-
-  public getObcPassword() {
-    return this.body.obcPassword;
+  public getObcInfo() {
+    return this.data;
   }
 }

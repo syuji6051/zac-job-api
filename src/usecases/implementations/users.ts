@@ -2,16 +2,16 @@ import { inject, injectable } from 'inversify';
 import { APIGatewayProxyResult } from 'aws-lambda';
 
 import {
-  UserCreateInput, UserListInput, PutZacLoginInput, PutObcLoginInput,
+  UserCreateInput, UserListInput, PutZacInfoInput, PutObcInfoInput, GetUserInfoInput,
 } from '@/src/usecases/inputs/users';
 import { Users as IUsers } from '@/src/usecases/users';
 import { Users as UserStore } from '@/src/usecases/stores/users';
 import { container, TYPES } from '@/src/providers/container';
 import {
-  UserCreateOutput, UserListOutput, PutZacLoginOutput, PutObcLoginOutput,
+  UserCreateOutput, UserListOutput, GetUserInfoOutput, PutZacInfoOutput, PutObcInfoOutput,
 } from '@/src/usecases/outputs/users';
 import { SecretsValues } from '@/src/entities/environments';
-import { getUserAttribute } from '@/src/helper/user-attribute';
+import { encrypt } from '@syuji6051/zac-job-library';
 
 @injectable()
 export default class Users implements IUsers {
@@ -45,33 +45,45 @@ export default class Users implements IUsers {
     return output.success(users);
   }
 
-  public async putZacLogin(
-    input: PutZacLoginInput,
-    output: PutZacLoginOutput,
+  public async getUserInfo(
+    input: GetUserInfoInput, output: GetUserInfoOutput,
   ): Promise<APIGatewayProxyResult> {
-    await this.store.putZacLogin(
-      input.getUserName(),
-      getUserAttribute(this.secrets, {
-        tenantId: input.getZacTenantId(),
-        userId: input.getZacUserId(),
-        password: input.getZacPassword(),
-      }),
-    );
+    const userId = input.getUserName();
+    console.log(userId);
+    const userInfo = await this.store.getUserInfo(userId);
+    return output.success(userInfo);
+  }
+
+  public async putZacInfo(
+    input: PutZacInfoInput, output: PutZacInfoOutput,
+  ): Promise<APIGatewayProxyResult> {
+    const { zacUserId, zacPassword, zacTenantId } = input.getZacInfo();
+    const { ENCRYPT_KEY, ENCRYPT_SALT_KEY } = this.secrets;
+    const encryptPassword = encrypt(ENCRYPT_KEY, ENCRYPT_SALT_KEY, zacPassword);
+
+    await this.store.setAttribute({
+      zacUserId,
+      zacPassword: encryptPassword,
+      zacTenantId,
+      userId: input.getUserName(),
+    });
     return output.success();
   }
 
-  public async putObcLogin(
-    input: PutObcLoginInput,
-    output: PutObcLoginOutput,
+  public async putObcInfo(
+    input: PutObcInfoInput, output: PutObcInfoOutput,
   ): Promise<APIGatewayProxyResult> {
-    await this.store.putObcLogin(
-      input.getUserName(),
-      getUserAttribute(this.secrets, {
-        tenantId: input.getObcTenantId(),
-        userId: input.getObcUserId(),
-        password: input.getObcPassword(),
-      }),
-    );
+    const { obcUserId, obcPassword, obcTenantId } = input.getObcInfo();
+    const { ENCRYPT_KEY, ENCRYPT_SALT_KEY } = this.secrets;
+    const encryptPassword = encrypt(ENCRYPT_KEY, ENCRYPT_SALT_KEY, obcPassword);
+
+    await this.store.setAttribute({
+      obcUserId,
+      obcPassword: encryptPassword,
+      obcTenantId,
+      userId: input.getUserName(),
+    });
+
     return output.success();
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { AttributeListType } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 
 export interface APIGatewayProxyEventV2Authorizer {
@@ -20,10 +21,16 @@ export interface User {
   attributes?: AttributeListType;
 }
 
+export interface GetUserInfoRequest {
+  user_id: string
+}
+
 export interface UserInfo {
   userId: string;
-  obcUserId: string;
-  obcPassword: string;
+  obcTenantId?: string | null;
+  obcUserId?: string | null;
+  zacTenantId?: string | null;
+  zacUserId?: string | null;
 }
 
 export interface ZacUserLogin {
@@ -32,18 +39,29 @@ export interface ZacUserLogin {
   zacPassword: string;
 }
 
-export interface ZacUserLoginRequestBody {
+export interface ZacUserRequest {
+  zac_tenant_id: string
+  zac_user_id: string
+  zac_password: string
+}
+
+export interface ZacInfo {
   zacTenantId: string
   zacUserId: string
   zacPassword: string
 }
 
-export interface ObcUserLoginRequestBody {
+export interface ObcInfoRequest {
+  obc_tenant_id: string
+  obc_user_id: string
+  obc_password: string
+}
+
+export interface ObcInfo {
   obcTenantId: string
   obcUserId: string
   obcPassword: string
 }
-
 export interface Attribute {
   tenantId: string
   userId: string

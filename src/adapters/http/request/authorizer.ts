@@ -26,9 +26,9 @@ export class EventV2Authorizer {
 }
 
 export class EventV2CognitoAuthorizer {
-  context?: APIGatewayProxyEventV2Authorizer
+  private context?: APIGatewayProxyEventV2Authorizer
 
-  userName: string
+  private userName: string
 
   constructor(
     context?: APIGatewayProxyEventV2Authorizer | null,
@@ -44,7 +44,7 @@ export class EventV2CognitoAuthorizer {
     this.userName = userName;
   }
 
-  getUserName() {
+  public getUserName() {
     return this.userName;
   }
 }
