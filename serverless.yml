@@ -34,26 +34,6 @@ functions:
       - http:
           path: /users/create
           method: post
-  PutZacInfo:
-    name: zac-job-api-put-zac-info-${opt:stage}
-    handler: dist/handlers/users.putZacInfo
-    role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-cognito-write-role-${opt:stage}
-    events:
-      - httpApi:
-          path: /users/user-info/zac
-          method: put
-          authorizer:
-            name: cognitoJwtAuthorizer
-  PutObcInfo:
-    name: zac-job-api-put-obc-info-${opt:stage}
-    handler: dist/handlers/users.putObcInfo
-    role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-cognito-write-role-${opt:stage}
-    events:
-      - httpApi:
-          path: /users/user-info/obc
-          method: put
-          authorizer:
-            name: cognitoJwtAuthorizer
   GetWorkCodeList:
     name: zac-job-api-get-work-code-list-${opt:stage}
     handler: dist/handlers/zac.getWorkCodeList
@@ -162,6 +142,26 @@ functions:
       - httpApi:
           path: /zac/works
           method: post
+          authorizer:
+            name: cognitoJwtAuthorizer
+  PutZacInfo:
+    name: zac-job-api-put-zac-info-${opt:stage}
+    handler: dist/handlers/users.putZacInfo
+    role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-lambda-role-${opt:stage}
+    events:
+      - httpApi:
+          path: /users/user-info/zac
+          method: put
+          authorizer:
+            name: cognitoJwtAuthorizer
+  PutObcInfo:
+    name: zac-job-api-put-obc-info-${opt:stage}
+    handler: dist/handlers/users.putObcInfo
+    role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-lambda-role-${opt:stage}
+    events:
+      - httpApi:
+          path: /users/user-info/obc
+          method: put
           authorizer:
             name: cognitoJwtAuthorizer
   SlackAuth:
