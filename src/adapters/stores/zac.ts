@@ -23,20 +23,16 @@ export default class Zac implements IZac {
   }
 
   async getWorkCodeList(userId: string, yearMonth: number) {
-    try {
-      return this.database.get(userId, yearMonth);
-    } catch (err) {
+    return this.database.get(userId, yearMonth).catch((err) => {
       logger.error(err.stack);
       throw err;
-    }
+    });
   }
 
   async setWorkCodeList(userId: string, yearMonth: number, workCodeList: WorkCode[]) {
-    try {
-      await this.database.set(userId, yearMonth, workCodeList);
-    } catch (err) {
+    await this.database.set(userId, yearMonth, workCodeList).catch((err) => {
       logger.error(err.stack);
       throw err;
-    }
+    });
   }
 }
