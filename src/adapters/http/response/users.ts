@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { APIGatewayProxyResult } from 'aws-lambda';
+import snakecaseKeys from 'snakecase-keys';
 import { views } from '@syuji6051/zac-job-library';
 import {
   User as UserEntity,
@@ -29,7 +30,7 @@ export class UserListOutput implements IUserListOutput {
 
 export class GetUserInfoOutput implements IGetUserInfoOutput {
   public success(userInfo: UserInfo): APIGatewayProxyResult {
-    return views.success(userInfo);
+    return views.success(snakecaseKeys(userInfo));
   }
 }
 
