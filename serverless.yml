@@ -144,6 +144,16 @@ functions:
           method: post
           authorizer:
             name: cognitoJwtAuthorizer
+  GetUserInfo:
+    name: zac-job-api-get-user-info-${opt:stage}
+    handler: dist/handlers/users.getUserInfo
+    role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-lambda-role-${opt:stage}
+    events:
+      - httpApi:
+          path: /users/user-info
+          method: get
+          authorizer:
+            name: cognitoJwtAuthorizer
   PutZacInfo:
     name: zac-job-api-put-zac-info-${opt:stage}
     handler: dist/handlers/users.putZacInfo
