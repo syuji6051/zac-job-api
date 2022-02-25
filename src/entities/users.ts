@@ -31,6 +31,7 @@ export interface UserInfo {
   obcUserId?: string | null;
   zacTenantId?: string | null;
   zacUserId?: string | null;
+  slackUserName?: string | null;
 }
 
 export interface ZacUserLogin {
