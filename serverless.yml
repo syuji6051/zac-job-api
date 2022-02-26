@@ -144,6 +144,15 @@ functions:
           method: post
           authorizer:
             name: cognitoJwtAuthorizer
+  AdminUsersList:
+    name: zac-job-api-admin-users-list-${opt:stage}
+    handler: dist/handlers/users.getUsersList
+    events:
+      - httpApi:
+          path: /admin/users/list
+          method: get
+          authorizer:
+            name: cognitoJwtAuthorizer
   GetUserInfo:
     name: zac-job-api-get-user-info-${opt:stage}
     handler: dist/handlers/users.getUserInfo
