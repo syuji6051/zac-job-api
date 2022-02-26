@@ -155,7 +155,7 @@ functions:
             name: cognitoJwtAuthorizer
   AdminUserInfo:
     name: zac-job-api-admin-get-user-info-${opt:stage}
-    handler: dist/handlers/users.getUserInfo
+    handler: dist/handlers/users.getIamUserInfo
     role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-lambda-role-${opt:stage}
     events:
       - httpApi:
