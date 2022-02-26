@@ -6,7 +6,8 @@ import { logger, middleware, services } from '@syuji6051/zac-job-library';
 import { container, TYPES } from '@/src/providers/container';
 import { Users as UseCase } from '@/src/usecases/users';
 import {
-  PutZacInfoInput, PutObcInfoInput, UserCreateInput, GetUsersListInput, GetUserInfoInput,
+  PutZacInfoInput,
+  PutObcInfoInput, UserCreateInput, GetUsersListInput, GetIamUserInfoInput, GetUserInfoInput,
 } from '@/src/adapters/http/request/users';
 import {
   PutZacInfoOutput, PutObcInfoOutput, UserCreateOutput, GetUsersListOutput, GetUserInfoOutput,
@@ -45,6 +46,18 @@ export const getUsersList: Handler = async (
     'UsersList',
     container.get<UseCase>(TYPES.USECASE_USERS).getUsersList(
       new GetUsersListInput(event), new GetUsersListOutput(),
+    ),
+  ).run(event);
+  return res;
+});
+
+export const getIamUserInfo: Handler = async (
+  event: APIGatewayProxyEventV2,
+): Promise<APIGatewayProxyResult> => loadAsyncModules.then(async () => {
+  const res = await new services.Application(
+    'IamUserInfo',
+    container.get<UseCase>(TYPES.USECASE_USERS).getUserInfo(
+      new GetIamUserInfoInput(event), new GetUserInfoOutput(),
     ),
   ).run(event);
   return res;

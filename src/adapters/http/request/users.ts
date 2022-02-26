@@ -3,6 +3,7 @@ import { errors, validation } from '@syuji6051/zac-job-library';
 import {
   UserCreateInput as IUserCreateInput,
   GetUsersListInput as IGetUsersListInput,
+  GetIamUserInfoInput as IGetIamUserInfoInput,
   GetUserInfoInput as IGetUserInfoInput,
   PutZacInfoInput as IPutZacInfoInput,
   PutObcInfoInput as IPutObcInfoInput,
@@ -64,6 +65,20 @@ export class GetUsersListInput extends EventV2CognitoAuthorizer implements IGetU
   }
 }
 
+export class GetIamUserInfoInput implements IGetIamUserInfoInput {
+  userId: string;
+
+  public constructor({ queryStringParameters }: APIGatewayProxyEventV2) {
+    if (queryStringParameters?.user_id == null) {
+      throw new errors.ValidationError('user_id is required');
+    }
+    this.userId = queryStringParameters?.user_id;
+  }
+
+  getUserName(): string {
+    return this.userId;
+  }
+}
 export class GetUserInfoInput extends EventV2CognitoAuthorizer implements IGetUserInfoInput {
   // eslint-disable-next-line no-useless-constructor
   public constructor(

@@ -15,6 +15,10 @@ export interface GetUsersListInput {
   getPaginationToken(): string | undefined;
 }
 
+export interface GetIamUserInfoInput {
+  getUserName(): string;
+}
+
 export interface GetUserInfoInput extends EventV2CognitoAuthorizer {
 }
 
