@@ -56,9 +56,6 @@ export class GetUsersListInput extends EventV2CognitoAuthorizer implements IGetU
 
   public constructor({ requestContext, queryStringParameters }: APIGatewayProxyEventV2) {
     super(requestContext.authorizer);
-    if (queryStringParameters == null) {
-      throw new errors.ValidationError('queryStringParameters is required');
-    }
     this.paginationToken = queryStringParameters?.pagination_token;
   }
 
