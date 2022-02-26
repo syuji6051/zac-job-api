@@ -147,6 +147,7 @@ functions:
   AdminUsersList:
     name: zac-job-api-admin-users-list-${opt:stage}
     handler: dist/handlers/users.getUsersList
+    role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-admin-lambda-role-${opt:stage}
     events:
       - httpApi:
           path: /admin/users/list
