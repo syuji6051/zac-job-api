@@ -40,17 +40,15 @@ export const create: Handler = async (
 
 export const getUsersList: Handler = async (
   event: APIGatewayProxyEventV2,
-): Promise<APIGatewayProxyResult> => {
-  const application = new services.Application(
+): Promise<APIGatewayProxyResult> => loadAsyncModules.then(async () => {
+  const res = await new services.Application(
     'UsersList',
     container.get<UseCase>(TYPES.USECASE_USERS).getUsersList(
       new GetUsersListInput(event), new GetUsersListOutput(),
     ),
-    loadAsyncModules,
-  );
-
-  return application.run(event);
-};
+  ).run(event);
+  return res;
+});
 
 export const getUserInfo: Handler = async (
   event: APIGatewayProxyEventV2,
