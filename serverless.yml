@@ -69,7 +69,6 @@ functions:
           method: get
           authorizer:
             name: cognitoJwtAuthorizer
-          async: true
   WorkList:
     name: zac-job-api-work-list-${opt:stage}
     handler: dist/handlers/works.workList
