@@ -162,7 +162,7 @@ functions:
           path: /admin/users/user-info
           method: get
           authorizer:
-            name: aws_iam
+            type: aws_iam
   GetUserInfo:
     name: zac-job-api-get-user-info-${opt:stage}
     handler: dist/handlers/users.getUserInfo
