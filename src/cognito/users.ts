@@ -1,4 +1,3 @@
-import { Attribute } from '@/src/entities/users';
 import { CognitoIdentityServiceProvider } from 'aws-sdk';
 import { ListUsersResponse, UserType } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 
@@ -29,44 +28,10 @@ export default class Users {
       .then((res) => res.User);
   }
 
-  async list(paginationToken: string): Promise<ListUsersResponse> {
+  async usersList(paginationToken: string | undefined): Promise<ListUsersResponse> {
     return this.cognito.listUsers({
       UserPoolId: this.userPoolId,
       PaginationToken: paginationToken,
-    }).promise();
-  }
-
-  async putZacLogin(userId: string, userAttribute: Attribute) {
-    await this.cognito.adminUpdateUserAttributes({
-      UserPoolId: this.userPoolId,
-      Username: userId,
-      UserAttributes: [{
-        Name: 'custom:zacTenantId',
-        Value: userAttribute.tenantId,
-      }, {
-        Name: 'custom:zacLoginId',
-        Value: userAttribute.userId,
-      }, {
-        Name: 'custom:zacPassword',
-        Value: userAttribute.password,
-      }],
-    }).promise();
-  }
-
-  async putObcLogin(userId: string, userAttribute: Attribute) {
-    await this.cognito.adminUpdateUserAttributes({
-      UserPoolId: this.userPoolId,
-      Username: userId,
-      UserAttributes: [{
-        Name: 'custom:obcTenantId',
-        Value: userAttribute.tenantId,
-      }, {
-        Name: 'custom:obcLoginId',
-        Value: userAttribute.userId,
-      }, {
-        Name: 'custom:obcPassword',
-        Value: userAttribute.password,
-      }],
     }).promise();
   }
 }

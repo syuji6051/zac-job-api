@@ -2,14 +2,10 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
 import snakecaseKeys from 'snakecase-keys';
 import { views } from '@syuji6051/zac-job-library';
-import {
-  User as UserEntity,
-  UserInfo,
-  Users as UsersEntity,
-} from '@/src/entities/users';
+import { UserInfo, GetUsersListOutput as EntityGetUsersListOutput } from '@/src/entities/users';
 import {
   UserCreateOutput as IUserCreateOutput,
-  UserListOutput as IUserListOutput,
+  GetUsersListOutput as IGetUsersListOutput,
   GetUserInfoOutput as IGetUserInfoOutput,
   PutZacInfoOutput as IPutZacInfoOutput,
   PutObcInfoOutput as IPutObcInfoOutput,
@@ -17,14 +13,14 @@ import {
 } from '@/src/usecases/outputs/users';
 
 export class UserCreateOutput implements IUserCreateOutput {
-  public success(user: UserEntity): APIGatewayProxyResult {
-    return views.success(user);
+  public success(): APIGatewayProxyResult {
+    return views.success();
   }
 }
 
-export class UserListOutput implements IUserListOutput {
-  public success(users: UsersEntity): APIGatewayProxyResult {
-    return views.success(users);
+export class GetUsersListOutput implements IGetUsersListOutput {
+  public success(users: EntityGetUsersListOutput): APIGatewayProxyResult {
+    return views.success(snakecaseKeys(users, { deep: true }));
   }
 }
 

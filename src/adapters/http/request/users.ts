@@ -2,19 +2,17 @@ import { errors, validation } from '@syuji6051/zac-job-library';
 
 import {
   UserCreateInput as IUserCreateInput,
-  UserListInput as IUserListInput,
+  GetUsersListInput as IGetUsersListInput,
   GetUserInfoInput as IGetUserInfoInput,
   PutZacInfoInput as IPutZacInfoInput,
   PutObcInfoInput as IPutObcInfoInput,
 } from '@/src/usecases/inputs/users';
 import { putObcLoginValidateFunc, putZacInfoValidateFunc } from '@/src/validations/users';
-import {
-  APIGatewayProxyEventV2Authorizer,
-  ZacInfo,
-  ObcInfo,
-} from '@/src/entities/users';
+import { ZacInfo, ObcInfo } from '@/src/entities/users';
+import { APIGatewayProxyEventV2Authorizer } from '@/src/entities/authorizer';
 import { EventV2CognitoAuthorizer } from '@/src/adapters/http/request/authorizer';
 import camelcaseKeys from 'camelcase-keys';
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 class UserInput {
   headers?: { [name: string]: string }
@@ -53,18 +51,18 @@ export class UserCreateInput extends UserInput implements IUserCreateInput {
   }
 }
 
-export class UserListInput extends UserInput implements IUserListInput {
-  private paginationToken: string;
+export class GetUsersListInput extends EventV2CognitoAuthorizer implements IGetUsersListInput {
+  private paginationToken: string | undefined;
 
-  public constructor(
-    _headers: { [name: string]: string },
-    query: { [field: string]: string },
-  ) {
-    super();
-    this.paginationToken = query.paginationToken;
+  public constructor({ requestContext, queryStringParameters }: APIGatewayProxyEventV2) {
+    super(requestContext.authorizer);
+    if (queryStringParameters == null) {
+      throw new errors.ValidationError('queryStringParameters is required');
+    }
+    this.paginationToken = queryStringParameters?.pagination_token;
   }
 
-  public getPaginationToken(): string {
+  public getPaginationToken() {
     return this.paginationToken;
   }
 }

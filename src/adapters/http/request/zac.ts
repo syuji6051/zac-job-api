@@ -5,7 +5,7 @@ import utc from 'dayjs/plugin/utc';
 import { errors, logger, validation } from '@syuji6051/zac-job-library';
 
 import { CognitoAuthorizer, EventV2Authorizer } from '@/src/adapters/http/request/authorizer';
-import { APIGatewayProxyEventV2Authorizer } from '@/src/entities/users';
+import { APIGatewayProxyEventV2Authorizer } from '@/src/entities/authorizer';
 import { RegisterWorksRequest, SetWorkCodeListRequest, WorkCode } from '@/src/entities/zac';
 import { registerWorks, getWorkCodeListValidation, setWorkCodeListValidation } from '@/src/validations/zac';
 

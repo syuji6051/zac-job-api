@@ -1,15 +1,15 @@
 import {
   APIGatewayProxyEvent, APIGatewayProxyEventV2, APIGatewayProxyResult, Handler,
 } from 'aws-lambda';
-import { logger, middleware } from '@syuji6051/zac-job-library';
+import { logger, middleware, services } from '@syuji6051/zac-job-library';
 
 import { container, TYPES } from '@/src/providers/container';
 import { Users as UseCase } from '@/src/usecases/users';
 import {
-  PutZacInfoInput, PutObcInfoInput, UserCreateInput, UserListInput, GetUserInfoInput,
+  PutZacInfoInput, PutObcInfoInput, UserCreateInput, GetUsersListInput, GetUserInfoInput,
 } from '@/src/adapters/http/request/users';
 import {
-  PutZacInfoOutput, PutObcInfoOutput, UserCreateOutput, UserListOutput, GetUserInfoOutput,
+  PutZacInfoOutput, PutObcInfoOutput, UserCreateOutput, GetUsersListOutput, GetUserInfoOutput,
 } from '@/src/adapters/http/response/users';
 import { seriesLoadAsync } from '@/src/helper/container';
 import { asyncAsmContainerModule } from '@/src/modules/common';
@@ -38,17 +38,18 @@ export const create: Handler = async (
 //     new UserCreateOutput(),
 //   );
 
-export const list: Handler = async (
-  event: APIGatewayProxyEvent,
+export const getUsersList: Handler = async (
+  event: APIGatewayProxyEventV2,
 ): Promise<APIGatewayProxyResult> => {
-  logger.debug(event);
-  const { headers, queryStringParameters } = event;
-  const query = queryStringParameters || {};
-  return container.get<UseCase>(TYPES.USECASE_USERS)
-    .list(
-      new UserListInput(headers, query),
-      new UserListOutput(),
-    );
+  const application = new services.Application(
+    'UsersList',
+    container.get<UseCase>(TYPES.USECASE_USERS).getUsersList(
+      new GetUsersListInput(event), new GetUsersListOutput(),
+    ),
+    loadAsyncModules,
+  );
+
+  return application.run(event);
 };
 
 export const getUserInfo: Handler = async (

@@ -1,4 +1,4 @@
-import { APIGatewayProxyEventV2Authorizer, APIGatewayProxyWithCognitoAuthorizer } from '@/src/entities/users';
+import { APIGatewayProxyEventV2Authorizer, APIGatewayProxyWithCognitoAuthorizer } from '@/src/entities/authorizer';
 import { errors } from '@syuji6051/zac-job-library';
 
 export class EventV2Authorizer {

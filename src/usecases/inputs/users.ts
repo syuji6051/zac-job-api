@@ -11,8 +11,8 @@ export interface UserCreateInput {
   getPassword(): string;
 }
 
-export interface UserListInput {
-  getPaginationToken(): string;
+export interface GetUsersListInput {
+  getPaginationToken(): string | undefined;
 }
 
 export interface GetUserInfoInput extends EventV2CognitoAuthorizer {

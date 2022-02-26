@@ -2,13 +2,13 @@ import { inject, injectable } from 'inversify';
 import { APIGatewayProxyResult } from 'aws-lambda';
 
 import {
-  UserCreateInput, UserListInput, PutZacInfoInput, PutObcInfoInput, GetUserInfoInput,
+  UserCreateInput, GetUsersListInput, PutZacInfoInput, PutObcInfoInput, GetUserInfoInput,
 } from '@/src/usecases/inputs/users';
 import { Users as IUsers } from '@/src/usecases/users';
 import { Users as UserStore } from '@/src/usecases/stores/users';
 import { container, TYPES } from '@/src/providers/container';
 import {
-  UserCreateOutput, UserListOutput, GetUserInfoOutput, PutZacInfoOutput, PutObcInfoOutput,
+  UserCreateOutput, GetUsersListOutput, GetUserInfoOutput, PutZacInfoOutput, PutObcInfoOutput,
 } from '@/src/usecases/outputs/users';
 import { SecretsValues } from '@/src/entities/environments';
 import { encrypt } from '@syuji6051/zac-job-library';
@@ -29,17 +29,16 @@ export default class Users implements IUsers {
     input: UserCreateInput,
     output: UserCreateOutput,
   ): Promise<APIGatewayProxyResult> {
-    const user = await this.store.create(
+    await this.store.create(
       input.getUserName(), input.getPassword(),
     );
-    return output.success(user);
+    return output.success();
   }
 
-  public async list(
-    input: UserListInput,
-    output: UserListOutput,
+  public async getUsersList(
+    input: GetUsersListInput, output: GetUsersListOutput,
   ): Promise<APIGatewayProxyResult> {
-    const users = await this.store.list(
+    const users = await this.store.getUsersList(
       input.getPaginationToken(),
     );
     return output.success(users);

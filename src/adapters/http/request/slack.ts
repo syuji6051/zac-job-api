@@ -8,7 +8,7 @@ import {
 } from '@/src/usecases/inputs/slack';
 import { EventV2CognitoAuthorizer } from '@/src/adapters/http/request/authorizer';
 import { BotMessagesRequestValidationFunc, SetUserAttributeValidateFunc } from '@/src/validations/slack';
-import { APIGatewayProxyEventV2Authorizer } from '@/src/entities/users';
+import { APIGatewayProxyEventV2Authorizer } from '@/src/entities/authorizer';
 import { BotMessage } from '@/src/entities/sns';
 import { SNSEventRecord } from 'aws-lambda';
 

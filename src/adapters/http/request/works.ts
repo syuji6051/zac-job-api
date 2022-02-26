@@ -7,7 +7,7 @@ import {
 } from '@/src/usecases/inputs/works';
 import { workSyncRequestFunc } from '@/src/validations/works';
 import { WorkSyncRequest } from '@/src/entities/works';
-import { APIGatewayProxyEventV2Authorizer } from '@/src/entities/users';
+import { APIGatewayProxyEventV2Authorizer } from '@/src/entities/authorizer';
 import { EventV2Authorizer } from '@/src/adapters/http/request/authorizer';
 
 export class WorkInput extends EventV2Authorizer {
