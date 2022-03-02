@@ -15,6 +15,7 @@ provider:
     SECRET_ID: zac-job-dev
     STAGE: ${opt:stage, 'dev'}
     PUPPETEER_API_SNS_TOPIC: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:zac-api-bot-message-${opt:stage}
+    PUPPETEER_PUNCH_WORK_SNS_TOPIC: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:puppeteer-punch-work-${opt:stage}
   httpApi:
     cors: true
     authorizers:
@@ -82,51 +83,12 @@ functions:
           method: get
           authorizer:
             name: cognitoJwtAuthorizer
-  WorkClockIn:
-    name: zac-job-api-work-clock-in-${opt:stage}
-    handler: dist/handlers/works.clockIn
-    vpc:
-      subnetIds: subnet-09e40f8637f9139f0
-      securityGroupIds: sg-0fcd4bf6bd4373a7d
+  PunchWork:
+    name: zac-job-api-punch-work-${opt:stage}
+    handler: dist/handlers/works.punchWork
     events:
       - httpApi:
-          path: /works/clock-in
-          method: post
-          authorizer:
-            name: cognitoJwtAuthorizer
-  WorkClockOut:
-    name: zac-job-api-work-clock-out-${opt:stage}
-    handler: dist/handlers/works.clockOut
-    vpc:
-      subnetIds: subnet-09e40f8637f9139f0
-      securityGroupIds: sg-0fcd4bf6bd4373a7d
-    events:
-      - httpApi:
-          path: /works/clock-out
-          method: post
-          authorizer:
-            name: cognitoJwtAuthorizer
-  WorkGoOut:
-    name: zac-job-api-work-go-out-${opt:stage}
-    handler: dist/handlers/works.goOut
-    vpc:
-      subnetIds: subnet-09e40f8637f9139f0
-      securityGroupIds: sg-0fcd4bf6bd4373a7d
-    events:
-      - httpApi:
-          path: /works/go-out
-          method: post
-          authorizer:
-            name: cognitoJwtAuthorizer
-  WorkGoReturn:
-    name: zac-job-api-work-go-return-${opt:stage}
-    handler: dist/handlers/works.goReturn
-    vpc:
-      subnetIds: subnet-09e40f8637f9139f0
-      securityGroupIds: sg-0fcd4bf6bd4373a7d
-    events:
-      - httpApi:
-          path: /works/go-return
+          path: /works/punch
           method: post
           authorizer:
             name: cognitoJwtAuthorizer
