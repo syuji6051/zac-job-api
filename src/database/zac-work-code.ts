@@ -1,5 +1,5 @@
 import mapper from '@/src/database/dynamo-mapper';
-import { ZacWorkCodeRecord } from '@/src/entities/dynamodb/zac-work-code';
+import ZacWorkCodeRecord from '@/src/entities/dynamodb/zac-work-code';
 import { WorkCode } from '@/src/entities/zac';
 import { ItemNotFoundException } from '@aws/dynamodb-data-mapper';
 

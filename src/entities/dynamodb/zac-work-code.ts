@@ -5,9 +5,8 @@ import { WorkCode } from '@/src/entities/zac';
 
 const { STAGE } = process.env;
 
-@table(`zac-job-work-code-table-${STAGE}`)
-// eslint-disable-next-line import/prefer-default-export
-export class ZacWorkCodeRecord {
+@table(`zac-job-work-code-list-${STAGE}`)
+export default class ZacWorkCodeRecord {
   @hashKey({
     attributeName: 'user_id',
     keyType: 'HASH',
