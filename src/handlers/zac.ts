@@ -1,7 +1,7 @@
 import {
-  APIGatewayProxyEventV2, APIGatewayProxyResult, APIGatewayProxyWithCognitoAuthorizerEvent, Handler,
+  APIGatewayProxyEventV2, APIGatewayProxyResult, Handler,
 } from 'aws-lambda';
-import { logger, middleware } from '@syuji6051/zac-job-library';
+import { logger, middleware, services } from '@syuji6051/zac-job-library';
 
 import { container, TYPES } from '@/src/providers/container';
 import { Zac as UseCase } from '@/src/usecases/zac';
@@ -32,33 +32,32 @@ export const registerWorks: Handler = async (
 });
 
 export const getWorkCodeList: Handler = async (
-  event: APIGatewayProxyWithCognitoAuthorizerEvent,
-): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
+  event: APIGatewayProxyEventV2,
+): Promise<APIGatewayProxyResult> => {
+  await loadAsyncModules;
   logger.info(JSON.stringify(event));
-  const { requestContext: { authorizer }, queryStringParameters } = event;
 
-  return (async () => container.get<UseCase>(TYPES.USECASE_ZAC).getWorkCodeList(
-    new GetWorkCodeListInput(authorizer, queryStringParameters),
-    new GetWorkCodeListOutput(),
-  ))()
-    .catch((err) => middleware.lambdaErrorHandler(err))
-    .finally(() => {
-      logger.info('createBaseWorks function end');
-    });
-});
+  const res = await new services.WebApplication(
+    'getWorkCodeList',
+    container.get<UseCase>(TYPES.USECASE_ZAC).getWorkCodeList(
+      new GetWorkCodeListInput(event),
+      new GetWorkCodeListOutput(),
+    ),
+  ).run(event);
+  return res;
+};
 
 export const setWorkCodeList: Handler = async (
-  event: APIGatewayProxyWithCognitoAuthorizerEvent,
-): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
+  event: APIGatewayProxyEventV2,
+): Promise<APIGatewayProxyResult> => {
+  await loadAsyncModules;
   logger.info(JSON.stringify(event));
-  const { requestContext: { authorizer }, body } = event;
 
-  return (async () => container.get<UseCase>(TYPES.USECASE_ZAC).setWorkCodeList(
-    new SetWorkCodeListInput(authorizer, body),
-    new VoidOutput(),
-  ))()
-    .catch((err) => middleware.lambdaErrorHandler(err))
-    .finally(() => {
-      logger.info('createBaseWorks function end');
-    });
-});
+  return new services.WebApplication(
+    'setWorkCodeList',
+    container.get<UseCase>(TYPES.USECASE_ZAC).setWorkCodeList(
+      new SetWorkCodeListInput(event),
+      new VoidOutput(),
+    ),
+  ).run(event);
+};
