@@ -26,8 +26,7 @@ export default class Users implements IUsers {
   }
 
   public async create(
-    input: UserCreateInput,
-    output: UserCreateOutput,
+    input: UserCreateInput, output: UserCreateOutput,
   ): Promise<APIGatewayProxyResult> {
     await this.store.create(
       input.getUserName(), input.getPassword(),
@@ -48,7 +47,6 @@ export default class Users implements IUsers {
     input: GetUserInfoInput, output: GetUserInfoOutput,
   ): Promise<APIGatewayProxyResult> {
     const userId = input.getUserName();
-    console.log(userId);
     const userInfo = await this.store.getUserInfo(userId);
     return output.success(userInfo);
   }

@@ -20,8 +20,10 @@ export interface UserInfo {
   userId: string;
   obcTenantId?: string | null;
   obcUserId?: string | null;
+  obcPassword?: string | null;
   zacTenantId?: string | null;
   zacUserId?: string | null;
+  zacPassword?: string | null;
   slackUserName?: string | null;
 }
 

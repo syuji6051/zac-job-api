@@ -45,12 +45,8 @@ export default class Users implements IUsers {
   }
 
   public async getUserInfo(userId: string): Promise<UserInfo> {
-    const {
-      obcTenantId, obcUserId, zacTenantId, zacUserId, slackUserName,
-    } = await this.userAttributes.get(userId);
-    return {
-      userId, obcTenantId, obcUserId, zacTenantId, zacUserId, slackUserName,
-    };
+    const user = await this.userAttributes.get(userId);
+    return user;
   }
 
   public async setAttribute(userAttributes: UserAttributesRecord) {

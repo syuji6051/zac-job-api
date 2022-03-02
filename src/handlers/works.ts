@@ -1,13 +1,12 @@
 import {
   APIGatewayProxyEventV2, APIGatewayProxyResult, Handler,
 } from 'aws-lambda';
-import { logger, middleware } from '@syuji6051/zac-job-library';
+import { logger, middleware, services } from '@syuji6051/zac-job-library';
 
 import { container, TYPES } from '@/src/providers/container';
 import { Works as UseCase } from '@/src/usecases/works';
 import {
-  WorkInput,
-  WorkListInput,
+  PunchWorkInput, WorkListInput,
 } from '@/src/adapters/http/request/works';
 import {
   WorkListOutput, WorkClockVoidOutput,
@@ -51,66 +50,78 @@ export const workList: Handler = async (
     });
 });
 
-export const clockIn: Handler = async (
+export const punchWork: Handler = async (
   event: APIGatewayProxyEventV2,
-): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
-  logger.info(event);
-  const { requestContext: { authorizer } } = event;
-  return (async () => container.get<UseCase>(TYPES.USECASE_WORKS)
-    .clockIn(
-      new WorkInput(authorizer),
-      new WorkClockVoidOutput(),
-    ))()
-    .catch((err) => middleware.lambdaErrorHandler(err))
-    .finally(() => {
-      logger.info('clockIn function end');
-    });
+): Promise<APIGatewayProxyResult> => loadAsyncModules.then(async () => {
+  const res = await new services.WebApplication(
+    'punchWork',
+    container.get<UseCase>(TYPES.USECASE_WORKS).punchWork(
+      new PunchWorkInput(event), new WorkClockVoidOutput(),
+    ),
+  ).run(event);
+  return res;
 });
 
-export const clockOut: Handler = async (
-  event: APIGatewayProxyEventV2,
-): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
-  logger.info(event);
-  const { requestContext: { authorizer } } = event;
-  return (async () => container.get<UseCase>(TYPES.USECASE_WORKS)
-    .clockOut(
-      new WorkInput(authorizer),
-      new WorkClockVoidOutput(),
-    ))()
-    .catch((err) => middleware.lambdaErrorHandler(err))
-    .finally(() => {
-      logger.info('clockOut function end');
-    });
-});
+// export const clockIn: Handler = async (
+//   event: APIGatewayProxyEventV2,
+// ): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
+//   logger.info(event);
+//   const { requestContext: { authorizer } } = event;
+//   return (async () => container.get<UseCase>(TYPES.USECASE_WORKS)
+//     .clockIn(
+//       new WorkInput(authorizer),
+//       new WorkClockVoidOutput(),
+//     ))()
+//     .catch((err) => middleware.lambdaErrorHandler(err))
+//     .finally(() => {
+//       logger.info('clockIn function end');
+//     });
+// });
 
-export const goOut: Handler = async (
-  event: APIGatewayProxyEventV2,
-): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
-  logger.info(event);
-  const { requestContext: { authorizer } } = event;
-  return (async () => container.get<UseCase>(TYPES.USECASE_WORKS)
-    .goOut(
-      new WorkInput(authorizer),
-      new WorkClockVoidOutput(),
-    ))()
-    .catch((err) => middleware.lambdaErrorHandler(err))
-    .finally(() => {
-      logger.info('goOut function end');
-    });
-});
+// export const clockOut: Handler = async (
+//   event: APIGatewayProxyEventV2,
+// ): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
+//   logger.info(event);
+//   const { requestContext: { authorizer } } = event;
+//   return (async () => container.get<UseCase>(TYPES.USECASE_WORKS)
+//     .clockOut(
+//       new WorkInput(authorizer),
+//       new WorkClockVoidOutput(),
+//     ))()
+//     .catch((err) => middleware.lambdaErrorHandler(err))
+//     .finally(() => {
+//       logger.info('clockOut function end');
+//     });
+// });
 
-export const goReturn: Handler = async (
-  event: APIGatewayProxyEventV2,
-): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
-  logger.info(event);
-  const { requestContext: { authorizer } } = event;
-  return (async () => container.get<UseCase>(TYPES.USECASE_WORKS)
-    .goReturn(
-      new WorkInput(authorizer),
-      new WorkClockVoidOutput(),
-    ))()
-    .catch((err) => middleware.lambdaErrorHandler(err))
-    .finally(() => {
-      logger.info('goReturn function end');
-    });
-});
+// export const goOut: Handler = async (
+//   event: APIGatewayProxyEventV2,
+// ): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
+//   logger.info(event);
+//   const { requestContext: { authorizer } } = event;
+//   return (async () => container.get<UseCase>(TYPES.USECASE_WORKS)
+//     .goOut(
+//       new WorkInput(authorizer),
+//       new WorkClockVoidOutput(),
+//     ))()
+//     .catch((err) => middleware.lambdaErrorHandler(err))
+//     .finally(() => {
+//       logger.info('goOut function end');
+//     });
+// });
+
+// export const goReturn: Handler = async (
+//   event: APIGatewayProxyEventV2,
+// ): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
+//   logger.info(event);
+//   const { requestContext: { authorizer } } = event;
+//   return (async () => container.get<UseCase>(TYPES.USECASE_WORKS)
+//     .goReturn(
+//       new WorkInput(authorizer),
+//       new WorkClockVoidOutput(),
+//     ))()
+//     .catch((err) => middleware.lambdaErrorHandler(err))
+//     .finally(() => {
+//       logger.info('goReturn function end');
+//     });
+// });

@@ -25,8 +25,12 @@ export class GetUsersListOutput implements IGetUsersListOutput {
 }
 
 export class GetUserInfoOutput implements IGetUserInfoOutput {
-  public success(userInfo: UserInfo): APIGatewayProxyResult {
-    return views.success(snakecaseKeys(userInfo));
+  public success({
+    userId, obcUserId, obcTenantId, zacUserId, zacTenantId, slackUserName,
+  }: UserInfo): APIGatewayProxyResult {
+    return views.success(snakecaseKeys({
+      userId, obcUserId, obcTenantId, zacUserId, zacTenantId, slackUserName,
+    }));
   }
 }
 

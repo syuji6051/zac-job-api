@@ -1,6 +1,21 @@
 /* eslint-disable camelcase */
 export type WorkType = 'clockIn' | 'clockOut' | 'goOut' | 'returned'
 
+export interface PunchWorkInput {
+  userId: string
+  obcTenantId: string
+  obcUserId: string
+  obcPassword: string
+  workType: WorkType
+}
+
+export interface PunchWork {
+  workType: WorkType
+}
+export interface PunchWorkRequest {
+  work_type: WorkType
+}
+
 export interface Work {
   clockIn: string;
   clockOut: string;
