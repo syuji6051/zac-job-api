@@ -2,7 +2,7 @@
 import express from 'express';
 import { middleware } from '@syuji6051/zac-job-library';
 import {
-  create, getUsersList, putZacInfo, putObcInfo, getUserInfo, getIamUserInfo,
+  create, getUsersList, putZacInfo, putObcInfo, getUserInfo,
 } from '@/src/handlers/users';
 
 const router = express.Router();
@@ -10,8 +10,6 @@ const router = express.Router();
 router.post('/user', middleware.lambdaDriver(create));
 router.get('/admin/users/list', middleware.apiGatewayV2EventGenerator());
 router.get('/admin/users/list', middleware.lambdaDriver(getUsersList));
-router.get('/admin/users/user-info', middleware.apiGatewayV2EventGenerator());
-router.get('/admin/users/user-info', middleware.lambdaDriver(getIamUserInfo));
 router.get('/users/user-info', middleware.apiGatewayV2EventGenerator());
 router.get('/users/user-info', middleware.lambdaDriver(getUserInfo));
 router.put('/users/user-info/zac', middleware.apiGatewayV2EventGenerator());
