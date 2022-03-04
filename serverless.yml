@@ -23,7 +23,7 @@ provider:
         identitySource: $request.header.Authorization
         issuerUrl: https://cognito-idp.#{AWS::Region}.amazonaws.com/ap-northeast-1_9grJYLXFS
         audience:
-          - 6l0isreofv92k8g27t274l37ft
+          - 7c29ki74372ne48hcegh6p50ml
 plugins:
   - serverless-pseudo-parameters
 
