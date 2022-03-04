@@ -58,9 +58,6 @@ functions:
   WorkListSync:
     name: zac-job-api-work-list-sync-${opt:stage}
     handler: dist/handlers/works.workSync
-    vpc:
-      subnetIds: subnet-09e40f8637f9139f0
-      securityGroupIds: sg-0fcd4bf6bd4373a7d
     events:
       - httpApi:
           path: /works/sync
@@ -70,9 +67,6 @@ functions:
   WorkList:
     name: zac-job-api-work-list-${opt:stage}
     handler: dist/handlers/works.workList
-    vpc:
-      subnetIds: subnet-09e40f8637f9139f0
-      securityGroupIds: sg-0fcd4bf6bd4373a7d
     events:
       - httpApi:
           path: /works
@@ -111,16 +105,6 @@ functions:
           method: get
           authorizer:
             name: cognitoJwtAuthorizer
-  AdminUserInfo:
-    name: zac-job-api-admin-get-user-info-${opt:stage}
-    handler: dist/handlers/users.getIamUserInfo
-    role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-lambda-role-${opt:stage}
-    events:
-      - httpApi:
-          path: /admin/users/user-info
-          method: get
-          authorizer:
-            type: aws_iam
   GetUserInfo:
     name: zac-job-api-get-user-info-${opt:stage}
     handler: dist/handlers/users.getUserInfo
