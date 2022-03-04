@@ -5,7 +5,7 @@ import { APIGatewayProxyResult } from 'aws-lambda';
 import { views } from '@syuji6051/zac-job-library';
 
 import {
-  WorkListOutput as IWorkListOutput,
+  GetWorkListOutput as IGetWorkListOutput,
   WorkClockVoidOutput as IWorkClockVoidOutput,
 } from '@/src/usecases/outputs/works';
 import { WorkRecord } from '@/src/entities/dynamodb/works';
@@ -13,7 +13,7 @@ import { WorkRecord } from '@/src/entities/dynamodb/works';
 dayjs.extend(timezone);
 dayjs.extend(utc);
 dayjs.tz.setDefault('Asia/Tokyo');
-export class WorkListOutput implements IWorkListOutput {
+export class GetWorkListOutput implements IGetWorkListOutput {
   public success(works: WorkRecord[]): APIGatewayProxyResult {
     return views.success(works
       .filter((work) => work.clockIn || work.clockOut)

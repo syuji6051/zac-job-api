@@ -1,15 +1,15 @@
 import {
   APIGatewayProxyEventV2, APIGatewayProxyResult, Handler,
 } from 'aws-lambda';
-import { logger, middleware, services } from '@syuji6051/zac-job-library';
+import { logger, services } from '@syuji6051/zac-job-library';
 
 import { container, TYPES } from '@/src/providers/container';
 import { Works as UseCase } from '@/src/usecases/works';
 import {
-  PunchWorkInput, WorkListInput,
+  PunchWorkInput, GetWorkListInput, SyncObcWorksInput,
 } from '@/src/adapters/http/request/works';
 import {
-  WorkListOutput, WorkClockVoidOutput,
+  GetWorkListOutput, WorkClockVoidOutput,
 } from '@/src/adapters/http/response/works';
 import { seriesLoadAsync } from '@/src/helper/container';
 import { asyncAsmContainerModule } from '@/src/modules/common';
@@ -20,39 +20,38 @@ const loadAsyncModules = seriesLoadAsync([
 
 export const workSync: Handler = async (
   event: APIGatewayProxyEventV2,
-): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
+): Promise<APIGatewayProxyResult> => {
+  await loadAsyncModules;
   logger.info(JSON.stringify(event));
-  const { requestContext: { authorizer }, queryStringParameters } = event;
 
-  return (async () => container.get<UseCase>(TYPES.USECASE_WORKS).workSync(
-    new WorkListInput(authorizer, queryStringParameters),
-    new WorkClockVoidOutput(),
-  ))()
-    .catch((err) => middleware.lambdaErrorHandler(err))
-    .finally(() => {
-      logger.info('workSync function end');
-    });
-});
+  const res = await new services.WebApplication(
+    'SyncWorkList',
+    container.get<UseCase>(TYPES.USECASE_WORKS).workSync(
+      new SyncObcWorksInput(event), new WorkClockVoidOutput(),
+    ),
+  ).run(event);
+  return res;
+};
 
 export const workList: Handler = async (
   event: APIGatewayProxyEventV2,
-): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
+): Promise<APIGatewayProxyResult> => {
+  await loadAsyncModules;
   logger.info(JSON.stringify(event));
-  const { requestContext: { authorizer }, queryStringParameters } = event;
 
-  return (async () => container.get<UseCase>(TYPES.USECASE_WORKS).workList(
-    new WorkListInput(authorizer, queryStringParameters),
-    new WorkListOutput(),
-  ))()
-    .catch((err) => middleware.lambdaErrorHandler(err))
-    .finally(() => {
-      logger.info('workSync function end');
-    });
-});
+  const res = await new services.WebApplication(
+    'GetWorkList',
+    container.get<UseCase>(TYPES.USECASE_WORKS).getWorkList(
+      new GetWorkListInput(event), new GetWorkListOutput(),
+    ),
+  ).run(event);
+  return res;
+};
 
 export const punchWork: Handler = async (
   event: APIGatewayProxyEventV2,
-): Promise<APIGatewayProxyResult> => loadAsyncModules.then(async () => {
+): Promise<APIGatewayProxyResult> => {
+  await loadAsyncModules;
   const res = await new services.WebApplication(
     'punchWork',
     container.get<UseCase>(TYPES.USECASE_WORKS).punchWork(
@@ -60,4 +59,4 @@ export const punchWork: Handler = async (
     ),
   ).run(event);
   return res;
-});
+};

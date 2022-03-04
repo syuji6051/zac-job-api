@@ -1,6 +1,14 @@
 /* eslint-disable camelcase */
 export type WorkType = 'clockIn' | 'clockOut' | 'goOut' | 'returned'
 
+export interface SyncObcWorksInput {
+  userId: string
+  obcTenantId: string
+  obcUserId: string
+  obcPassword: string
+  period: number
+}
+
 export interface PunchWorkInput {
   userId: string
   obcTenantId: string
@@ -29,10 +37,6 @@ export interface Work {
   day: string;
 }
 
-export interface WorkSyncRequestParameter {
+export interface SyncObcWorksRequest {
   year_month: string
-}
-
-export interface WorkSyncRequest {
-  yearMonth: string
 }

@@ -1,42 +1,40 @@
-import { APIGatewayProxyEventQueryStringParameters, APIGatewayProxyEventV2 } from 'aws-lambda';
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { validation, errors } from '@syuji6051/zac-job-library';
 import camelcaseKeys from 'camelcase-keys';
 
-import { WorkListInput as IWorkListInput } from '@/src/usecases/inputs/works';
-import { obcPunchWorkRequestFunc, workSyncRequestFunc } from '@/src/validations/works';
-import { PunchWork, WorkSyncRequest } from '@/src/entities/works';
+import { SyncObcWorksInput as ISyncObcWorksInput, GetWorkListInput as IGetWorkListInput } from '@/src/usecases/inputs/works';
+import { obcPunchWorkRequestFunc, syncObcWorksRequestFunc } from '@/src/validations/works';
+import { PunchWork } from '@/src/entities/works';
 import { APIGatewayProxyEventV2Authorizer } from '@/src/entities/authorizer';
 import { EventV2Authorizer } from '@/src/adapters/http/request/authorizer';
 
-export class WorkInput extends EventV2Authorizer {
-  protected authorizer?: APIGatewayProxyEventV2Authorizer;
+export class SyncObcWorksInput extends EventV2Authorizer implements ISyncObcWorksInput {
+  private yearMonth: number;
 
-  public getUserId(): string {
-    return this.getUserName();
+  public constructor(event: APIGatewayProxyEventV2) {
+    const { requestContext: { authorizer }, queryStringParameters: query = {} } = event;
+    super(authorizer);
+    validation.check(syncObcWorksRequestFunc, query);
+    this.yearMonth = Number(query.year_month);
+  }
+
+  getYearMonth() {
+    return this.yearMonth;
   }
 }
 
-export class WorkListInput extends WorkInput implements IWorkListInput {
-  private workSyncRequest: WorkSyncRequest;
+export class GetWorkListInput extends EventV2Authorizer implements IGetWorkListInput {
+  private yearMonth: number;
 
-  public constructor(
-    authorizer: APIGatewayProxyEventV2Authorizer | undefined,
-    query: APIGatewayProxyEventQueryStringParameters | null = {},
-  ) {
+  public constructor(event: APIGatewayProxyEventV2) {
+    const { requestContext: { authorizer }, queryStringParameters: query = {} } = event;
     super(authorizer);
-    try {
-      validation.check(workSyncRequestFunc, query);
-    } catch (err) {
-      if (err instanceof Error) {
-        throw new errors.ValidationError(err.message);
-      }
-      throw err;
-    }
-    this.workSyncRequest = camelcaseKeys(query!) as unknown as WorkSyncRequest;
+    validation.check(syncObcWorksRequestFunc, query);
+    this.yearMonth = Number(query.year_month);
   }
 
-  public getYearMonth(): string {
-    return this.workSyncRequest.yearMonth;
+  getYearMonth() {
+    return this.yearMonth;
   }
 }
 
@@ -45,9 +43,7 @@ export class PunchWorkInput extends EventV2Authorizer {
 
   data: PunchWork;
 
-  public constructor(
-    event: APIGatewayProxyEventV2,
-  ) {
+  public constructor(event: APIGatewayProxyEventV2) {
     const { requestContext: { authorizer }, body } = event;
     super(authorizer);
     if (body == null) throw new errors.ValidationError('body is required');

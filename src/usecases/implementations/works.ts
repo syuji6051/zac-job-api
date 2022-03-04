@@ -4,10 +4,11 @@ import { APIGatewayProxyResult } from 'aws-lambda';
 import { Works as WorkStore } from '@/src/usecases/stores/works';
 import { Users as UserStore } from '@/src/usecases/stores/users';
 import { Works as IWorks } from '@/src/usecases/works';
-import { WorkListOutput, WorkClockVoidOutput } from '@/src/adapters/http/response/works';
-import { WorkListInput, PunchWorkInput } from '@/src/usecases/inputs/works';
+import { GetWorkListOutput, WorkClockVoidOutput } from '@/src/adapters/http/response/works';
+import { GetWorkListInput, PunchWorkInput } from '@/src/usecases/inputs/works';
 import { container, TYPES } from '@/src/providers/container';
-import { publishPunchWork } from '@/src/helper/sns';
+import { publishPunchWork, syncObcWorks } from '@/src/helper/sns';
+import { SyncObcWorksInput } from '@/src/adapters/http/request/works';
 
 @injectable()
 export default class Works implements IWorks {
@@ -21,20 +22,26 @@ export default class Works implements IWorks {
   }
 
   public async workSync(
-    input: WorkListInput, output: WorkClockVoidOutput,
+    input: SyncObcWorksInput, output: WorkClockVoidOutput,
   ): Promise<APIGatewayProxyResult> {
-    const userId = input.getUserId();
-    const works = await this.workStore.obcWorkList(userId, input.getYearMonth());
+    const userId = input.getUserName();
+    const period = input.getYearMonth();
+    const { obcTenantId, obcUserId, obcPassword } = await this.userStore.getUserInfo(userId);
 
-    await this.workStore.put(userId, works);
+    if (obcTenantId == null || obcUserId == null || obcPassword == null) {
+      throw new Error('content of user-info is insufficient');
+    }
+    await syncObcWorks({
+      userId, obcTenantId, obcUserId, obcPassword, period,
+    });
     return output.success();
   }
 
-  public async workList(
-    input: WorkListInput, output: WorkListOutput,
+  public async getWorkList(
+    input: GetWorkListInput, output: GetWorkListOutput,
   ): Promise<APIGatewayProxyResult> {
-    const userId = input.getUserId();
-    const works = await this.workStore.workList(userId, input.getYearMonth());
+    const userId = input.getUserName();
+    const works = await this.workStore.getWorkList(userId, input.getYearMonth());
     return output.success(works);
   }
 
@@ -44,7 +51,7 @@ export default class Works implements IWorks {
     const userId = input.getUserName();
     const { workType } = input.getContent();
     const { obcTenantId, obcUserId, obcPassword } = await this.userStore.getUserInfo(userId);
-    console.log(obcTenantId, obcUserId, obcPassword);
+
     if (obcTenantId == null || obcUserId == null || obcPassword == null) {
       throw new Error('content of user-info is insufficient');
     }

@@ -1,12 +1,12 @@
 import { getAjv } from '@syuji6051/zac-job-library';
-import workSyncRequest from '@/src/validations/schema/work-sync-request-parameter.json';
-import ObcPunchWorkRequestJson from '@/src/validations/schema/ObcPunchWorkRequest.json';
+import SyncObcWorksRequestJson from '@/src/validations/schema/SyncObcWorksRequest.json';
+import ObcPunchWorkRequestJson from '@/src/validations/schema/PunchWorkRequest.json';
 
 const ajv = getAjv({ removeAdditional: true });
-const workSyncRequestFunc = ajv.compile(workSyncRequest);
+const syncObcWorksRequestFunc = ajv.compile(SyncObcWorksRequestJson);
 
 const obcPunchWorkRequestFunc = ajv.compile(ObcPunchWorkRequestJson);
 export {
-  workSyncRequestFunc,
+  syncObcWorksRequestFunc,
   obcPunchWorkRequestFunc,
 };

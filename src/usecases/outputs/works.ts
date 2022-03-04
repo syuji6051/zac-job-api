@@ -2,7 +2,7 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { WorkRecord } from '@/src/entities/dynamodb/works';
 
-export interface WorkListOutput {
+export interface GetWorkListOutput {
   success(works: WorkRecord[]): APIGatewayProxyResult;
 }
 
