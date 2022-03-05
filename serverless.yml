@@ -16,6 +16,7 @@ provider:
     STAGE: ${opt:stage, 'dev'}
     PUPPETEER_API_SNS_TOPIC: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:zac-api-bot-message-${opt:stage}
     PUPPETEER_PUNCH_WORK_SNS_TOPIC: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:puppeteer-punch-work-${opt:stage}
+    PUPPETEER_SYNC_OBC_WORKS_SNS_TOPIC: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:puppeteer-sync-obc-works-${opt:stage}
   httpApi:
     cors: true
     authorizers:
