@@ -4,7 +4,7 @@ import {
 
 const { STAGE } = process.env;
 
-@table(`zac-job-work-results-table-${STAGE}`)
+@table(`zac-job-work-results-${STAGE}`)
 // eslint-disable-next-line import/prefer-default-export
 export class WorkRecord {
   @hashKey({
