@@ -2,7 +2,6 @@ import { inject, injectable } from 'inversify';
 
 import { Users as IUsers } from '@/src/usecases/stores/users';
 import UsersTable from '@/src/cognito/users';
-import Puppeteer from '@/src/puppeteer/zac';
 import { GetUsersListOutput, UserInfo } from '@/src/entities/users';
 import { TYPES } from '@/src/providers/container';
 import { SecretsValues } from '@/src/entities/environments';
@@ -13,15 +12,12 @@ import { UserAttributesRecord } from '@/src/entities/dynamodb/user-attributes';
 export default class Users implements IUsers {
   private cognito: UsersTable;
 
-  private puppeteer: Puppeteer;
-
   private userAttributes: UserAttributes;
 
   constructor(
     @inject(TYPES.ASM_VALUES) private secrets: SecretsValues,
   ) {
     this.cognito = new UsersTable(secrets.COGNITO_USER_POOL);
-    this.puppeteer = new Puppeteer();
     this.userAttributes = new UserAttributes();
   }
 

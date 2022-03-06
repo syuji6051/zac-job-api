@@ -5,7 +5,7 @@ import { WorkClockVoidOutput } from '@/src/usecases/outputs/works';
 import { GetWorkCodeListOutput, VoidOutput } from '@/src/usecases/outputs/zac';
 
 export interface Zac {
-  registerWorks(
+  linkAutoZacWorks(
     input: RegisterWorksInput, output: WorkClockVoidOutput
   ): Promise<APIGatewayProxyResult>;
 

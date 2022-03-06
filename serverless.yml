@@ -17,6 +17,7 @@ provider:
     PUPPETEER_API_SNS_TOPIC: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:zac-api-bot-message-${opt:stage}
     PUPPETEER_PUNCH_WORK_SNS_TOPIC: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:puppeteer-punch-work-${opt:stage}
     PUPPETEER_SYNC_OBC_WORKS_SNS_TOPIC: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:puppeteer-sync-obc-works-${opt:stage}
+    PUPPETEER_ZAC_WORK_SNS_TOPIC: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:puppeteer-zac-work-register-${opt:stage}
   httpApi:
     cors: true
     authorizers:
@@ -84,15 +85,11 @@ functions:
           authorizer:
             name: cognitoJwtAuthorizer
   ZacWork:
-    name: zac-job-api-zac-work-${opt:stage}
-    handler: dist/handlers/zac.registerWorks
-    role: arn:aws:iam::#{AWS::AccountId}:role/zac-job-work-table-read-write-role-${opt:stage}
-    vpc:
-      subnetIds: subnet-09e40f8637f9139f0
-      securityGroupIds: sg-0fcd4bf6bd4373a7d
+    name: zac-job-api-zac-work-auto-link-${opt:stage}
+    handler: dist/handlers/zac.linkAutoZacWorks
     events:
       - httpApi:
-          path: /zac/works
+          path: /zac/works/auto-link
           method: post
           authorizer:
             name: cognitoJwtAuthorizer

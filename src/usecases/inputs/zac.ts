@@ -1,15 +1,15 @@
+import { EventV2Authorizer } from '@/src/adapters/http/request/authorizer';
 import { WorkCode } from '@/src/entities/zac';
-import { Authorizer } from '@/src/usecases/inputs/users';
 
-export interface RegisterWorksInput extends Authorizer {
+export interface RegisterWorksInput extends EventV2Authorizer {
   getDay(): Date;
 }
 
-export interface GetWorkCodeListInput extends Authorizer {
+export interface GetWorkCodeListInput extends EventV2Authorizer {
   getYearMonth(): number;
 }
 
-export interface SetWorkCodeListInput extends Authorizer {
+export interface SetWorkCodeListInput extends EventV2Authorizer {
   getYearMonth(): number;
   getWorkCodeList(): WorkCode[]
 }

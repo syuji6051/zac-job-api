@@ -7,7 +7,7 @@ import { Works as IWorks } from '@/src/usecases/works';
 import { GetWorkListOutput, WorkClockVoidOutput } from '@/src/adapters/http/response/works';
 import { GetWorkListInput, PunchWorkInput } from '@/src/usecases/inputs/works';
 import { container, TYPES } from '@/src/providers/container';
-import { publishPunchWork, syncObcWorks } from '@/src/helper/sns';
+import { publishPunchWork, publishSyncObcWorks } from '@/src/helper/sns';
 import { SyncObcWorksInput } from '@/src/adapters/http/request/works';
 
 @injectable()
@@ -31,7 +31,7 @@ export default class Works implements IWorks {
     if (obcTenantId == null || obcUserId == null || obcPassword == null) {
       throw new Error('content of user-info is insufficient');
     }
-    await syncObcWorks({
+    await publishSyncObcWorks({
       userId, obcTenantId, obcUserId, obcPassword, period,
     });
     return output.success();

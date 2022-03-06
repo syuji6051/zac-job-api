@@ -1,4 +1,4 @@
-import { APIGatewayProxyEventQueryStringParameters, APIGatewayProxyEventV2 } from 'aws-lambda';
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
@@ -18,26 +18,13 @@ export class RegisterWorkInput extends EventV2Authorizer {
 
   registerWorks: RegisterWorksRequest;
 
-  public constructor(
-    authorizer?: APIGatewayProxyEventV2Authorizer,
-    query: APIGatewayProxyEventQueryStringParameters | null = {},
-  ) {
+  public constructor(event: APIGatewayProxyEventV2) {
+    const { requestContext: { authorizer }, queryStringParameters: query = {} } = event;
     super(authorizer);
-    try {
-      console.log(query);
-      validation.check(registerWorks, query);
-    } catch (err) {
-      if (err instanceof Error) {
-        throw new errors.ValidationError(err.message);
-      }
-    }
+    validation.check(registerWorks, query);
     this.registerWorks = {
       day: dayjs.utc(query!.day, 'YYYY/MM/DD').toDate(),
     };
-  }
-
-  public getUserId(): string {
-    return this.getUserName();
   }
 
   public getDay() {

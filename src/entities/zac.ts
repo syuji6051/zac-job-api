@@ -3,8 +3,11 @@ import { ZacRegisterParams } from '@syuji6051/zac-client';
 
 // export interface ZacWorkRegisterRequestBody extends ZacRegisterParams {}
 
-export interface ZacWork extends ZacRegisterParams {
+export interface RegisterZacWorkInput extends ZacRegisterParams {
   userId: string
+  zacTenantId: string
+  zacUserId: string
+  zacPassword: string
 }
 
 export interface RegisterWorksRequestParameter {

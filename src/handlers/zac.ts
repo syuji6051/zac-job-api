@@ -1,7 +1,7 @@
 import {
   APIGatewayProxyEventV2, APIGatewayProxyResult, Handler,
 } from 'aws-lambda';
-import { logger, middleware, services } from '@syuji6051/zac-job-library';
+import { logger, services } from '@syuji6051/zac-job-library';
 
 import { container, TYPES } from '@/src/providers/container';
 import { Zac as UseCase } from '@/src/usecases/zac';
@@ -15,21 +15,18 @@ const loadAsyncModules = seriesLoadAsync([
   asyncAsmContainerModule,
 ]);
 
-export const registerWorks: Handler = async (
+export const linkAutoZacWorks: Handler = async (
   event: APIGatewayProxyEventV2,
-): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
-  logger.info(JSON.stringify(event));
-  const { requestContext: { authorizer }, queryStringParameters } = event;
-
-  return (async () => container.get<UseCase>(TYPES.USECASE_ZAC).registerWorks(
-    new RegisterWorkInput(authorizer, queryStringParameters),
-    new WorkClockVoidOutput(),
-  ))()
-    .catch((err) => middleware.lambdaErrorHandler(err))
-    .finally(() => {
-      logger.info('createBaseWorks function end');
-    });
-});
+): Promise<APIGatewayProxyResult> => {
+  await loadAsyncModules;
+  const res = await new services.WebApplication(
+    'linkAutoZacWorks',
+    container.get<UseCase>(TYPES.USECASE_ZAC).linkAutoZacWorks(
+      new RegisterWorkInput(event), new WorkClockVoidOutput(),
+    ),
+  ).run(event);
+  return res;
+};
 
 export const getWorkCodeList: Handler = async (
   event: APIGatewayProxyEventV2,

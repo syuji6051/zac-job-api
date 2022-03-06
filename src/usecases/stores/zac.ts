@@ -1,8 +1,11 @@
 /* eslint-disable no-unused-vars */
-import { WorkCode, ZacWork } from '@/src/entities/zac';
+import { ZacRegisterParams } from '@syuji6051/zac-client';
+
+import { WorkCode } from '@/src/entities/zac';
+import { WorkRecord } from '@/src/entities/dynamodb/works';
 
 interface Zac {
-  register(props: ZacWork): Promise<void>;
+  convertToZacWork(inputDay: Date, work: WorkRecord, defaultWorkCode: string): ZacRegisterParams;
   getWorkCodeList(userId: string, yearMonth: number): Promise<WorkCode []>;
   setWorkCodeList(userId: string, yearMonth: number, workCodeList: WorkCode[]): Promise<void>;
 }
