@@ -84,11 +84,11 @@ functions:
           method: post
           authorizer:
             name: cognitoJwtAuthorizer
-  # ZacWorkAutoLink:
-  #   name: zac-job-api-zac-work-auto-link-${opt:stage}
-  #   handler: dist/handlers/zac.linkAutoZacWorks
-  #   environment:
-  #     PUPPETEER_REGISTER_ZAC_WORK_SNS_TOPIC: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:puppeteer-zac-work-register-${opt:stage}
+  ZacWorkAutoLink:
+    name: zac-job-api-zac-work-auto-link-${opt:stage}
+    handler: dist/handlers/zac.linkAutoZacWorks
+    environment:
+      PUPPETEER_REGISTER_ZAC_WORK_SNS_TOPIC: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:puppeteer-zac-work-register-${opt:stage}
     events:
       - httpApi:
           path: /zac/works/auto-link
