@@ -37,14 +37,16 @@ export default class Zac implements IZac {
     const workYearMonth = Number(dayjs.utc(day).format('YYYYMM'));
 
     const work = await this.workStore.get(userId, day);
-    const { zacTenantId, zacUserId, zacPassword } = await this.userStore.getUserInfo(userId);
+    const {
+      zacTenantId, zacUserId: zacLoginId, zacPassword,
+    } = await this.userStore.getUserInfo(userId);
     const defaultWorkCode = (await this.zacStore.getWorkCodeList(userId, workYearMonth))
       .find((code) => code.default)?.code;
     if (!defaultWorkCode) throw new Error('work code not found!');
 
     const zacWork = this.zacStore.convertToZacWork(day, work, defaultWorkCode);
 
-    if (zacTenantId == null || zacPassword == null || zacUserId == null) {
+    if (zacTenantId == null || zacPassword == null || zacLoginId == null) {
       throw new Error('content of user-info is insufficient');
     }
 
@@ -52,7 +54,7 @@ export default class Zac implements IZac {
       userId,
       zacTenantId,
       zacPassword,
-      zacUserId,
+      zacLoginId,
       ...zacWork,
     });
 

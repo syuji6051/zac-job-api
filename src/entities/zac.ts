@@ -6,7 +6,7 @@ import { ZacRegisterParams } from '@syuji6051/zac-client';
 export interface RegisterZacWorkInput extends ZacRegisterParams {
   userId: string
   zacTenantId: string
-  zacUserId: string
+  zacLoginId: string
   zacPassword: string
 }
 
