@@ -1,10 +1,10 @@
 import { inject, injectable } from 'inversify';
+import { secrets } from '@syuji6051/zac-job-interface';
 
 import { Users as IUsers } from '@/src/usecases/stores/users';
 import UsersTable from '@/src/cognito/users';
 import { GetUsersListOutput, UserInfo } from '@/src/entities/users';
 import { TYPES } from '@/src/providers/container';
-import { SecretsValues } from '@/src/entities/environments';
 import UserAttributes from '@/src/database/user-attributes';
 import { UserAttributesRecord } from '@/src/entities/dynamodb/user-attributes';
 
@@ -15,9 +15,9 @@ export default class Users implements IUsers {
   private userAttributes: UserAttributes;
 
   constructor(
-    @inject(TYPES.ASM_VALUES) private secrets: SecretsValues,
+    @inject(TYPES.ASM_VALUES) private secret: secrets.SecretsValues,
   ) {
-    this.cognito = new UsersTable(secrets.COGNITO_USER_POOL);
+    this.cognito = new UsersTable(secret.COGNITO_USER_POOL);
     this.userAttributes = new UserAttributes();
   }
 

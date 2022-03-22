@@ -18,7 +18,8 @@
     "@slack/oauth": "^2.3.0",
     "@slack/web-api": "^6.5.1",
     "@syuji6051/zac-client": "^1.2.2",
-    "@syuji6051/zac-job-library": "^1.0.31",
+    "@syuji6051/zac-job-interface": "^0.0.3",
+    "@syuji6051/zac-job-library": "^1.0.33",
     "ajv": "^6.12.6",
     "aws-sdk": "^2.805.0",
     "aws4": "^1.11.0",
@@ -32,7 +33,8 @@
     "inversify": "^5.0.1",
     "reflect-metadata": "^0.1.13",
     "snakecase-keys": "^4.0.2",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "zod": "^3.13.4"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.50",

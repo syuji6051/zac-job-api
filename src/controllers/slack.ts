@@ -13,6 +13,6 @@ router.post('/slack/auth', middleware.lambdaCognitoAuthorizerDriver(setUserAttri
 router.post('/slack/action-events', middleware.apiGatewayV2EventGenerator());
 router.post('/slack/action-events', middleware.lambdaCognitoAuthorizerDriver(actionEvents));
 
-router.post('/slack/bot/messages', middleware.snsEventGenerator());
-router.post('/slack/bot/messages', middleware.lambdaDriver(botMessage));
+router.post('/sns/slack/messages', middleware.snsEventGenerator());
+router.post('/sns/slack/messages', middleware.lambdaDriver(botMessage));
 export default router;

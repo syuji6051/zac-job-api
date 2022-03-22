@@ -1,15 +1,15 @@
 import { ChatPostMessageArguments, WebClient } from '@slack/web-api';
-import { SecretsValues } from '@/src/entities/environments';
+import { secrets } from '@syuji6051/zac-job-interface';
 import { logger } from '@syuji6051/zac-job-library';
 
 export default class Message {
   slack: WebClient;
 
-  secrets: SecretsValues;
+  secret: secrets.SecretsValues;
 
-  constructor(secrets: SecretsValues) {
-    this.secrets = secrets;
-    this.slack = new WebClient(secrets.SLACK_TOKEN);
+  constructor(secret: secrets.SecretsValues) {
+    this.secret = secret;
+    this.slack = new WebClient(secret.SLACK_TOKEN);
   }
 
   async sendMessage(options: ChatPostMessageArguments) {

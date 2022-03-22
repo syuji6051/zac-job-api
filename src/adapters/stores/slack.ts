@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
+import { secrets } from '@syuji6051/zac-job-interface';
 
 import { TYPES } from '@/src/providers/container';
-import { SecretsValues } from '@/src/entities/environments';
 import SlackUserInfo from '@/src/slack/user-info';
 import SlackMessage from '@/src/slack/message';
 import { Slack as ISlack } from '@/src/usecases/stores/slack';
@@ -14,10 +14,10 @@ export default class Slack implements ISlack {
   message: SlackMessage;
 
   constructor(
-    @inject(TYPES.ASM_VALUES) private secrets: SecretsValues,
+    @inject(TYPES.ASM_VALUES) private secret: secrets.SecretsValues,
   ) {
-    this.userInfo = new SlackUserInfo(secrets);
-    this.message = new SlackMessage(secrets);
+    this.userInfo = new SlackUserInfo(secret);
+    this.message = new SlackMessage(secret);
   }
 
   public async getUserInfo(code: string): Promise<UserInfoModel> {
@@ -32,9 +32,11 @@ export default class Slack implements ISlack {
     };
   }
 
-  public async sendMessage(token: string, channel: string, text: string) {
+  public async sendMessage(channel: string, text: string, token?: string) {
     await this.message.sendMessage({
-      channel, text,
+      channel,
+      text,
+      token: token === undefined ? this.secret.SLACK_TOKEN : token,
     });
   }
 }

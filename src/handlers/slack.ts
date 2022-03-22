@@ -57,7 +57,6 @@ export const botMessage: Handler = async (
   await (async () => container.get<UseCase>(TYPES.USECASE_SLACK).botMessage(
     new BotMessageInput(Records),
   ))()
-    .catch((err) => middleware.lambdaErrorHandler(err))
     .finally(() => {
       logger.info('botMessage function end');
     });

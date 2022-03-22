@@ -1,16 +1,16 @@
+import { SNSEventRecord } from 'aws-lambda';
+import { slack } from '@syuji6051/zac-job-interface';
 import { errors, logger, validation } from '@syuji6051/zac-job-library';
 
-import { SetUserAttributeRequest, EventActionRequest } from '@/src/entities/slack';
+import { SetUserAttributeRequest, EventActionRequest, zSetUserAttributeRequest } from '@/src/entities/slack';
 import {
   SetUserAttributeInput as ISetUserAttributeInput,
   ActionEventsInput as IActionEventsInput,
   BotMessageInput as IBotMessageInput,
 } from '@/src/usecases/inputs/slack';
 import { EventV2CognitoAuthorizer } from '@/src/adapters/http/request/authorizer';
-import { BotMessagesRequestValidationFunc, SetUserAttributeValidateFunc } from '@/src/validations/slack';
 import { APIGatewayProxyEventV2Authorizer } from '@/src/entities/authorizer';
-import { BotMessage } from '@/src/entities/sns';
-import { SNSEventRecord } from 'aws-lambda';
+import { PublishSnsToSlackMessages } from '@/src/entities/sns';
 
 // eslint-disable-next-line import/prefer-default-export
 export class SetUserAttributeInput
@@ -26,7 +26,7 @@ export class SetUserAttributeInput
       throw new errors.ValidationError('code is required');
     }
     const data = JSON.parse(body) as SetUserAttributeRequest;
-    validation.check(SetUserAttributeValidateFunc, data);
+    validation.check(zSetUserAttributeRequest, data);
     this.code = data.code;
   }
 
@@ -54,15 +54,15 @@ export class ActionEventsInput implements IActionEventsInput {
 }
 
 export class BotMessageInput implements IBotMessageInput {
-  input: BotMessage[];
+  input: PublishSnsToSlackMessages;
 
   constructor(body: SNSEventRecord[]) {
     const messages = body.map((event) => JSON.parse(event.Sns.Message));
-    validation.check(BotMessagesRequestValidationFunc, messages);
-    this.input = messages as BotMessage [];
+    const results = validation.check(slack.zPublishSnsToSlackMessage.array(), messages);
+    this.input = results;
   }
 
-  getInput(): BotMessage[] {
+  getInput(): PublishSnsToSlackMessages {
     return this.input;
   }
 }

@@ -1,5 +1,7 @@
 /* eslint-disable camelcase */
 
+import { z } from '@/../zac-job-interface/node_modules/zod/lib';
+
 export interface User {
   userName?: string;
   enabled?: boolean;
@@ -39,11 +41,13 @@ export interface ZacUserRequest {
   zac_password: string
 }
 
-export interface ZacInfo {
-  zacTenantId: string
-  zacUserId: string
-  zacPassword: string
-}
+export const zZacInfo = z.object({
+  zacTenantId: z.string(),
+  zacUserId: z.string(),
+  zacPassword: z.string(),
+});
+
+export type ZacInfo = z.infer<typeof zZacInfo>
 
 export interface ObcInfoRequest {
   obc_tenant_id: string
@@ -51,11 +55,14 @@ export interface ObcInfoRequest {
   obc_password: string
 }
 
-export interface ObcInfo {
-  obcTenantId: string
-  obcUserId: string
-  obcPassword: string
-}
+export const zObcInfo = z.object({
+  obcTenantId: z.string(),
+  obcUserId: z.string(),
+  obcPassword: z.string(),
+});
+
+export type ObcInfo = z.infer<typeof zObcInfo>
+
 export interface Attribute {
   tenantId: string
   userId: string

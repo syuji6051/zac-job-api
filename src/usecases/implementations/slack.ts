@@ -1,5 +1,6 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { injectable } from 'inversify';
+import { secrets } from '@syuji6051/zac-job-interface';
 import { errors } from '@syuji6051/zac-job-library';
 
 import { container, TYPES } from '@/src/providers/container';
@@ -9,9 +10,8 @@ import { Users as UserStore } from '@/src/usecases/stores/users';
 import { Works as WorkStore } from '@/src/usecases/stores/works';
 import { SetUserAttributeInput, ActionEventsInput, BotMessageInput } from '@/src/usecases/inputs/slack';
 import { SetUserAttributeOutput, ActionEventsOutput } from '@/src/usecases/outputs/slack';
-import { SecretsValues } from '@/src/entities/environments';
-import { publishBotMessage } from '@/src/helper/sns';
-import { choiceWorkMessage, getWorkTypeName } from '@/src/helper/slack';
+import { publishPunchWork } from '@/src/helper/sns';
+import { choiceWorkMessage, getWorkTypeName, sendSlackError } from '@/src/helper/slack';
 
 @injectable()
 export default class Slack implements ISlack {
@@ -21,10 +21,10 @@ export default class Slack implements ISlack {
 
   private work: WorkStore;
 
-  secrets: SecretsValues;
+  secrets: secrets.SecretsValues;
 
   constructor() {
-    this.secrets = container.get<SecretsValues>(TYPES.ASM_VALUES);
+    this.secrets = container.get<secrets.SecretsValues>(TYPES.ASM_VALUES);
     this.slack = container.get<SlackStore>(TYPES.STORE_SLACK);
     this.user = container.get<UserStore>(TYPES.STORE_USERS);
     this.work = container.get<WorkStore>(TYPES.STORE_WORKS);
@@ -48,8 +48,7 @@ export default class Slack implements ISlack {
   }
 
   public async actionEvents(
-    input: ActionEventsInput,
-    output: ActionEventsOutput,
+    input: ActionEventsInput, output: ActionEventsOutput,
   ): Promise<APIGatewayProxyResult> {
     const request = input.getRequest();
     if (this.secrets.SLACK_VERIFICATION_TOKEN !== request.token) {
@@ -58,9 +57,7 @@ export default class Slack implements ISlack {
 
     if (request.type === 'url_verification') {
       const { challenge } = request;
-      return output.success({
-        challenge,
-      });
+      return output.success({ challenge });
     }
 
     const {
@@ -70,26 +67,37 @@ export default class Slack implements ISlack {
     } = request;
 
     if (botId === undefined) {
-      const userInfo = await this.user.getUserFromSlackId(user);
-      if (userInfo === undefined) throw new Error('User not found');
-      const { userId } = userInfo;
       const workType = choiceWorkMessage(text);
-      if (workType) {
-        await publishBotMessage(channel, `${getWorkTypeName(workType)} 処理を受けつけました`);
-        await this.work.workPunch(userId, workType);
+      if (workType == null) {
+        return output.success({});
       }
+
+      const userInfo = await this.user.getUserFromSlackId(user);
+      if (userInfo === undefined) {
+        throw await sendSlackError(this.secrets, channel, 'OBCとSlackとの連携が完了していません');
+      }
+
+      const {
+        userId, slackAccessToken: token, obcTenantId, obcUserId, obcPassword,
+      } = userInfo;
+
+      if (obcTenantId == null || obcUserId == null || obcPassword == null) {
+        throw await sendSlackError(this.secrets, channel, 'OBC必須項目が足りていません');
+      }
+      await this.slack.sendMessage(channel, `${getWorkTypeName(workType)} 処理を受けつけました`);
+
+      await publishPunchWork({
+        userId, obcTenantId, obcUserId, obcPassword, token, channel, workType,
+      });
     }
     return output.success({});
   }
 
-  public async botMessage(
-    input: BotMessageInput,
-  ) {
-    const { SLACK_TOKEN } = this.secrets;
+  public async botMessage(input: BotMessageInput) {
     const messages = input.getInput();
-    for (const { chanel, message } of messages) {
+    for (const { chanel, message, token } of messages) {
       // eslint-disable-next-line no-await-in-loop
-      await this.slack.sendMessage(SLACK_TOKEN, chanel, message);
+      await this.slack.sendMessage(token, chanel, message);
     }
   }
 }

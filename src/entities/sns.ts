@@ -1,13 +1,9 @@
 /* eslint-disable camelcase */
+import { slack } from '@syuji6051/zac-job-interface';
 import { WorkType } from '@/src/entities/works';
 
 export interface WorkLink {
   work_type: WorkType
 }
 
-export type BotMessages = BotMessage [];
-
-export interface BotMessage {
-  chanel: string
-  message: string
-}
+export type PublishSnsToSlackMessages = slack.PublishSnsToSlackMessage [];

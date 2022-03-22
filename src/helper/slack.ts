@@ -1,4 +1,6 @@
 import { WorkType } from '@/src/entities/works';
+import { secrets } from '@syuji6051/zac-job-interface';
+import { services } from '@syuji6051/zac-job-library';
 
 const clockInRegXp = /^(出勤|:remote-syusya:).*/;
 const clockOutRegXp = /^(退勤|:remote-taisya:).*/;
@@ -37,7 +39,19 @@ const choiceWorkMessage = (text: string): WorkType | undefined => {
 
 const getWorkTypeName = (workType: WorkType): string => workTypeAttribute[workType].name;
 
+const sendSlackError = async (secret: secrets.SecretsValues, chanel: string, message: string) => {
+  await services.errors.SlackError.build(
+    secret.SNS_SLACK_MESSAGE_TOPIC,
+    {
+      token: secret.SLACK_TOKEN,
+      chanel,
+      message,
+    },
+  );
+};
+
 export {
   choiceWorkMessage,
   getWorkTypeName,
+  sendSlackError,
 };

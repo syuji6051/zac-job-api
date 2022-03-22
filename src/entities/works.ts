@@ -1,5 +1,9 @@
+import { z } from 'zod';
+
 /* eslint-disable camelcase */
-export type WorkType = 'clockIn' | 'clockOut' | 'goOut' | 'returned'
+export const zWorkType = z.enum(['clockIn', 'clockOut', 'goOut', 'returned']);
+
+export type WorkType = z.infer<typeof zWorkType>
 
 export interface SyncObcWorksInput {
   userId: string
@@ -14,12 +18,16 @@ export interface PunchWorkInput {
   obcTenantId: string
   obcUserId: string
   obcPassword: string
+  token?: string | null
+  channel?: string | null
   workType: WorkType
 }
 
-export interface PunchWork {
-  workType: WorkType
-}
+export const zPunchWork = z.object({
+  workType: zWorkType,
+});
+
+export type PunchWork = z.infer<typeof zPunchWork>
 export interface PunchWorkRequest {
   work_type: WorkType
 }
@@ -37,6 +45,8 @@ export interface Work {
   day: string;
 }
 
-export interface SyncObcWorksRequest {
-  year_month: string
-}
+export const zSyncObcWorksRequest = z.object({
+  yearMonth: z.string(),
+});
+
+export type SyncObcWorksRequest = z.infer<typeof zSyncObcWorksRequest>

@@ -1,5 +1,6 @@
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import { APIGatewayProxyResult } from 'aws-lambda';
+import { secrets } from '@syuji6051/zac-job-interface';
 
 import {
   UserCreateInput, GetUsersListInput, PutZacInfoInput, PutObcInfoInput, GetUserInfoInput,
@@ -10,19 +11,17 @@ import { container, TYPES } from '@/src/providers/container';
 import {
   UserCreateOutput, GetUsersListOutput, GetUserInfoOutput, PutZacInfoOutput, PutObcInfoOutput,
 } from '@/src/usecases/outputs/users';
-import { SecretsValues } from '@/src/entities/environments';
 import { encrypt } from '@syuji6051/zac-job-library';
 
 @injectable()
 export default class Users implements IUsers {
   private store: UserStore;
 
-  constructor(
-    // eslint-disable-next-line no-unused-vars
-    @inject(TYPES.ASM_VALUES) private secrets: SecretsValues,
-  ) {
+  private secrets: secrets.SecretsValues;
+
+  constructor() {
     this.store = container.get<UserStore>(TYPES.STORE_USERS);
-    // this.secrets = container.get<SecretsValues>(TYPES.ASM_VALUES);
+    this.secrets = container.get<secrets.SecretsValues>(TYPES.ASM_VALUES);
   }
 
   public async create(

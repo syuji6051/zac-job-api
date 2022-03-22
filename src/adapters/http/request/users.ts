@@ -7,8 +7,9 @@ import {
   PutZacInfoInput as IPutZacInfoInput,
   PutObcInfoInput as IPutObcInfoInput,
 } from '@/src/usecases/inputs/users';
-import { putObcLoginValidateFunc, putZacInfoValidateFunc } from '@/src/validations/users';
-import { ZacInfo, ObcInfo } from '@/src/entities/users';
+import {
+  ZacInfo, ObcInfo, zZacInfo, zObcInfo,
+} from '@/src/entities/users';
 import { APIGatewayProxyEventV2Authorizer } from '@/src/entities/authorizer';
 import { EventV2CognitoAuthorizer } from '@/src/adapters/http/request/authorizer';
 import camelcaseKeys from 'camelcase-keys';
@@ -83,8 +84,8 @@ export class PutZacInfoInput extends EventV2CognitoAuthorizer implements IPutZac
     super(authorizer);
     if (requestBody == null) throw new errors.ValidationError('body is required');
     const body = JSON.parse(requestBody);
-    validation.check(putZacInfoValidateFunc, body);
-    this.data = camelcaseKeys(body);
+    const data = validation.check(zZacInfo, camelcaseKeys(body));
+    this.data = data;
   }
 
   public getZacInfo() {
@@ -102,8 +103,8 @@ export class PutObcInfoInput extends EventV2CognitoAuthorizer implements IPutObc
     super(authorizer);
     if (requestBody == null) throw new errors.ValidationError('body is required');
     const body = JSON.parse(requestBody);
-    validation.check(putObcLoginValidateFunc, body);
-    this.data = camelcaseKeys(body);
+    const data = validation.check(zObcInfo, camelcaseKeys(body));
+    this.data = data;
   }
 
   public getObcInfo() {

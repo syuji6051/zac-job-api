@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import { ZacRegisterParams } from '@syuji6051/zac-client';
+import { z } from 'zod';
 
 // export interface ZacWorkRegisterRequestBody extends ZacRegisterParams {}
 
@@ -14,20 +15,25 @@ export interface RegisterWorksRequestParameter {
   day: string
 }
 
-export interface RegisterWorksRequest {
-  day: Date
-}
+export const zRegisterWorksRequest = z.object({
+  day: z.date(),
+});
 
-export interface GetWorkCodeListRequest {
-  year_month: number
-}
+export type RegisterWorksRequest = z.infer<typeof zRegisterWorksRequest>
 
-export interface SetWorkCodeListRequest {
-  year_month: number
-  code_list: WorkCode []
-}
+export const zGetWorkCodeListRequest = z.object({
+  yearMonth: z.number(),
+});
 
-export interface WorkCode {
-  code: string
-  default: boolean
-}
+export const zWorkCode = z.object({
+  code: z.string(),
+  default: z.boolean(),
+});
+export type WorkCode = z.infer<typeof zWorkCode>
+
+export const zSetWorkCodeListRequest = z.object({
+  yearMonth: z.number(),
+  codeList: zWorkCode.array(),
+});
+
+export type SetWorkCodeListRequest = z.infer<typeof zSetWorkCodeListRequest>

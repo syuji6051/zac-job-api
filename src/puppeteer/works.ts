@@ -1,13 +1,13 @@
+import { secrets } from '@syuji6051/zac-job-interface';
 import { logger, request } from '@syuji6051/zac-job-library';
 import { container, TYPES } from '@/src/providers/container';
-import { SecretsValues } from '@/src/entities/environments';
 import { WorkType } from '@/src/entities/works';
 
 export default class Works {
-  secrets: SecretsValues;
+  secrets: secrets.SecretsValues;
 
   constructor() {
-    this.secrets = container.get<SecretsValues>(TYPES.ASM_VALUES);
+    this.secrets = container.get<secrets.SecretsValues>(TYPES.ASM_VALUES);
   }
 
   public async list(userId: string, yearMonth: string) {

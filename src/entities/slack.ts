@@ -1,17 +1,22 @@
 /* eslint-disable camelcase */
-export interface SetUserAttributeRequest {
-  code: string
-}
+import { z } from 'zod';
+
+export const zSetUserAttributeRequest = z.object({
+  code: z.string(),
+});
+export type SetUserAttributeRequest = z.infer<typeof zSetUserAttributeRequest>;
 
 type EventActionType = 'rich_text_section' | 'message'
 
-export type EventActionRequest = EventActionVerificationTokenRequest | EventActionMessageRequest;
+export const zEventActionVerificationTokenRequest = z.object({
+  type: z.enum(['url_verification']),
+  token: z.string(),
+  challenge: z.string(),
+});
+export type EventActionVerificationTokenRequest
+  = z.infer<typeof zEventActionVerificationTokenRequest>
 
-export interface EventActionVerificationTokenRequest {
-  type: 'url_verification',
-  token: string
-  challenge: string
-}
+export type EventActionRequest = EventActionVerificationTokenRequest | EventActionMessageRequest;
 
 export interface EventActionMessageRequest {
   type: EventActionType

@@ -1,15 +1,15 @@
 import { WebClient } from '@slack/web-api';
-import { SecretsValues } from '@/src/entities/environments';
+import { secrets } from '@syuji6051/zac-job-interface';
 import { logger } from '@syuji6051/zac-job-library';
 
 export default class UserInfo {
   slack: WebClient;
 
-  secrets: SecretsValues;
+  secrets: secrets.SecretsValues;
 
-  constructor(secrets: SecretsValues) {
-    this.secrets = secrets;
-    this.slack = new WebClient(secrets.SLACK_TOKEN);
+  constructor(secretValue: secrets.SecretsValues) {
+    this.secrets = secretValue;
+    this.slack = new WebClient(this.secrets.SLACK_TOKEN);
   }
 
   async getAccessToken(code: string) {
