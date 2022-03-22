@@ -2,10 +2,10 @@ import { WorkType } from '@/src/entities/works';
 import { secrets } from '@syuji6051/zac-job-interface';
 import { services } from '@syuji6051/zac-job-library';
 
-const clockInRegXp = /^(出勤|:remote-syusya:).*/;
-const clockOutRegXp = /^(退勤|:remote-taisya:).*/;
-const goOutRegXp = /^(外出|:gaisyutsu:).*/;
-const goReturnRegXp = /^(再入|:sainyu:).*/;
+const clockInRegXp = /^(出勤|:remote-syusya:|ws).*/;
+const clockOutRegXp = /^(退勤|:remote-taisya:|we).*/;
+const goOutRegXp = /^(外出|:gaisyutsu:|wo).*/;
+const goReturnRegXp = /^(再入|:sainyu:|wr).*/;
 
 const workTypeAttribute = {
   clockIn: {
