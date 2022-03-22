@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
-
-import { z } from '@/../zac-job-interface/node_modules/zod/lib';
+import { z } from 'zod';
 
 export interface User {
   userName?: string;
