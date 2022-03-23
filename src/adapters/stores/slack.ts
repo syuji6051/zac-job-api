@@ -34,9 +34,7 @@ export default class Slack implements ISlack {
 
   public async sendMessage(channel: string, text: string, token?: string) {
     await this.message.sendMessage({
-      channel,
-      text,
-      token: token === undefined ? this.secret.SLACK_TOKEN : token,
+      channel, text, token,
     });
   }
 }

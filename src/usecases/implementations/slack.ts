@@ -97,7 +97,7 @@ export default class Slack implements ISlack {
     const messages = input.getInput();
     for (const { chanel, message, token } of messages) {
       // eslint-disable-next-line no-await-in-loop
-      await this.slack.sendMessage(token, chanel, message);
+      await this.slack.sendMessage(chanel, message, token);
     }
   }
 }

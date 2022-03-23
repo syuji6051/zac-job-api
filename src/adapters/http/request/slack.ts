@@ -44,7 +44,6 @@ export class ActionEventsInput implements IActionEventsInput {
     }
     const data = JSON.parse(body) as EventActionRequest;
     logger.debug(JSON.stringify(data));
-    // validation.check(EventActionRequestValidateFunc, data);
     this.request = data;
   }
 

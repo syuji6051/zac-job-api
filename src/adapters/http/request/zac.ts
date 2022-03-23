@@ -44,8 +44,8 @@ export class GetWorkCodeListInput extends EventV2Authorizer {
     const { requestContext: { authorizer }, queryStringParameters: query } = event;
     super(authorizer);
     if (query == null) throw new errors.ValidationError('query is required');
-    const data = validation.check(zGetWorkCodeListRequest, camelcaseKeys(query));
-    this.yearMonth = Number(data.yearMonth);
+    const data = zGetWorkCodeListRequest.parse(camelcaseKeys(query));
+    this.yearMonth = data.yearMonth;
   }
 
   public getYearMonth() {
@@ -64,7 +64,7 @@ export class SetWorkCodeListInput extends EventV2Authorizer {
     const { requestContext: { authorizer }, body } = event;
     super(authorizer);
     if (body == null) throw new errors.ValidationError('body is required');
-    const data = validation.check(zSetWorkCodeListRequest, camelcaseKeys(JSON.parse(body)));
+    const data = zSetWorkCodeListRequest.parse(camelcaseKeys(JSON.parse(body)));
     this.yearMonth = data.yearMonth;
     this.workCodeList = data.codeList;
   }

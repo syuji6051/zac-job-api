@@ -22,8 +22,11 @@ export const zRegisterWorksRequest = z.object({
 export type RegisterWorksRequest = z.infer<typeof zRegisterWorksRequest>
 
 export const zGetWorkCodeListRequest = z.object({
-  yearMonth: z.number(),
+  yearMonth: z.string()
+    .refine((v) => !Number.isNaN(Number(v)), 'Number transform error')
+    .transform((v) => Number(v)),
 });
+export type GetWorkCodeListRequest = z.infer<typeof zGetWorkCodeListRequest>
 
 export const zWorkCode = z.object({
   code: z.string(),
@@ -32,7 +35,9 @@ export const zWorkCode = z.object({
 export type WorkCode = z.infer<typeof zWorkCode>
 
 export const zSetWorkCodeListRequest = z.object({
-  yearMonth: z.number(),
+  yearMonth: z.string()
+    .refine((v) => !Number.isNaN(Number(v)), 'Number transform error')
+    .transform((v) => Number(v)),
   codeList: zWorkCode.array(),
 });
 
