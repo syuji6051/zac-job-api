@@ -24,10 +24,11 @@ export class RegisterWorkInput extends EventV2Authorizer {
   public constructor(event: APIGatewayProxyEventV2) {
     const { requestContext: { authorizer }, queryStringParameters: query = {} } = event;
     super(authorizer);
-    validation.check(zRegisterWorksRequest, {
+    const data = validation.check(zRegisterWorksRequest, {
       ...query,
       day: dayjs.utc(query?.day, 'YYYY/MM/DD').toDate(),
     });
+    this.registerWorks = data;
   }
 
   public getDay() {
