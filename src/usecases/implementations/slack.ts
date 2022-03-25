@@ -66,30 +66,33 @@ export default class Slack implements ISlack {
       },
     } = request;
 
-    if (botId === undefined) {
-      const workType = choiceWorkMessage(text);
-      if (workType == null) {
-        return output.success({});
-      }
-
-      const userInfo = await this.user.getUserFromSlackId(user);
-      if (userInfo === undefined) {
-        throw await sendSlackError(this.secrets, channel, 'OBCとSlackとの連携が完了していません');
-      }
-
-      const {
-        userId, slackAccessToken: token, obcTenantId, obcUserId, obcPassword,
-      } = userInfo;
-
-      if (obcTenantId == null || obcUserId == null || obcPassword == null) {
-        throw await sendSlackError(this.secrets, channel, 'OBC必須項目が足りていません');
-      }
-      await this.slack.sendMessage(channel, `${getWorkTypeName(workType)} 処理を受けつけました`);
-
-      await publishPunchWork({
-        userId, obcTenantId, obcUserId, obcPassword, token, channel, workType,
-      });
+    if (botId !== undefined || input.getRetryNum() !== 0) {
+      return output.success({});
     }
+
+    const workType = choiceWorkMessage(text);
+    if (workType == null) {
+      return output.success({});
+    }
+
+    const userInfo = await this.user.getUserFromSlackId(user);
+    if (userInfo === undefined) {
+      throw await sendSlackError(this.secrets, channel, 'OBCとSlackとの連携が完了していません');
+    }
+
+    const {
+      userId, slackAccessToken: token, obcTenantId, obcUserId, obcPassword,
+    } = userInfo;
+
+    if (obcTenantId == null || obcUserId == null || obcPassword == null) {
+      throw await sendSlackError(this.secrets, channel, 'OBC必須項目が足りていません');
+    }
+    await this.slack.sendMessage(channel, `${getWorkTypeName(workType)} 処理を受けつけました`);
+
+    await publishPunchWork({
+      userId, obcTenantId, obcUserId, obcPassword, token, channel, workType,
+    });
+
     return output.success({});
   }
 

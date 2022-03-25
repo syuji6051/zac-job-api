@@ -36,10 +36,10 @@ export const actionEvents: Handler = async (
   event: APIGatewayProxyResult,
 ): Promise<APIGatewayProxyResult> => loadAsyncModules.then(() => {
   logger.info(JSON.stringify(event));
-  const { body } = event;
+  const { body, headers } = event;
 
   return (async () => container.get<UseCase>(TYPES.USECASE_SLACK).actionEvents(
-    new ActionEventsInput(body),
+    new ActionEventsInput(headers, body),
     new ActionEventOutput(),
   ))()
     .catch((err) => middleware.lambdaErrorHandler(err))

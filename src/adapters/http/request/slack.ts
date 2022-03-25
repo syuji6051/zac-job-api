@@ -2,7 +2,9 @@ import { SNSEventRecord } from 'aws-lambda';
 import { slack } from '@syuji6051/zac-job-interface';
 import { errors, logger, validation } from '@syuji6051/zac-job-library';
 
-import { SetUserAttributeRequest, EventActionRequest, zSetUserAttributeRequest } from '@/src/entities/slack';
+import {
+  SetUserAttributeRequest, EventActionRequest, zSetUserAttributeRequest, LambdaEventHeaders,
+} from '@/src/entities/slack';
 import {
   SetUserAttributeInput as ISetUserAttributeInput,
   ActionEventsInput as IActionEventsInput,
@@ -12,7 +14,6 @@ import { EventV2CognitoAuthorizer } from '@/src/adapters/http/request/authorizer
 import { APIGatewayProxyEventV2Authorizer } from '@/src/entities/authorizer';
 import { PublishSnsToSlackMessages } from '@/src/entities/sns';
 
-// eslint-disable-next-line import/prefer-default-export
 export class SetUserAttributeInput
   extends EventV2CognitoAuthorizer implements ISetUserAttributeInput {
   code: string;
@@ -38,10 +39,14 @@ export class SetUserAttributeInput
 export class ActionEventsInput implements IActionEventsInput {
   request: EventActionRequest;
 
-  constructor(body: string | null) {
+  slackRetryNum: number;
+
+  constructor(headers?: LambdaEventHeaders, body?: string | null) {
     if (body == null) {
       throw new errors.ValidationError('body is required');
     }
+    const slackRetryNum = headers!['x-slack-retry-num'] || 0;
+    this.slackRetryNum = typeof slackRetryNum === 'string' ? Number(slackRetryNum) : 0;
     const data = JSON.parse(body) as EventActionRequest;
     logger.debug(JSON.stringify(data));
     this.request = data;
@@ -49,6 +54,10 @@ export class ActionEventsInput implements IActionEventsInput {
 
   getRequest() {
     return this.request;
+  }
+
+  getRetryNum() {
+    return this.slackRetryNum;
   }
 }
 

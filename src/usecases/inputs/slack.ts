@@ -7,7 +7,8 @@ export interface SetUserAttributeInput extends EventV2CognitoAuthorizer {
 }
 
 export interface ActionEventsInput {
-  getRequest(): EventActionRequest
+  getRequest(): EventActionRequest;
+  getRetryNum(): number;
 }
 
 export interface BotMessageInput {

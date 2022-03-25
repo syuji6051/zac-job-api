@@ -39,6 +39,10 @@ export interface EventActionMessageRequest {
   event_time: number
 }
 
+export interface LambdaEventHeaders {
+  [header: string]: boolean | number | string
+}
+
 export interface EventActionResponse {
   challenge?: string
 }
