@@ -39,12 +39,12 @@ const choiceWorkMessage = (text: string): WorkType | undefined => {
 
 const getWorkTypeName = (workType: WorkType): string => workTypeAttribute[workType].name;
 
-const sendSlackError = async (secret: secrets.SecretsValues, chanel: string, message: string) => {
+const sendSlackError = async (secret: secrets.SecretsValues, channel: string, message: string) => {
   await services.errors.SlackError.build(
     secret.SNS_SLACK_MESSAGE_TOPIC,
     {
       token: secret.SLACK_TOKEN,
-      chanel,
+      channel,
       message,
     },
   );
