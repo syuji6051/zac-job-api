@@ -41,12 +41,16 @@ export class ActionEventsInput implements IActionEventsInput {
 
   slackRetryNum: number;
 
+  obcWorkDryRun: boolean;
+
   constructor(headers?: LambdaEventHeaders, body?: string | null) {
     if (body == null) {
       throw new errors.ValidationError('body is required');
     }
-    const slackRetryNum = headers!['x-slack-retry-num'] || 0;
+    const slackRetryNum = headers !== undefined ? headers['x-slack-retry-num'] : 0;
     this.slackRetryNum = typeof slackRetryNum === 'string' ? Number(slackRetryNum) : 0;
+    this.obcWorkDryRun = headers !== undefined ? headers['x-zac-job-obc-dry-run'] === 'true' : false;
+
     const data = JSON.parse(body) as EventActionRequest;
     logger.debug(JSON.stringify(data));
     this.request = data;
@@ -58,6 +62,10 @@ export class ActionEventsInput implements IActionEventsInput {
 
   getRetryNum() {
     return this.slackRetryNum;
+  }
+
+  getObcDryRun() {
+    return this.obcWorkDryRun;
   }
 }
 

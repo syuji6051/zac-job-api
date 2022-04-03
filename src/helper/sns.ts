@@ -1,5 +1,6 @@
+import { works } from '@syuji6051/zac-job-interface';
 import { sns } from '@syuji6051/zac-job-library';
-import { PunchWorkInput, SyncObcWorksInput } from '@/src/entities/works';
+import { SyncObcWorksInput } from '@/src/entities/works';
 import { RegisterZacWorkInput } from '@/src/entities/zac';
 
 const {
@@ -12,8 +13,8 @@ const publishSyncObcWorks = async (messages: SyncObcWorksInput) => {
   await sns.publish<SyncObcWorksInput>(messages, PUPPETEER_SYNC_OBC_WORKS_SNS_TOPIC || '');
 };
 
-const publishPunchWork = async (messages: PunchWorkInput) => {
-  await sns.publish<PunchWorkInput>(messages, PUPPETEER_PUNCH_WORK_SNS_TOPIC || '');
+const publishPunchWork = async (messages: works.PunchWorkInput) => {
+  await sns.publish<works.PunchWorkInput>(messages, PUPPETEER_PUNCH_WORK_SNS_TOPIC || '');
 };
 
 const publishRegisterZacWork = async (messages: RegisterZacWorkInput) => {

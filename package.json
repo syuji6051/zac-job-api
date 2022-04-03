@@ -18,7 +18,7 @@
     "@slack/oauth": "^2.3.0",
     "@slack/web-api": "^6.5.1",
     "@syuji6051/zac-client": "^1.2.2",
-    "@syuji6051/zac-job-interface": "^0.0.5",
+    "@syuji6051/zac-job-interface": "^0.0.6",
     "@syuji6051/zac-job-library": "^1.1.0",
     "aws-sdk": "^2.805.0",
     "aws4": "^1.11.0",

@@ -81,8 +81,11 @@ export default class Slack implements ISlack {
     }
 
     const {
-      userId, slackAccessToken: token, obcTenantId, obcUserId, obcPassword,
+      userId, slackAccessToken, obcTenantId, obcUserId, obcPassword,
     } = userInfo;
+
+    const token = slackAccessToken !== null ? slackAccessToken : undefined;
+    const obcDryRun = input.getObcDryRun();
 
     if (obcTenantId == null || obcUserId == null || obcPassword == null) {
       throw await sendSlackError(this.secrets, channel, 'OBC必須項目が足りていません');
@@ -90,7 +93,10 @@ export default class Slack implements ISlack {
     await this.slack.sendMessage(channel, `${getWorkTypeName(workType)} 処理を受けつけました`);
 
     await publishPunchWork({
-      userId, obcTenantId, obcUserId, obcPassword, token, channel, workType,
+      userId, obcTenantId, obcUserId, obcPassword, token, channel, workType, obcDryRun,
+    });
+    await this.slack.sendPunchWorkMessages({
+      userId, token, botChannel: channel, workType,
     });
 
     return output.success({});

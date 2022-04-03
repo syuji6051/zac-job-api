@@ -13,16 +13,6 @@ export interface SyncObcWorksInput {
   period: number
 }
 
-export interface PunchWorkInput {
-  userId: string
-  obcTenantId: string
-  obcUserId: string
-  obcPassword: string
-  token?: string | null
-  channel?: string | null
-  workType: WorkType
-}
-
 export const zPunchWork = z.object({
   workType: zWorkType,
 });
