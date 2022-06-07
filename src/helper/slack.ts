@@ -22,7 +22,7 @@ const workTypeAttribute = {
   },
   returned: {
     name: '再入',
-    icon: 'sainyu',
+    icon: ':sainyu:',
   },
 };
 
