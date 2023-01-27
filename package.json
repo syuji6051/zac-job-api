@@ -57,7 +57,7 @@
     "fork-ts-checker-webpack-plugin": "^5.0.5",
     "nodemon": "^2.0.15",
     "prettier": "^2.0.5",
-    "serverless": "^2.46.0",
+    "serverless": "^3.27.0",
     "serverless-pseudo-parameters": "^2.5.0",
     "ts-node": "^10.5.0",
     "tscpaths": "^0.0.9",
